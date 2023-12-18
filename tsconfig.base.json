@@ -15,6 +15,9 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@angular-monorepo/non-prod/storybook": [
+        "libs/non-prod/storybook/src/index.ts"
+      ],
       "@angular-monorepo/shared/ui-menu": ["libs/shared/ui-menu/src/index.ts"]
     }
   },
