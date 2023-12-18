@@ -13,6 +13,8 @@
    * [General](#general)
    * [Own additions/modifications](#own-additionsmodifications)
       + [UI](#ui)
+      + [UI: Stylesheets](#ui-stylesheets)
+      + [UI: Icons](#ui-icons)
       + [Catalogue the UI components with Storybook](#catalogue-the-ui-components-with-storybook)
       + [Developing process](#developing-process)
       + [The domain `non-prod`](#the-domain-non-prod)
@@ -123,7 +125,9 @@ Goals:
 1. Create business UI components based on general components
 2. Use instant styling
 3. Use theme switching on the global level
-4. Reduce/avoid SCSS/CSS tinkering especially on component level
+4. Avoid SCSS/CSS tinkering especially on component level
+5. Instead of pixel pushing you use [padding](https://primeflex.org/padding)- and 
+[margin](https://primeflex.org/margin)-classes instead.
 
 We abstract a component of the UI library wrapping it in a component with the input parameters.
 
@@ -169,6 +173,23 @@ the components of the UI library directly to avoid too high abstraction effort c
 >3. Problems with a high complexity of the input mechanism (e.g. if you need to put in such 
 stuff like sorting or validation functions instead of just a sync data or 
 some simple control params)
+
+<!-- TOC --><a name="ui-stylesheets"></a>
+### UI: Stylesheets
+All the stylesheets are defined/used in `styles.scss` in the root directory.
+This file is then used in the configurations of the apps, catalogue (e.g. 
+[Storybook](https://storybook.js.org/)), E2E-Tools, etc.
+
+<!-- TOC --><a name="ui-icons"></a>
+### UI: Icons
+We abstract the icons for better readability and decoupling from the current UI library.
+So instead of `pi pi-fw pi-home` we use `icon-home`. The abstraction is made in 
+`styles.scss` in the root directory.
+
+**NOTE!**
+
+We make the abstraction of the icons on demand instead of in advance to avoid
+a work which can be (partially) useless.
 
 <!-- TOC --><a name="catalogue-the-ui-components-with-storybook"></a>
 ### Catalogue the UI components with Storybook

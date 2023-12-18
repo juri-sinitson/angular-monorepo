@@ -23,7 +23,8 @@
         "port": 4400,
         "configDir": "libs/non-prod/storybook/.storybook",
         "browserTarget": "non-prod-storybook:build-storybook",
-        "compodoc": false
+        "compodoc": false,
+        "styles": ["styles.scss"]
       },
       "configurations": {
         "ci": {
@@ -38,7 +39,8 @@
         "outputDir": "dist/storybook/non-prod-storybook",
         "configDir": "libs/non-prod/storybook/.storybook",
         "browserTarget": "non-prod-storybook:build-storybook",
-        "compodoc": false
+        "compodoc": false,
+        "styles": ["styles.scss"]
       },
       "configurations": {
         "ci": {
@@ -56,7 +58,8 @@
       "executor": "@nx/web:file-server",
       "options": {
         "buildTarget": "non-prod-storybook:build-storybook",
-        "staticFilePath": "dist/storybook/non-prod-storybook"
+        "staticFilePath": "dist/storybook/non-prod-storybook",
+        "styles": ["styles.scss"]
       },
       "configurations": {
         "ci": {

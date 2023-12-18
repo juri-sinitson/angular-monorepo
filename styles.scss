@@ -1,0 +1,36 @@
+@use 'primeng/resources/primeng.css';
+@use 'primeng/resources/themes/lara-light-blue/theme.css';
+@use 'primeflex/primeflex.css';
+@use 'primeicons/primeicons.css';
+
+
+// ABSTRACTING ICONS to decouple from the current UI library
+.abstract-icon {
+  @extend .pi;
+  @extend .pi-fw;
+}
+
+.icon-home {
+  @extend .abstract-icon;
+  @extend .pi-home;  
+}
+
+.icon-calendar {
+  @extend .abstract-icon;
+  @extend .pi-calendar;
+}
+
+.icon-pencil {
+  @extend .abstract-icon;
+  @extend .pi-pencil;
+}
+
+.icon-file {
+  @extend .abstract-icon;
+  @extend .pi-file;
+}
+
+.icon-cog {
+  @extend .abstract-icon;
+  @extend .pi-cog;
+}
