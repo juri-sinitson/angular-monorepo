@@ -169,6 +169,9 @@ devDependencies:
   eslint-plugin-cypress:
     specifier: ^2.13.4
     version: 2.15.1(eslint@8.48.0)
+  http-server:
+    specifier: ^14.1.1
+    version: 14.1.1
   jest:
     specifier: ^29.4.1
     version: 29.7.0(@types/node@18.16.9)(ts-node@10.9.1)
