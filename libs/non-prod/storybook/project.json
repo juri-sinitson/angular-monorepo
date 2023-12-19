@@ -24,7 +24,7 @@
         "configDir": "libs/non-prod/storybook/.storybook",
         "browserTarget": "non-prod-storybook:build-storybook",
         "compodoc": false,
-        "styles": ["styles.scss"]
+        "styles": ["styles.scss"]        
       },
       "configurations": {
         "ci": {
@@ -40,7 +40,7 @@
         "configDir": "libs/non-prod/storybook/.storybook",
         "browserTarget": "non-prod-storybook:build-storybook",
         "compodoc": false,
-        "styles": ["styles.scss"]
+        "styles": ["styles.scss"]        
       },
       "configurations": {
         "ci": {
@@ -59,7 +59,7 @@
       "options": {
         "buildTarget": "non-prod-storybook:build-storybook",
         "staticFilePath": "dist/storybook/non-prod-storybook",
-        "styles": ["styles.scss"]
+        "styles": ["styles.scss"]        
       },
       "configurations": {
         "ci": {
