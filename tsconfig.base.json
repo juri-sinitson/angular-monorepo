@@ -18,6 +18,9 @@
       "@angular-monorepo/shared/ui-chart": [
         "libs/shared/ui-chart/src/index.ts"
       ],
+      "@angular-monorepo/shared/ui-common": [
+        "libs/shared/ui-common/src/index.ts"
+      ],
       "@angular-monorepo/shared/ui-menu": ["libs/shared/ui-menu/src/index.ts"]
     }
   },
