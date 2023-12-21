@@ -1,1 +1,1 @@
-export * from './components/line-chart/line-chart.component';
+export * from './lib/components/line-chart/line-chart.component';
