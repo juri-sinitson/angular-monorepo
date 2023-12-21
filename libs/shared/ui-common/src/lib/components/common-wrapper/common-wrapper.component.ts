@@ -15,16 +15,18 @@ import { ProgressSpinnerComponent } from '../progress-spinner/progress-spinner.c
   ],
   template: `
     <common-card [header]="header">
-      @if(messages) {
-        <common-messages [messages]="messages">
-        </common-messages>
+      @if(messages.length > 0) {
+        <div data-testid="messages">
+          <common-messages [messages]="messages">
+          </common-messages>
+        </div>
       }
       @if(showContent && !loading) {
         <!-- THE CONTENT OF THE COMPONENT THAT IS WRAPPED -->
         <ng-content></ng-content>
       }
       @if(loading) {
-        <div class="flex justify-content-center">
+        <div class="flex justify-content-center" data-testid="loading">
           <common-progress-spinner [loadingMessage]="loadingMessage">
           </common-progress-spinner>          
         </div>

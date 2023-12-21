@@ -13,5 +13,13 @@ import { CardModule } from 'primeng/card';
   `,  
 })
 export class CardComponent {
-  @Input() header: string | undefined = undefined;
+  private _header: string  = '';
+  
+  @Input() set header(header: string) {
+    this._header = header;
+  }
+
+  get header(): string | undefined {
+    return this._header ? this._header : undefined;
+  }
 }

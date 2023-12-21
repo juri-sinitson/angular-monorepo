@@ -1,5 +1,7 @@
 import { Component, Input } from '@angular/core';
+
 import { MessagesModule } from 'primeng/messages';
+
 import { MessageInterface } from '../../interfaces/message.interface';
 
 @Component({
@@ -7,7 +9,7 @@ import { MessageInterface } from '../../interfaces/message.interface';
   standalone: true,
   imports: [MessagesModule],
   template: `
-    <p-messages [(value)]="messages" [enableService]="false" [closable]="false"></p-messages>
+    <p-messages [value]="messages" [enableService]="false" [closable]="false"></p-messages>
   `,  
 })
 export class MessagesComponent {

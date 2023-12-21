@@ -20,6 +20,12 @@ export const expectElem = async (testId: string, canvas: any): Promise<void> => 
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const expectNoElem = async (testId: string, canvas: any): Promise<void> => {
+  const elem = canvas.queryByTestId(testId, canvas);
+  expect(elem).toBeFalsy();
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const getCanvas = (canvasElement: HTMLElement): any => {
   return within(canvasElement);
 }

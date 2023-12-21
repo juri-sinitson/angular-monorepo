@@ -9,7 +9,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
   template: `
     <p-progressSpinner></p-progressSpinner>
     @if(loadingMessage) {
-      <p>{{loadingMessage}}...</p>
+      <p data-testid="loadingMessage">{{loadingMessage}}...</p>
     }
   `,
 })

@@ -1,8 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/angular';
 import { ProgressSpinnerComponent } from './progress-spinner.component';
-
-import { within } from '@storybook/testing-library';
-import { expect } from '@storybook/jest';
+import { expectElem, expectNoElem, expectText, getCanvas } from '../../lib-intern-util/component-test.po';
 
 const meta: Meta<ProgressSpinnerComponent> = {
   component: ProgressSpinnerComponent,
@@ -11,18 +9,23 @@ const meta: Meta<ProgressSpinnerComponent> = {
 export default meta;
 type Story = StoryObj<ProgressSpinnerComponent>;
 
-export const Primary: Story = {
-  args: {
-    loadingMessage: '',
-  },
-};
-
-export const Heading: Story = {
+export const withoutMessage: Story = {
   args: {
     loadingMessage: '',
   },
   play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    expect(canvas.getByText(/progress-spinner works!/gi)).toBeTruthy();
+    const canvas = getCanvas(canvasElement);
+    await expectNoElem('loadingMessage', canvas);
+  }
+};
+
+export const withMessage: Story = {
+  args: {
+    loadingMessage: 'Loading',
   },
+  play: async ({ canvasElement }) => {
+    const canvas = getCanvas(canvasElement);
+    await expectElem('loadingMessage', canvas);
+    await expectText('Loading...', canvas);
+  }
 };

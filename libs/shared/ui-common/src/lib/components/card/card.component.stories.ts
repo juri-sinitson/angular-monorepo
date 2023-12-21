@@ -4,7 +4,7 @@ import type { Meta, StoryObj } from '@storybook/angular';
 
 import { CardComponent } from './card.component';
 
-import { expectNoText, expectText, getCanvas } from '../../util/component-test.po';
+import { expectNoText, expectText, getCanvas } from '../../lib-intern-util/component-test.po';
 
 @Component({
   selector: 'common-card-tester',

@@ -1,11 +1,12 @@
-import { provideAnimations } from '@angular/platform-browser/animations';
 import { Component, Input } from '@angular/core';
 
 import { applicationConfig, type Meta, type StoryObj } from '@storybook/angular';
 
+import { commonAppConfig } from '@angular-monorepo/shared/util-common';
+
 import { CommonWrapperComponent } from './common-wrapper.component';
 import { MessageInterface } from '../../interfaces/message.interface';
-
+import { expectElem, expectNoElem, expectNoText, expectText, getCanvas } from '../../lib-intern-util/component-test.po';
 
 
 const errorMessages: MessageInterface[] = [
@@ -49,11 +50,7 @@ const meta: Meta<WrapperTestComponent> = {
   component: WrapperTestComponent,
   title: 'shared/ui-common/Common Wrapper',
   decorators: [
-    applicationConfig({
-      providers: [
-        provideAnimations(),
-      ],
-    })
+    applicationConfig({...commonAppConfig})
   ],
 };
 export default meta;
@@ -64,6 +61,13 @@ export const showContent: Story = {
     messages: [],
     showContent: true,
     loading: false,
+    header: '',
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = getCanvas(canvasElement);
+    await expectText('Wrapped content', canvas);
+    await expectNoElem('loading', canvas);
+    await expectNoElem('messages', canvas);
   },
 };
 
@@ -74,6 +78,13 @@ export const contentWithHeader: Story = {
     loading: false,
     header: 'My Header',
   },
+  play: async ({ canvasElement }) => {
+    const canvas = getCanvas(canvasElement);
+    await expectText('Wrapped content', canvas);
+    await expectText('My Header', canvas);
+    await expectNoElem('loading', canvas);
+    await expectNoElem('messages', canvas);
+  },  
 };
 
 export const loading: Story = {
@@ -81,8 +92,15 @@ export const loading: Story = {
     messages: [],
     showContent: true,
     loading: true,
-    loadingMessage: 'Loading...',
-    header: undefined,
+    loadingMessage: 'Loading',
+    header: '',
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = getCanvas(canvasElement);
+    await expectNoText('Wrapped content', canvas);
+    await expectElem('loading', canvas);
+    await expectText('Loading...', canvas);
+    await expectNoElem('messages', canvas);
   },
 };
 
@@ -91,7 +109,15 @@ export const messageWithContent: Story = {
     messages: infoMessages,
     showContent: true,
     loading: false,
+    header: '',
   },
+  play: async ({ canvasElement }) => {
+    const canvas = getCanvas(canvasElement);
+    await expectText('Wrapped content', canvas);
+    await expectNoElem('loading', canvas);
+    await expectElem('messages', canvas);
+    await expectText('Info message', canvas);
+  },  
 };
 
 export const messageWithoutContent: Story = {
@@ -99,19 +125,14 @@ export const messageWithoutContent: Story = {
     messages: errorMessages,
     showContent: false,
     loading: false,
+    header: '',
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = getCanvas(canvasElement);
+    await expectNoText('Wrapped content', canvas);
+    await expectNoElem('loading', canvas);
+    await expectElem('messages', canvas);
+    await expectText('Error message', canvas);
   },
 };
 
-/*export const Heading: Story = {
-  args: {
-    messages: [],
-    showContent: true,
-    loading: false,
-    loadingMessage: '',
-    header: undefined,
-  },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    expect(canvas.getByText(/common-wrapper works!/gi)).toBeTruthy();
-  },
-};*/
