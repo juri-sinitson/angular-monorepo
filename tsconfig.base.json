@@ -14,7 +14,13 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "paths": {      
       "@angular-monorepo/shared/ui-chart": [
         "libs/shared/ui-chart/src/index.ts"
       ],
@@ -23,6 +29,12 @@
       ],
       "@angular-monorepo/shared/ui-menu": ["libs/shared/ui-menu/src/index.ts"]
     }
+  },
+  "angularCompilerOptions": {
+    "enableI18nLegacyMessageIdFormat": false,
+    "strictInjectionParameters": true,
+    "strictInputAccessModifiers": true,
+    "strictTemplates": true
   },
   "exclude": ["node_modules", "tmp"]
 }
