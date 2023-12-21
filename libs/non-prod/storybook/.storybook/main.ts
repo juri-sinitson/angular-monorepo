@@ -1,4 +1,5 @@
 import type { StorybookConfig } from '@storybook/angular';
+
 // Commented out because vite currently doesn't load the styles.
 // import { mergeConfig } from 'vite';
 
@@ -12,6 +13,14 @@ const config: StorybookConfig = {
   framework: {
     name: '@storybook/angular',
     options: {},
+  },
+
+  // Don't remove it, we need it from time to 
+  // time for debug purposes
+  webpackFinal: async (config) => {
+    return {
+      ...config,
+    };
   },
 
   // TODO: Figure out why vite doesn't load the styles.
