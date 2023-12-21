@@ -32,6 +32,53 @@
     "lint": {
       "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"]
+    },
+    "storybook": {
+      "executor": "@storybook/angular:start-storybook",
+      "options": {
+        "port": 4400,
+        "configDir": "libs/shared/ui-common/.storybook",
+        "browserTarget": "shared-ui-common:build-storybook",
+        "compodoc": false
+      },
+      "configurations": {
+        "ci": {
+          "quiet": true
+        }
+      }
+    },
+    "build-storybook": {
+      "executor": "@storybook/angular:build-storybook",
+      "outputs": ["{options.outputDir}"],
+      "options": {
+        "outputDir": "dist/storybook/shared-ui-common",
+        "configDir": "libs/shared/ui-common/.storybook",
+        "browserTarget": "shared-ui-common:build-storybook",
+        "compodoc": false
+      },
+      "configurations": {
+        "ci": {
+          "quiet": true
+        }
+      }
+    },
+    "test-storybook": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "test-storybook -c libs/shared/ui-common/.storybook --url=http://localhost:4400"
+      }
+    },
+    "static-storybook": {
+      "executor": "@nx/web:file-server",
+      "options": {
+        "buildTarget": "shared-ui-common:build-storybook",
+        "staticFilePath": "dist/storybook/shared-ui-common"
+      },
+      "configurations": {
+        "ci": {
+          "buildTarget": "shared-ui-common:build-storybook:ci"
+        }
+      }
     }
   }
 }
