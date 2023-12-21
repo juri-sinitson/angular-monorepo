@@ -16,7 +16,7 @@ import { ProgressSpinnerComponent } from '../progress-spinner/progress-spinner.c
   template: `
     <common-card [header]="header">
       @if(messages) {
-        <common-messages [messages]="messages"]>
+        <common-messages [messages]="messages">
         </common-messages>
       }
       @if(showContent && !loading) {
@@ -24,13 +24,9 @@ import { ProgressSpinnerComponent } from '../progress-spinner/progress-spinner.c
         <ng-content></ng-content>
       }
       @if(loading) {
-        <div class="flex items-center">
+        <div class="flex justify-content-center">
           <common-progress-spinner [loadingMessage]="loadingMessage">
-          </common-progress-spinner>
-          
-          @if(loadingMessage) {
-            <p>{{loadingMessage}}</p>
-          }      
+          </common-progress-spinner>          
         </div>
       }
     </common-card>

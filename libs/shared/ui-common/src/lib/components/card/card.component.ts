@@ -8,6 +8,7 @@ import { CardModule } from 'primeng/card';
   imports: [CardModule,],
   template: `
     <p-card [header]="header">
+      <ng-content></ng-content>
     </p-card>
   `,  
 })

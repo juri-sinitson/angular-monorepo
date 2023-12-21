@@ -7,7 +7,7 @@ import { MessageInterface } from '../../interfaces/message.interface';
   standalone: true,
   imports: [MessagesModule],
   template: `
-    <p-messages [(value)]="messages" [enableService]="false"></p-messages>
+    <p-messages [(value)]="messages" [enableService]="false" [closable]="false"></p-messages>
   `,  
 })
 export class MessagesComponent {

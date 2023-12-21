@@ -6,7 +6,7 @@ import { expect } from '@storybook/jest';
 
 const meta: Meta<ProgressSpinnerComponent> = {
   component: ProgressSpinnerComponent,
-  title: 'ProgressSpinnerComponent',
+  title: 'shared/ui-common/Progress Spinner',
 };
 export default meta;
 type Story = StoryObj<ProgressSpinnerComponent>;
