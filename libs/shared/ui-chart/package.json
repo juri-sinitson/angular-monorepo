@@ -1,11 +1,6 @@
 {
   "name": "@angular-monorepo/shared/ui-chart",
   "version": "0.0.1",
-  "peerDependencies": {
-    "@angular/core": "^17.0.0",
-    "@storybook/angular": "7.6.5",
-    "primeng": "^17.1.0"
-  },
   "dependencies": {},
   "sideEffects": false
 }
