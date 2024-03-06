@@ -1,7 +1,7 @@
 import { commonAppConfig } from '@angular-monorepo/shared/util-common';
 import { applicationConfig, type Meta, type StoryObj } from '@storybook/angular';
 
-import { MessageInterface } from '../../interfaces/message.interface';
+import { MessageInterface } from '@angular-monorepo/shared/util-common';
 
 import { MessagesComponent } from './messages.component';
 import { expectNoText, expectText, getCanvas } from '../../lib-intern-util/component-test.po';

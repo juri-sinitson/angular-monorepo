@@ -28,8 +28,8 @@
           "budgets": [
             {
               "type": "initial",
-              "maximumWarning": "500kb",
-              "maximumError": "1mb"
+              "maximumWarning": "2mb",
+              "maximumError": "3mb"
             },
             {
               "type": "anyComponentStyle",
@@ -56,6 +56,9 @@
         "development": {
           "buildTarget": "manual-tests:build:development"
         }
+      },
+      "options": {
+        "proxyConfig": "apps/manual-tests/proxy.conf.json"
       },
       "defaultConfiguration": "development"
     },

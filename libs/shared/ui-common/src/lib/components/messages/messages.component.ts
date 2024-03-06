@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 
 import { MessagesModule } from 'primeng/messages';
 
-import { MessageInterface } from '../../interfaces/message.interface';
+import { MessageInterface } from '@angular-monorepo/shared/util-common';
 
 @Component({
   selector: 'common-messages',

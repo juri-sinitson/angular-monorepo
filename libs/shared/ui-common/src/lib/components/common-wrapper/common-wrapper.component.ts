@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 
-import { MessageInterface } from '../../interfaces/message.interface';
+import { MessageInterface } from '@angular-monorepo/shared/util-common';
 import { CardComponent } from '../card/card.component';
 import { MessagesComponent } from '../messages/messages.component';
 import { ProgressSpinnerComponent } from '../progress-spinner/progress-spinner.component';

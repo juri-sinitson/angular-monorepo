@@ -1,0 +1,12 @@
+// TODO! Figure out why this can't be imported from 
+// a library
+
+interface AppSettings { 
+  logsCollectorUrl: string;
+  logsCollectorApiKey: string;  
+}
+
+export const appSettings: AppSettings = {
+  logsCollectorUrl: 'THE_LOGS_COLLECTOR_URL',
+  logsCollectorApiKey: 'THE_LOGS_COLLECTOR_API_KEY',
+}

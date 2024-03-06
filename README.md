@@ -231,6 +231,12 @@ Examples for possible candidates:
 1. The person or address interfaces and most probably the routines for fetching this data
 2. Some statistics data on charts
 
+### Error handling
+**TODOs**
+1. Describe what is it about
+2. Add the setup section
+3. Add the limitations (e.g. when used by a lot of users)
+
 <!-- TOC --><a name="commits"></a>
 # Commits
 See https://github.com/angular/angular/blob/22b96b9/CONTRIBUTING.md#-commit-message-guidelines

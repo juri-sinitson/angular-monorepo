@@ -3,6 +3,7 @@ import { RouterModule } from '@angular/router';
 // TODO: give the correct tags to the projects
 // eslint-disable-next-line @nx/enforce-module-boundaries
 import { MenuItemInterface, TabMenuComponent } from '@angular-monorepo/shared/ui-menu';
+import { toExtendedError } from '@angular-monorepo/shared/util-common';
 
 @Component({
   standalone: true,
@@ -18,6 +19,18 @@ import { MenuItemInterface, TabMenuComponent } from '@angular-monorepo/shared/ui
 })
 export class AppComponent {
   title = 'app1';
+
+  constructor() {
+    try {
+      try {
+        throw new Error('This is a test error');
+      } catch (error) {      
+        throw toExtendedError(error);
+      }
+    } catch (error) {
+      console.log('Recatching the error in the app component.');      
+    }
+  }
 
   private menuItems_ = [  
     {

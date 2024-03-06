@@ -43,3 +43,4 @@ Thumbs.db
 
 # Security: to avoid versioning access tokens, passwords, etc
 nx.json
+apps/backend-tests/src/app-settings.ts

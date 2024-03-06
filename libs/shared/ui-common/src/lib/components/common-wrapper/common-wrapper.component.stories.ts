@@ -5,7 +5,7 @@ import { applicationConfig, type Meta, type StoryObj } from '@storybook/angular'
 import { commonAppConfig } from '@angular-monorepo/shared/util-common';
 
 import { CommonWrapperComponent } from './common-wrapper.component';
-import { MessageInterface } from '../../interfaces/message.interface';
+import { MessageInterface } from '@angular-monorepo/shared/util-common';
 import { expectElem, expectNoElem, expectNoText, expectText, getCanvas } from '../../lib-intern-util/component-test.po';
 
 

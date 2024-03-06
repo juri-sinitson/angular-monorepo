@@ -13,9 +13,9 @@ import { CardModule } from 'primeng/card';
   `,  
 })
 export class CardComponent {
-  private _header: string  = '';
+  private _header: string | undefined  = '';
   
-  @Input() set header(header: string) {
+  @Input() set header(header: string | undefined) {
     this._header = header;
   }
 
