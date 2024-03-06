@@ -25,6 +25,13 @@ const infoMessages: MessageInterface[] = [
   },
 ];
 
+/**
+ * Testing component.
+ * 
+ * We create this component because of 
+ * the wrapped content. So we demonstrate
+ * how the content is wrapped.
+ */
 @Component({
   selector: 'common-wrapper-test',
   standalone: true,
@@ -38,13 +45,15 @@ const infoMessages: MessageInterface[] = [
   `,
 })
 export class WrapperTestComponent {
+  // TODO! Figure how to use signal 
+  // inputs here that the controls 
+  // of storybook stay usable.
   @Input() messages: MessageInterface[] = [];
-  @Input() showContent: boolean = true;
-  @Input() loading: boolean = false;
-  @Input() loadingMessage: string = '';
+  @Input() showContent = true;
+  @Input() loading = false;
+  @Input() loadingMessage = '';
   @Input() header: string | undefined = undefined;
 }
-
 
 const meta: Meta<WrapperTestComponent> = {
   component: WrapperTestComponent,

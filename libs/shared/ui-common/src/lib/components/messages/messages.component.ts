@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 
 import { MessagesModule } from 'primeng/messages';
 
@@ -9,20 +9,14 @@ import { MessageInterface } from '../../interfaces/message.interface';
   standalone: true,
   imports: [MessagesModule],
   template: `
-    <p-messages [value]="messages" [enableService]="false" [closable]="false"></p-messages>
+    <p-messages [value]="messagesSliced()" [enableService]="false" [closable]="false"></p-messages>
   `,  
 })
 export class MessagesComponent {
-
-  private messages_: MessageInterface[] = [];
-
-  @Input() lastMessagesAmount = 5;
-  @Input() set messages(messages: MessageInterface[]) {
-    // Take only x last messages to avoid overflow
-    this.messages_ = messages.slice(-this.lastMessagesAmount);
-  }
-
-  get messages(): MessageInterface[] {
-    return this.messages_;
-  }
+  lastMessagesAmount = input<number>(5);
+  messages = input.required<MessageInterface[]>();
+  messagesSliced = computed(() => {
+    const amount: number = this.lastMessagesAmount();
+    return this.messages().slice(-amount);
+  });
 }

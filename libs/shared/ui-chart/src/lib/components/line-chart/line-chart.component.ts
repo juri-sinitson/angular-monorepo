@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit, input } from '@angular/core';
 
 import { ChartModule } from 'primeng/chart';
 
@@ -8,14 +8,14 @@ import { ChartModule } from 'primeng/chart';
   imports: [ChartModule],
   template: `
     <div class="card">
-      <p-chart type="line" [data]="data" [options]="options"></p-chart>
+      <p-chart type="line" [data]="data()" [options]="options"></p-chart>
     </div>
   `,
 })
 export class LineChartComponent implements OnInit{
   
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  @Input() data: any;
+  data = input<any>();
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private options_: any;

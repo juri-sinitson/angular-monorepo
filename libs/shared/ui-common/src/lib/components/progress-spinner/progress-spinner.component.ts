@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
@@ -8,11 +8,11 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
   imports: [ProgressSpinnerModule],
   template: `
     <p-progressSpinner></p-progressSpinner>
-    @if(loadingMessage) {
-      <p data-testid="loadingMessage">{{loadingMessage}}...</p>
+    @if(loadingMessage()) {
+      <p data-testid="loadingMessage">{{loadingMessage()}}...</p>
     }
   `,
 })
 export class ProgressSpinnerComponent {
-  @Input() loadingMessage = '';
+  loadingMessage = input<string>('');
 }

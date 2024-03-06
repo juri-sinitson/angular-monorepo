@@ -6,6 +6,13 @@ import { CardComponent } from './card.component';
 
 import { expectNoText, expectText, getCanvas } from '../../lib-intern-util/component-test.po';
 
+/**
+ * Testing component.
+ * 
+ * We create this component because of 
+ * the fictive content. So we demonstrate
+ * how the content is put to a card.
+ */
 @Component({
   selector: 'common-card-tester',
   standalone: true,
@@ -17,6 +24,9 @@ import { expectNoText, expectText, getCanvas } from '../../lib-intern-util/compo
   `,  
 })
 export class CardTestComponent {
+  // TODO! Figure how to use signal 
+  // inputs here that the controls 
+  // of storybook stay usable.
   @Input() header: string | undefined;
 }
 

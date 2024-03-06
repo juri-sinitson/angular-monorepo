@@ -5,16 +5,33 @@ import { MessageInterface } from '../../interfaces/message.interface';
 
 import { MessagesComponent } from './messages.component';
 import { expectNoText, expectText, getCanvas } from '../../lib-intern-util/component-test.po';
+import { Component, Input } from '@angular/core';
 
-const meta: Meta<MessagesComponent> = {
-  component: MessagesComponent,
+
+@Component({
+  selector: 'common-messages-test-wrapper',
+  standalone: true,
+  imports: [MessagesComponent],
+  template: `
+    <common-messages [messages]="messages"></common-messages>
+  `,  
+})
+export class MessagesTestWrapperComponent {
+  // TODO! Figure how to use signal 
+  // inputs here that the controls 
+  // of storybook stay usable.
+  @Input() messages: MessageInterface[] = [];
+}
+
+const meta: Meta<MessagesTestWrapperComponent> = {
+  component: MessagesTestWrapperComponent,
   title: 'shared/ui-common/Messages',
   decorators: [
     applicationConfig({...commonAppConfig})
   ],
 };
 export default meta;
-type Story = StoryObj<MessagesComponent>;
+type Story = StoryObj<MessagesTestWrapperComponent>;
 
 const messages: MessageInterface[] = [
   {
@@ -55,8 +72,7 @@ const messages: MessageInterface[] = [
 ];
 
 export const Primary: Story = {
-  args: {
-    lastMessagesAmount: 5,
+  args: {    
     messages,
   },
   play: async ({ canvasElement }) => {

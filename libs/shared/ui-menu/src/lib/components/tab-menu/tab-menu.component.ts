@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { TabMenuModule } from 'primeng/tabmenu';
 
 import { MenuItemInterface } from '../../interfaces/menu-item.interface';
@@ -11,7 +11,7 @@ import { MenuItemInterface } from '../../interfaces/menu-item.interface';
   standalone: true,
   imports: [TabMenuModule],
   template: `
-    <p-tabMenu [model]="items" [activeItem]="items[0]">
+    <p-tabMenu [model]="items()" [activeItem]="items()[0]">
       <ng-template pTemplate="item" let-item>
         <a
           class="p-menuitem-link flex justify-content-between align-items-center p-3"
@@ -20,12 +20,12 @@ import { MenuItemInterface } from '../../interfaces/menu-item.interface';
           [routerLinkActive]="'active'"
         >
           <div>
-            @if (showIcons) {
+            @if (showIcons()) {
               <span [class]="item.icon"></span>
             }
-            @if (showLabels) {
+            @if (showLabels()) {
               <span> {{ item.label }}</span>
-            }            
+            }
           </div>
         </a>
       </ng-template>
@@ -33,7 +33,7 @@ import { MenuItemInterface } from '../../interfaces/menu-item.interface';
   `,
 })
 export class TabMenuComponent {
-  @Input() items: MenuItemInterface[] = [];  
-  @Input() showLabels = true;
-  @Input() showIcons = true;
+  items = input.required<MenuItemInterface[]>();  
+  showLabels = input<boolean>(true);
+  showIcons = input<boolean>(true);
 }

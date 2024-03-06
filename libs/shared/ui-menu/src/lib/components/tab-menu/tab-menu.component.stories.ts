@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { RouterLink, RouterLinkActive, RouterOutlet, Routes, provideRouter } from '@angular/router';
 
@@ -49,8 +49,28 @@ const routes: Routes = [
   { path: '**', redirectTo: '/home', pathMatch: 'full' },
 ];
 
-const meta: Meta<TabMenuComponent> = {
-  component: TabMenuComponent,
+@Component({
+  selector: 'menu-tab-menu-test-wrapper',
+  standalone: true,
+  imports: [TabMenuComponent],
+  template: `
+    <menu-tab-menu [items]="items" 
+      [showLabels]="showLabels" 
+      [showIcons]="showIcons">
+    </menu-tab-menu>
+  `,  
+})
+export class TabMenuTestWrapperComponent {
+  // TODO! Figure how to use signal 
+  // inputs here that the controls 
+  // of storybook stay usable.
+  @Input() items: MenuItemInterface[] = [];  
+  @Input() showLabels = true;
+  @Input() showIcons = true;
+}
+
+const meta: Meta<TabMenuTestWrapperComponent> = {
+  component: TabMenuTestWrapperComponent,
   title: 'shared/ui-menu/Tab Menu',
   decorators: [
     moduleMetadata ({
@@ -75,7 +95,7 @@ const meta: Meta<TabMenuComponent> = {
   ],
 };
 
-type Story = StoryObj<TabMenuComponent>;
+type Story = StoryObj<TabMenuTestWrapperComponent>;
 
 const items: MenuItemInterface[] = [
   { label: 'Home', icon: 'icon-home', url: '/home', },
