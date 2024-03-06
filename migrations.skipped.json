@@ -1,0 +1,11 @@
+{
+  "migrations": [
+    {
+      "version": "17.2.9",
+      "description": "Move executor options to target defaults",
+      "implementation": "./src/migrations/update-17-2-9/move-options-to-target-defaults",
+      "package": "@nx/eslint",
+      "name": "move-options-to-target-defaults"
+    }
+  ]
+}
