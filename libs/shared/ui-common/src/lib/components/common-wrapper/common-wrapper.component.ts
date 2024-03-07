@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 
 import { MessageInterface } from '../../interfaces/message.interface';
 import { CardComponent } from '../card/card.component';
@@ -32,7 +32,8 @@ import { ProgressSpinnerComponent } from '../progress-spinner/progress-spinner.c
         </div>
       }
     </common-card>
-  `,  
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CommonWrapperComponent {
   messages = input<MessageInterface[]>([]);  

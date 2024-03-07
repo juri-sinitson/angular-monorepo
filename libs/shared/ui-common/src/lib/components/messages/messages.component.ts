@@ -1,4 +1,4 @@
-import { Component, computed, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 
 import { MessagesModule } from 'primeng/messages';
 
@@ -10,7 +10,8 @@ import { MessageInterface } from '../../interfaces/message.interface';
   imports: [MessagesModule],
   template: `
     <p-messages [value]="messagesSliced()" [enableService]="false" [closable]="false"></p-messages>
-  `,  
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MessagesComponent {
   lastMessagesAmount = input<number>(5);

@@ -1,4 +1,4 @@
-import { Component, OnInit, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, input } from '@angular/core';
 
 import { ChartModule } from 'primeng/chart';
 
@@ -11,6 +11,7 @@ import { ChartModule } from 'primeng/chart';
       <p-chart type="line" [data]="data()" [options]="options"></p-chart>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LineChartComponent implements OnInit{
   

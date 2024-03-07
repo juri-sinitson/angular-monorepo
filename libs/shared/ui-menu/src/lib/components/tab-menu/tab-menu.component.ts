@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { TabMenuModule } from 'primeng/tabmenu';
 
 import { MenuItemInterface } from '../../interfaces/menu-item.interface';
@@ -31,6 +31,7 @@ import { MenuItemInterface } from '../../interfaces/menu-item.interface';
       </ng-template>
     </p-tabMenu>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TabMenuComponent {
   items = input.required<MenuItemInterface[]>();  

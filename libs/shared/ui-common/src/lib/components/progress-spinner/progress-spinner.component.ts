@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
@@ -12,6 +12,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
       <p data-testid="loadingMessage">{{loadingMessage()}}...</p>
     }
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProgressSpinnerComponent {
   loadingMessage = input<string>('');
