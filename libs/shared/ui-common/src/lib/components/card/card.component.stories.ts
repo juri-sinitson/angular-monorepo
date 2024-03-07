@@ -4,7 +4,8 @@ import type { Meta, StoryObj } from '@storybook/angular';
 
 import { CardComponent } from './card.component';
 
-import { expectNoText, expectText, getCanvas } from '../../lib-intern-util/component-test.po';
+import { expectNoText, expectText, getCanvas } 
+  from '@angular-monorepo/shared/util-common-non-prod';
 
 /**
  * Testing component.

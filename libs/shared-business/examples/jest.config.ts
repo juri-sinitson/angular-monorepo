@@ -1,6 +1,6 @@
 /* eslint-disable */
 export default {
-  displayName: 'shared-business--examples',
+  displayName: 'shared-business-examples',
   preset: '../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   coverageDirectory: '../../../coverage/libs/shared-business/examples',

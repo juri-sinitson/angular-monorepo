@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/angular';
 import { ProgressSpinnerComponent } from './progress-spinner.component';
-import { expectElem, expectNoElem, expectText, getCanvas } from '../../lib-intern-util/component-test.po';
+import { expectElem, expectNoElem, expectText, getCanvas } 
+  from '@angular-monorepo/shared/util-common-non-prod';
 import { Component, Input } from '@angular/core';
 
 @Component({

@@ -13,7 +13,7 @@ import {
 
 import { TabMenuComponent } from './tab-menu.component';
 import { MenuItemInterface } from '../../interfaces/menu-item.interface';
-import { clickElem, expectElem, getCanvas } from '../../util/component-test.po';
+import { clickElem, expectElem, getCanvas } from '@angular-monorepo/shared/util-common-non-prod';
 
 @Component({
   selector: 'menu-test',

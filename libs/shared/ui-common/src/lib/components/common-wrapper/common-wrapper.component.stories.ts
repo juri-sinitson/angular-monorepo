@@ -5,8 +5,9 @@ import { applicationConfig, type Meta, type StoryObj } from '@storybook/angular'
 import { commonAppConfig } from '@angular-monorepo/shared/util-common';
 
 import { CommonWrapperComponent } from './common-wrapper.component';
-import { MessageInterface } from '../../interfaces/message.interface';
-import { expectElem, expectNoElem, expectNoText, expectText, getCanvas } from '../../lib-intern-util/component-test.po';
+import { MessageInterface } from '@angular-monorepo/shared/util-common';
+import { expectElem, expectNoElem, expectNoText, expectText, getCanvas } 
+  from '@angular-monorepo/shared/util-common-non-prod';
 
 
 const errorMessages: MessageInterface[] = [
@@ -38,8 +39,8 @@ const infoMessages: MessageInterface[] = [
   imports: [CommonWrapperComponent],
   template: `
     <common-common-wrapper [messages]="messages" [showContent]="showContent" 
-    [loading]="loading" [loadingMessage]="loadingMessage" 
-    [header]="header">
+    [isLoading]="isLoading" [loadingMessage]="loadingMessage" 
+    [header]="header" [noData]="noData">
       <p>Wrapped content</p>
     </common-common-wrapper>
   `,
@@ -50,9 +51,10 @@ export class WrapperTestComponent {
   // of storybook stay usable.
   @Input() messages: MessageInterface[] = [];
   @Input() showContent = true;
-  @Input() loading = false;
+  @Input() isLoading = false;
   @Input() loadingMessage = '';
   @Input() header: string | undefined = undefined;
+  @Input() noData = false;
 }
 
 const meta: Meta<WrapperTestComponent> = {
@@ -69,7 +71,7 @@ export const showContent: Story = {
   args: {
     messages: [],
     showContent: true,
-    loading: false,
+    isLoading: false,
     header: '',
   },
   play: async ({ canvasElement }) => {
@@ -84,7 +86,7 @@ export const contentWithHeader: Story = {
   args: {
     messages: [],
     showContent: true,
-    loading: false,
+    isLoading: false,
     header: 'My Header',
   },
   play: async ({ canvasElement }) => {
@@ -100,7 +102,7 @@ export const loading: Story = {
   args: {
     messages: [],
     showContent: true,
-    loading: true,
+    isLoading: true,
     loadingMessage: 'Loading',
     header: '',
   },
@@ -117,7 +119,7 @@ export const messageWithContent: Story = {
   args: {
     messages: infoMessages,
     showContent: true,
-    loading: false,
+    isLoading: false,
     header: '',
   },
   play: async ({ canvasElement }) => {
@@ -133,7 +135,7 @@ export const messageWithoutContent: Story = {
   args: {
     messages: errorMessages,
     showContent: false,
-    loading: false,
+    isLoading: false,
     header: '',
   },
   play: async ({ canvasElement }) => {
@@ -145,3 +147,19 @@ export const messageWithoutContent: Story = {
   },
 };
 
+export const noData: Story = {
+  args: {
+    messages: [],
+    showContent: true,
+    isLoading: false,
+    noData: true,    
+    header: '',    
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = getCanvas(canvasElement);
+    await expectText('Wrapped content', canvas);
+    await expectNoElem('loading', canvas);
+    await expectNoElem('messages', canvas);
+    await expectElem('no-data', canvas);
+  },
+};

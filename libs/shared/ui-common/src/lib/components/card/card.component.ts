@@ -7,9 +7,11 @@ import { CardModule } from 'primeng/card';
   standalone: true,
   imports: [CardModule,],
   template: `
-    <p-card [header]="header()">
-      <ng-content></ng-content>
-    </p-card>
+    <div class="mt-2">
+      <p-card [header]="header()">
+        <ng-content></ng-content>
+      </p-card>
+    </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

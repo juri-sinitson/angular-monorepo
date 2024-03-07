@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, input } from '@angular/co
 
 import { MessagesModule } from 'primeng/messages';
 
-import { MessageInterface } from '../../interfaces/message.interface';
+import { MessageInterface } from '@angular-monorepo/shared/util-common';
 
 @Component({
   selector: 'common-messages',

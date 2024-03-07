@@ -20,7 +20,7 @@
           "apps/examples-frontend/src/favicon.ico",
           "apps/examples-frontend/src/assets"
         ],
-        "styles": ["apps/examples-frontend/src/styles.scss"],
+        "styles": ["styles.scss"],
         "scripts": []
       },
       "configurations": {

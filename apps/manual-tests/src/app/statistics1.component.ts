@@ -3,16 +3,23 @@ import { Component } from '@angular/core';
 // TODO: give the correct tags to the projects
 // eslint-disable-next-line @nx/enforce-module-boundaries
 import { LineChartComponent } from '@angular-monorepo/shared/ui-chart';
+// TODO: give the correct tags to the projects
+// eslint-disable-next-line @nx/enforce-module-boundaries
+import { ProductsSmartComponent }  from '@angular-monorepo/shared-business/feature-examples'
 
 const documentStyle = getComputedStyle(document.documentElement);
 
 @Component({
   standalone: true,
   imports: [
-    LineChartComponent
+    LineChartComponent,
+    ProductsSmartComponent,
   ],
   selector: 'angular-monorepo-statistics1',
-  template: '<chart-line-chart [data]="chartData"></chart-line-chart>',  
+  template: `
+    <chart-line-chart [data]="chartData"></chart-line-chart>
+    <angular-monorepo-products-smart></angular-monorepo-products-smart>
+  `,  
 })
 export class Statistics1Component {
   title = 'Statistics1';

@@ -1,12 +1,20 @@
 import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
+
+// TODO: Adjust the project tags.
+// eslint-disable-next-line @nx/enforce-module-boundaries
+import { 
+  ProductsSmartComponent, 
+  OtherProductsSmartComponent 
+} from '@angular-monorepo/shared-business/feature-examples';
 
 @Component({
   standalone: true,
-  imports: [RouterModule],
+  imports: [ProductsSmartComponent, OtherProductsSmartComponent],
   selector: 'angular-monorepo-root',
-  template: `<h1>Welcome examples-frontend</h1>
-    <router-outlet></router-outlet>`,
+  template: `    
+    <angular-monorepo-products-smart></angular-monorepo-products-smart>    
+    <angular-monorepo-other-products-smart></angular-monorepo-other-products-smart>
+  `,
   styles: ``,
 })
 export class AppComponent {}

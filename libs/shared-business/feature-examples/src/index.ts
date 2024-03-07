@@ -1,1 +1,2 @@
-export * from './lib/shared-business-feature-examples/shared-business-feature-examples.component';
+export * from './lib/components/products/products-smart.component';
+export * from './lib/components/products/other-products-smart.component';

@@ -1,5 +1,5 @@
 {
-  "name": "shared-business--examples",
+  "name": "shared-business-examples",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/shared-business/examples/src",
   "prefix": "angular-monorepo",
