@@ -21,6 +21,9 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "paths": {
+      "@angular-monorepo/shared-business/feature-examples": [
+        "libs/shared-business/feature-examples/src/index.ts"
+      ],
       "@angular-monorepo/shared/ui-chart": [
         "libs/shared/ui-chart/src/index.ts"
       ],
