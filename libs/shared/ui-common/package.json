@@ -1,5 +1,14 @@
 {
   "name": "@angular-monorepo/shared/ui-common",
   "version": "0.0.1",
+  "peerDependencies": {
+    "@angular/core": "^17.0.0",
+    "@storybook/angular": "7.6.5",
+    "primeng": "^17.1.0",
+    "@angular-monorepo/shared/util-common": "0.0.1",
+    "@storybook/testing-library": "^0.2.2",
+    "@storybook/jest": "^0.2.3"
+  },
+  "dependencies": {},
   "sideEffects": false
 }
