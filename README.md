@@ -3,33 +3,33 @@
 - [What is this repo for?](#what-is-this-repo-for)
 - [Is a monorepo an evil?](#is-a-monorepo-an-evil)
 - [Before execution](#before-execution)
-   * [Intro](#intro)
-   * [Creating configs](#creating-configs)
-   * [The list](#the-list)
+  - [Intro](#intro)
+  - [Creating configs](#creating-configs)
+  - [The list](#the-list)
 - [Execution](#execution)
-   * [Own additions](#own-additions)
+  - [Own additions](#own-additions)
 - [Architecture](#architecture)
-   * [Main Goals](#main-goals)
-   * [General](#general)
-   * [Own additions/modifications](#own-additionsmodifications)
-      + [UI](#ui)
-      + [UI: Stylesheets](#ui-stylesheets)
-      + [UI: Icons](#ui-icons)
-      + [Catalogue the UI components with Storybook](#catalogue-the-ui-components-with-storybook)
-      + [Developing process](#developing-process)
-      + [The domain `non-prod`](#the-domain-non-prod)
-      + [The domain `shared`](#the-domain-shared)
-      + [The domain `shared-business`](#the-domain-shared-business)
+  - [Main Goals](#main-goals)
+  - [General](#general)
+  - [Own additions/modifications](#own-additionsmodifications)
+    - [UI](#ui)
+    - [UI: Stylesheets](#ui-stylesheets)
+    - [UI: Icons](#ui-icons)
+    - [Catalogue the UI components with Storybook](#catalogue-the-ui-components-with-storybook)
+    - [Developing process](#developing-process)
+    - [The domain `non-prod`](#the-domain-non-prod)
+    - [The domain `shared`](#the-domain-shared)
+    - [The domain `shared-business`](#the-domain-shared-business)
 - [Commits](#commits)
-   * [Own additions/modifications](#own-additionsmodifications-1)
+  - [Own additions/modifications](#own-additionsmodifications-1)
 - [Generated documentation](#generated-documentation)
-   * [Start the app](#start-the-app)
-   * [Generate code](#generate-code)
-   * [Running tasks](#running-tasks)
-   * [Want better Editor Integration?](#want-better-editor-integration)
-   * [Ready to deploy?](#ready-to-deploy)
-   * [Set up CI!](#set-up-ci)
-   * [Connect with us!](#connect-with-us)
+  - [Start the app](#start-the-app)
+  - [Generate code](#generate-code)
+  - [Running tasks](#running-tasks)
+  - [Want better Editor Integration?](#want-better-editor-integration)
+  - [Ready to deploy?](#ready-to-deploy)
+  - [Set up CI!](#set-up-ci)
+  - [Connect with us!](#connect-with-us)
 
 <!-- TOC end -->
 
@@ -163,9 +163,9 @@ Example of the implementation (error handling and other stuff are omitted for th
 </p-tabMenu>
 ```
 
-**Possible limitations of the UI abstraction above**
+**Possible limitations**
 
-For a very complex CRUD table (e.g. with a very complex custom sorting logic) or a very complex
+1. For a very complex CRUD table (e.g. with a very complex custom sorting logic) or a very complex
 form (e.g. with a very complex custom validation logic) it might be reasonable to use
 the components of the UI library directly to avoid too high abstraction effort caused by
 >1. Abstraction itself
@@ -173,6 +173,8 @@ the components of the UI library directly to avoid too high abstraction effort c
 >3. Problems with a high complexity of the input mechanism (e.g. if you need to put in such 
 stuff like sorting or validation functions instead of just a sync data or 
 some simple control params)
+2. The are cases where the granularity of components being customizable might be too limited in such 
+   a library like PrimeNG. You will most probably need such a framework like [Tailwindcss](https://tailwindcss.com/) instead.
 
 <!-- TOC --><a name="ui-stylesheets"></a>
 ### UI: Stylesheets
@@ -195,12 +197,14 @@ a work which can be (partially) useless.
 ### Catalogue the UI components with Storybook
 1. To catalogue and test the components (business and basic ones) we use [Storybook](https://storybook.js.org/).
 
->Goals:
+**Goals**
 >1. Increased agility because UI part can be approved during/before the service/backend part is being developed.
 >2. Every component can be found quickly. No knowledge and credentials of the real app is needed. This is very 
 handy for designers, POs, C-Level and other decision parties.
 >3. The UI components are production ready. No rewriting for use in the production is needed.
 
+**Possible downsides/limitations**
+1. The bumping up to the next Angular major version might need a high refactoring effort.
 
 <!-- TOC --><a name="developing-process"></a>
 ### Developing process
