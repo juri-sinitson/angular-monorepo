@@ -1,0 +1,29 @@
+{
+  "name": "examples-frontend-e2e",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/examples-frontend-e2e/src",
+  "targets": {
+    "e2e": {
+      "executor": "@nx/cypress:cypress",
+      "options": {
+        "cypressConfig": "apps/examples-frontend-e2e/cypress.config.ts",
+        "testingType": "e2e",
+        "devServerTarget": "examples-frontend:serve:development"
+      },
+      "configurations": {
+        "production": {
+          "devServerTarget": "examples-frontend:serve:production"
+        },
+        "ci": {
+          "devServerTarget": "examples-frontend:serve-static"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  },
+  "tags": [],
+  "implicitDependencies": ["examples-frontend"]
+}
