@@ -3,16 +3,14 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import type { Meta, StoryObj } from '@storybook/angular';
 import { BasicTableComponent } from './basic-table.component';
 
-import { 
+import {
   expectNoElem,
-  expectTableColElemText, 
-  expectTableValueElemText, 
-  getCanvas 
-} 
-from '@angular-monorepo/shared/util-common-non-prod';
+  expectTableColElemText,
+  expectTableValueElemText,
+  getCanvas,
+} from '@angular-monorepo/shared/util-common-non-prod';
 
 import { TableColumn } from '../../types/table';
-
 
 export interface ProductInterface {
   code: string;
@@ -54,19 +52,21 @@ const productsList: ProductInterface[] = [
   },
 ];
 
-
 @Component({
   selector: 'common-basic-table-test-wrapper',
   standalone: true,
   imports: [BasicTableComponent],
   template: `
-    <common-basic-table [data]="products" [columns]="columns"></common-basic-table>
+    <common-basic-table
+      [data]="products"
+      [columns]="columns"
+    ></common-basic-table>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BasicTableTestWrapperComponent {
-  // TODO! Figure how to use signal 
-  // inputs here that the controls 
+  // TODO! Figure how to use signal
+  // inputs here that the controls
   // of storybook stay usable.
   // If you figure out, you can remove this wrapper.
   @Input() products: ProductInterface[] = [];
@@ -80,19 +80,19 @@ const meta: Meta<BasicTableTestWrapperComponent> = {
 export default meta;
 type Story = StoryObj<BasicTableTestWrapperComponent>;
 
-const providedColumns: TableColumn = [  
+const providedColumns: TableColumn = [
   ['name', 'Name'],
   ['category', 'Kategorie'],
   ['quantity', 'Anzahl'],
   ['code', 'Code'],
 ];
 
-const expectProvidedColumns = async (canvas: HTMLCanvasElement) => {  
+const expectProvidedColumns = async (canvas: HTMLCanvasElement) => {
   await expectTableColElemText('col-code', 'Code', canvas);
   await expectTableColElemText('col-name', 'Name', canvas);
   await expectTableColElemText('col-category', 'Kategorie', canvas);
   await expectTableColElemText('col-quantity', 'Anzahl', canvas);
-}
+};
 
 export const colNamesDerived: Story = {
   args: {
@@ -140,7 +140,7 @@ export const noData: Story = {
     const canvas = getCanvas(canvasElement);
 
     await expectProvidedColumns(canvas);
-    
+
     await expectNoElem('val-code', canvas);
     await expectNoElem('val-name', canvas);
     await expectNoElem('val-category', canvas);

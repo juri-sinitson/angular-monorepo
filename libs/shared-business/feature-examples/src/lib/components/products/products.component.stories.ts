@@ -8,7 +8,15 @@ import { ProductInterface } from '@angular-monorepo/shared-business/examples';
 // eslint-disable-next-line @nx/enforce-module-boundaries
 import { MessageInterface } from '@angular-monorepo/shared/util-common';
 // eslint-disable-next-line @nx/enforce-module-boundaries
-import { errorStory, getFirstElemByText, expectNoElem, expectText, getCanvas, loadingStory, noDataStory } from '@angular-monorepo/shared/util-common-non-prod';
+import {
+  errorStory,
+  getFirstElemByText,
+  expectNoElem,
+  expectText,
+  getCanvas,
+  loadingStory,
+  noDataStory,
+} from '@angular-monorepo/shared/util-common-non-prod';
 
 const productsList: ProductInterface[] = [
   {
@@ -73,15 +81,15 @@ const productsList: ProductInterface[] = [
   standalone: true,
   imports: [ProductsComponent],
   template: `
-    <angular-monorepo-products 
+    <angular-monorepo-products
       [data]="data"
-      [messages]="messages" 
+      [messages]="messages"
       [isLoading]="isLoading"
       [header]="header"
       [noData]="noData"
     >
     </angular-monorepo-products>
-  `,  
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductsTestWrapperComponent {
@@ -140,7 +148,7 @@ export const Primary: Story = {
   },
   play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
     const canvas = getCanvas(canvasElement);
-    
+
     await expectCols(canvas);
     await expectValues(canvas);
 
@@ -151,7 +159,7 @@ export const Primary: Story = {
 };
 
 export const Loading: Story = {
-  args: {    
+  args: {
     ...loadingStory.args,
     data: productsList,
     header: 'Products',

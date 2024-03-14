@@ -1,14 +1,22 @@
 import { Component, Input } from '@angular/core';
 
-import { applicationConfig, type Meta, type StoryObj } from '@storybook/angular';
+import {
+  applicationConfig,
+  type Meta,
+  type StoryObj,
+} from '@storybook/angular';
 
 import { commonAppConfig } from '@angular-monorepo/shared/util-common';
 
 import { CommonWrapperComponent } from './common-wrapper.component';
 import { MessageInterface } from '@angular-monorepo/shared/util-common';
-import { expectElem, expectNoElem, expectNoText, expectText, getCanvas } 
-  from '@angular-monorepo/shared/util-common-non-prod';
-
+import {
+  expectElem,
+  expectNoElem,
+  expectNoText,
+  expectText,
+  getCanvas,
+} from '@angular-monorepo/shared/util-common-non-prod';
 
 const errorMessages: MessageInterface[] = [
   {
@@ -28,8 +36,8 @@ const infoMessages: MessageInterface[] = [
 
 /**
  * Testing component.
- * 
- * We create this component because of 
+ *
+ * We create this component because of
  * the wrapped content. So we demonstrate
  * how the content is wrapped.
  */
@@ -38,16 +46,21 @@ const infoMessages: MessageInterface[] = [
   standalone: true,
   imports: [CommonWrapperComponent],
   template: `
-    <common-common-wrapper [messages]="messages" [showContent]="showContent" 
-    [isLoading]="isLoading" [loadingMessage]="loadingMessage" 
-    [header]="header" [noData]="noData">
+    <common-common-wrapper
+      [messages]="messages"
+      [showContent]="showContent"
+      [isLoading]="isLoading"
+      [loadingMessage]="loadingMessage"
+      [header]="header"
+      [noData]="noData"
+    >
       <p>Wrapped content</p>
     </common-common-wrapper>
   `,
 })
 export class WrapperTestComponent {
-  // TODO! Figure how to use signal 
-  // inputs here that the controls 
+  // TODO! Figure how to use signal
+  // inputs here that the controls
   // of storybook stay usable.
   @Input() messages: MessageInterface[] = [];
   @Input() showContent = true;
@@ -60,9 +73,7 @@ export class WrapperTestComponent {
 const meta: Meta<WrapperTestComponent> = {
   component: WrapperTestComponent,
   title: 'shared/ui-common/Common Wrapper',
-  decorators: [
-    applicationConfig({...commonAppConfig})
-  ],
+  decorators: [applicationConfig({ ...commonAppConfig })],
 };
 export default meta;
 type Story = StoryObj<WrapperTestComponent>;
@@ -95,7 +106,7 @@ export const contentWithHeader: Story = {
     await expectText('My Header', canvas);
     await expectNoElem('loading', canvas);
     await expectNoElem('messages', canvas);
-  },  
+  },
 };
 
 export const loading: Story = {
@@ -128,7 +139,7 @@ export const messageWithContent: Story = {
     await expectNoElem('loading', canvas);
     await expectElem('messages', canvas);
     await expectText('Info message', canvas);
-  },  
+  },
 };
 
 export const messageWithoutContent: Story = {
@@ -152,8 +163,8 @@ export const noData: Story = {
     messages: [],
     showContent: true,
     isLoading: false,
-    noData: true,    
-    header: '',    
+    noData: true,
+    header: '',
   },
   play: async ({ canvasElement }) => {
     const canvas = getCanvas(canvasElement);

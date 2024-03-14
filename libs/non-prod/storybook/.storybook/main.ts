@@ -1,10 +1,8 @@
 import type { StorybookConfig } from '@storybook/angular';
 
-// Commented out because vite currently doesn't load the styles.
-// import { mergeConfig } from 'vite';
-
 const config: StorybookConfig = {
-  stories: ['../../../**/*.stories.@(js|jsx|ts|tsx|mdx)'],
+  stories: ['../../../**/*.@(mdx|stories.@(js|jsx|ts|tsx))'],
+
   addons: [
     '@storybook/addon-essentials', 
     '@storybook/addon-interactions',    
@@ -15,34 +13,16 @@ const config: StorybookConfig = {
     options: {},
   },
 
-  // Don't remove it, we need it from time to 
-  // time for debug purposes
-  webpackFinal: async (config) => {
+  // For debug purposes
+  /*webpackFinal: async (config) => {
     return {
       ...config,
     };
-  },
-
-  // TODO: Figure out why vite doesn't load the styles.
-  /*core: {
-    builder: '@storybook/builder-vite',
-  },
-  async viteFinal(config) {
-    // Merge custom configuration into the default config
-    return mergeConfig(config, {
-      // Add dependencies to pre-optimization
-      css: {
-        preprocessorOptions: {
-          // For example, if you are using SCSS
-          scss: {
-            additionalData: `
-              @import "styles.scss"
-            `
-          }
-        }
-      }
-    });
   },*/
+
+  docs: {
+    autodocs: true
+  }
 };
 
 export default config;

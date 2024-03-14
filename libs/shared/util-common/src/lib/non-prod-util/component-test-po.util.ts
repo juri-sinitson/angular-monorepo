@@ -1,5 +1,4 @@
-import { userEvent, within } from '@storybook/testing-library';
-import { expect } from '@storybook/jest';
+import { expect, userEvent, within } from '@storybook/test';
 
 // TODO: wrap them in a class or an object to avoid name conflicts
 // in the future

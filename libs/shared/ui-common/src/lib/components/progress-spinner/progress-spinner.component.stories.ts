@@ -1,7 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/angular';
 import { ProgressSpinnerComponent } from './progress-spinner.component';
-import { expectElem, expectNoElem, expectText, getCanvas } 
-  from '@angular-monorepo/shared/util-common-non-prod';
+import {
+  expectElem,
+  expectNoElem,
+  expectText,
+  getCanvas,
+} from '@angular-monorepo/shared/util-common-non-prod';
 import { Component, Input } from '@angular/core';
 
 @Component({
@@ -9,12 +13,14 @@ import { Component, Input } from '@angular/core';
   standalone: true,
   imports: [ProgressSpinnerComponent],
   template: `
-    <common-progress-spinner [loadingMessage]="loadingMessage"></common-progress-spinner>
-  `,  
+    <common-progress-spinner
+      [loadingMessage]="loadingMessage"
+    ></common-progress-spinner>
+  `,
 })
 export class ProgressSpinnerTestWrapperComponent {
-  // TODO! Figure how to use signal 
-  // inputs here that the controls 
+  // TODO! Figure how to use signal
+  // inputs here that the controls
   // of storybook stay usable.
   @Input() loadingMessage = '';
 }
@@ -33,7 +39,7 @@ export const withoutMessage: Story = {
   play: async ({ canvasElement }) => {
     const canvas = getCanvas(canvasElement);
     await expectNoElem('loadingMessage', canvas);
-  }
+  },
 };
 
 export const withMessage: Story = {
@@ -44,5 +50,5 @@ export const withMessage: Story = {
     const canvas = getCanvas(canvasElement);
     await expectElem('loadingMessage', canvas);
     await expectText('Loading...', canvas);
-  }
+  },
 };
