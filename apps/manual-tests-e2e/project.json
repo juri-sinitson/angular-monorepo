@@ -9,7 +9,8 @@
       "options": {
         "cypressConfig": "apps/manual-tests-e2e/cypress.config.ts",
         "testingType": "e2e",
-        "devServerTarget": "manual-tests:serve:development"
+        "devServerTarget": "manual-tests:serve:development",
+        "port": "cypress-auto"
       },
       "configurations": {
         "production": {
