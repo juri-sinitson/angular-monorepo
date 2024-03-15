@@ -15,7 +15,6 @@ jobs:
       - uses: pnpm/action-setup@v2
         with:
           version: 8
-      - run: pnpm nx-cloud start-ci-run --distribute-on="3 linux-medium-js" --stop-agents-after="affected:test-storybook"
       - name: Restore cached npm dependencies
         id: cache-dependencies-restore
         uses: actions/cache/restore@v3
@@ -26,6 +25,7 @@ jobs:
             ~/.cache/ms-playwright
           key: npm-dependencies-${{ hashFiles('pnpm-lock.yaml') }}
       - run: pnpm install --frozen-lockfile
+      - run: pnpm nx-cloud start-ci-run --distribute-on="3 linux-medium-js" --stop-agents-after="affected:test-storybook"
       - run: pnpm exec playwright install
       - run: pnpm cypress install
       - name: Cache npm dependencies
