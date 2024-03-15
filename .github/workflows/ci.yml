@@ -24,7 +24,11 @@ jobs:
             ~/.cache/Cypress # needed for the Cypress binary
             ~/.cache/ms-playwright
           key: npm-dependencies-${{ hashFiles('pnpm-lock.yaml') }}
-      - run: pnpm install --frozen-lockfile
+      - run: cp nx.json.dist nx.json 
+      - run: pnpm install --frozen-lockfile      
+      # Replacing the placeholder YOUR-SENSITIVE-VALUE-HERE for nxCloudAccessToken
+      # with an appropriate secret value
+      - run: sed 's/YOUR-SENSITIVE-VALUE-HERE/${{ secrets.nx_cloud_access_token_readonly }}/' nx.json > temp.json && mv temp.json nx.json
       - run: pnpm nx-cloud start-ci-run --distribute-on="3 linux-medium-js" --stop-agents-after="affected:test-storybook"
       - run: pnpm exec playwright install
       - run: pnpm cypress install
@@ -39,11 +43,7 @@ jobs:
           key: ${{ steps.cache-dependencies-restore.outputs.cache-primary-key }}
       - uses: nrwl/nx-set-shas@v3
       # This line is needed for nx affected to work when CI is running on a PR
-      - run: git branch --track main origin/main
-      - run: cp nx.json.dist nx.json 
-      # Replacing the placeholder YOUR-SENSITIVE-VALUE-HERE for nxCloudAccessToken
-      # with a secret
-      - run: sed 's/YOUR-SENSITIVE-VALUE-HERE/${{ secrets.nx_cloud_access_token_readonly }}/' nx.json > temp.json && mv temp.json nx.json
+      - run: git branch --track main origin/main            
       - run: pnpm ci:lint-test-build
       - run: pnpm ci:e2e
       - run: pnpm ci:test-storybook
