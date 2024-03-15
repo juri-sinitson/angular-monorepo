@@ -24,11 +24,11 @@ jobs:
             ~/.cache/Cypress # needed for the Cypress binary
             ~/.cache/ms-playwright
           key: npm-dependencies-${{ hashFiles('pnpm-lock.yaml') }}
-      - run: cp nx.json.dist nx.json 
-      - run: pnpm install --frozen-lockfile      
+      - run: cp nx.json.dist nx.json      
       # Replacing the placeholder YOUR-SENSITIVE-VALUE-HERE for nxCloudAccessToken
       # with an appropriate secret value
       - run: sed 's/YOUR-SENSITIVE-VALUE-HERE/${{ secrets.nx_cloud_access_token_readonly }}/' nx.json > temp.json && mv temp.json nx.json
+      - run: pnpm install --frozen-lockfile      
       # This command is commented out, because currently (2024-03-15) the usage 
       # of NX Agents is only supported for payed plan. Wether it's a payed plan
       # or not is determined by nx cloud access token provided in this repo as a secret.
