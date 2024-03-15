@@ -24,6 +24,10 @@ jobs:
             node_modules
             ~/.cache/Cypress # needed for the Cypress binary
           key: npm-dependencies-${{ hashFiles('pnpm-lock.yaml') }}
+      - run: cp nx.json.dist nx.json 
+      # Replacing YOUR-SENSITIVE-VALUE-HERE for nxCloudAccessToken
+      # with en empty sting 
+      - run: sed 's/YOUR-SENSITIVE-VALUE-HERE//' nx.json > temp.json && mv temp.json nx.json
       - run: pnpm install --frozen-lockfile
       - name: Cache npm dependencies
         uses: actions/cache/save@v3
