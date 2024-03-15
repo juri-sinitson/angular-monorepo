@@ -9,7 +9,7 @@
     "storybook": "pnpm nx run non-prod-storybook:storybook",
     "storybook-alt": "NODE_ENV=development pnpm nx run non-prod-storybook:storybook",
     "test-storybook": "pnpm nx affected --verbose -t test-storybook --parallel --url http://localhost:4400",    
-    "cy:run": "pnpm nx affected --verbose -t e2e --verbose --parallel",
+    "cy:run": "pnpm nx affected --verbose -t e2e --parallel",
     "cy:run-headed": "pnpm nx run --verbose examples-frontend-e2e:e2e --headed --watch --browser chrome",
     "e2e-headed": "pnpm start-server-and-test start-backend http://localhost:3000 cy:run-headed",
     "ci:storybook": "pnpm storybook -- --ci",
