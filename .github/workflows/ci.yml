@@ -41,8 +41,8 @@ jobs:
       - run: git branch --track main origin/main
       - run: cp nx.json.dist nx.json 
       # Replacing the placeholder YOUR-SENSITIVE-VALUE-HERE for nxCloudAccessToken
-      # with an empty sting
-      - run: sed 's/YOUR-SENSITIVE-VALUE-HERE//' nx.json > temp.json && mv temp.json nx.json      
+      # with a secret
+      - run: sed 's/YOUR-SENSITIVE-VALUE-HERE/${{ secrets.nx_cloud_access_token_readonly }}/' nx.json > temp.json && mv temp.json nx.json
       - run: pnpm ci:lint-test-build
       - run: pnpm ci:e2e
       - run: pnpm ci:test-storybook
