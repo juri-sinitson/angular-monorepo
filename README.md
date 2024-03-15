@@ -269,13 +269,13 @@ acts as a proxy to a store with side effects, than those side effects are mocked
 not tested to keep the tests immune against refactoring (the changes which don't affect 
 the behavior to the outside).
 
-There is also [video](https://www.youtube.com/watch?v=EZ05e7EMOLM) from 2017 which is still current regarding this topic.
+There is also a [video](https://www.youtube.com/watch?v=EZ05e7EMOLM) from 2017 which is still current regarding this topic.
 
 ### E2E tests and Storybook interaction tests
 The same principle as for unit tests: the implementation details are not tested.
 The implementation details in this case are css classes, ids and other stuff which
-will or theoretically can be changed or removed to improve the template. Thus the 
-special marker should for E2E tests and Storybook interaction tests should be used,
+will or theoretically can be changed or removed to improve the template. Thus a
+separate marker should be used for E2E tests and Storybook interaction tests,
 e.g. the `testid` attribute which works on both cypress and storybook.
 
 The goal of storybook interaction tests is to make sure every entry in 
