@@ -20,6 +20,11 @@
     - [The domain `non-prod`](#the-domain-non-prod)
     - [The domain `shared`](#the-domain-shared)
     - [The domain `shared-business`](#the-domain-shared-business)
+    - [Side effects](#side-effects)
+    - [State Management](#state-management)
+    - [Unit tests](#unit-tests)
+    - [E2E tests and Storybook interaction tests](#e2e-tests-and-storybook-interaction-tests)
+    - [DRY](#dry)
 - [Commits](#commits)
   - [Own additions/modifications](#own-additionsmodifications-1)
 - [Generated documentation](#generated-documentation)
@@ -234,6 +239,68 @@ Put the business logic there, which will be shared amongst other libs.
 Examples for possible candidates: 
 1. The person or address interfaces and most probably the routines for fetching this data
 2. Some statistics data on charts
+
+### Side effects
+Side effects are separated from the rest of the code into a (signal) store.
+A method of the store should then have a prefix or postfix `sideEffects`.
+A typical side effect is a network request. A side effect is generally 
+everything which delivers different results (also theoretically) if
+executed multiple times with the same input. So no matter how reliable
+a backend is, an endpoint can at least theoretically deliver different 
+results when called multiple times with the same input (bugs, failures, 
+unavailability, an attack, (buggy) updates, 
+changes by normal usage, etc.).
+
+The better side effects are separated from the rest of the code,
+the better testable and reliable it will be.
+
+### State Management
+The state management is currently (2024-03-16) implemented using a
+[signal store](https://ngrx.io/guide/signals/signal-store) of NGRX. To provide an abstraction, the signal store is not available from the outside. Instead a service is used which provides the access to the pieces of the state and as the case may be triggers some side effects on the store.
+
+The goal of this approach is a better predictability and better debugability with e.g. Redux DevTools
+(an addon for a popular browser). It's may also come in very handy if you know that all 
+the network requests are made as side effects on the appropriate store and that a store is the single
+source of truth.
+
+### Unit tests
+Unit tests are made to ensure a service behaves as expected. If the service to be tested 
+acts as a proxy to a store with side effects, than those side effects are mocked for different scenarios. E.g. in case of a GET network request the following scenarios are emulated: happy case, loading, error and no data (in case of angular with [this](https://angular.io/guide/http-test-requests#http-testing-library) testing library). For every scenario the behavior of the service or in other words its API to the outside is tested. Implementation details are 
+not tested to keep the tests immune against refactoring (the changes which don't affect 
+the behavior to the outside).
+
+There is also [video](https://www.youtube.com/watch?v=EZ05e7EMOLM) from 2017 which is still current regarding this topic.
+
+### E2E tests and Storybook interaction tests
+The same principle as for unit tests: the implementation details are not tested.
+The implementation details in this case are css classes, ids and other stuff which
+will or theoretically can be changed or removed to improve the template. Thus the 
+special marker should for E2E tests and Storybook interaction tests should be used,
+e.g. the `testid` attribute which works on both cypress and storybook.
+
+The goal of storybook interaction tests is to make sure every entry in 
+storybook behaves as expected and is generally there (e.g. instead of an ugly black-red
+error message).
+
+The goal of E2E tests is to make sure the app behaves for the end user as expected.
+If they are performant they save a lot of work for manual testing. E2E tests should be 
+made economically to provide a good performance.
+
+E.g. in case of a table it should be enough to test if the header row and first two data rows are there. 
+
+When you test if the data was loaded on the page correctly is't usually not necessary to call visit for every component. Same when you test the loading, error and no data states on the page. It usually should be enough to make one visit for each state instead of one visit for
+each component.
+
+If you have a lot of combinations to check, fill and post some data, it's reasonable to test e.g. the most important ten ones instead of 200 of them.
+
+To make a test better readable the page object approach is used.
+
+### DRY
+To avoid repeating e.g. for such standard states like, loading, error and no data, a wrapper
+(here `libs\shared\ui-common\src\lib\components\common-wrapper\common-wrapper.component.ts`) is used. The goals:
+1. The depiction of states is unified and can be changed in one place
+2. One saves time just wrapping the data component instead of writing those 
+   routines again and again.
 
 <!-- TOC --><a name="commits"></a>
 # Commits
