@@ -297,7 +297,7 @@ To make a test better readable the page object approach is used.
 
 ### DRY
 To avoid repeating e.g. for such standard states like, loading, error and no data, a wrapper
-(here `libs\shared\ui-common\src\lib\components\common-wrapper\common-wrapper.component.ts`) is used. The goals:
+(here [`common-wrapper.component`](https://github.com/juri-sinitson/angular-monorepo/blob/main/libs/shared/ui-common/src/lib/components/common-wrapper/common-wrapper.component.ts)) is used. The goals:
 1. The depiction of states is unified and can be changed in one place
 2. One saves time just wrapping the data component instead of writing those 
    routines again and again.
