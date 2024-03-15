@@ -1,0 +1,57 @@
+# See https://nx.dev/ci/intro/tutorials/github-actions
+# and https://nx.dev/ci/intro/ci-with-nx
+name: CI
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  main:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
+      - name: Restore cached npm dependencies
+        id: cache-dependencies-restore
+        uses: actions/cache/restore@v3
+        with:
+          path: |
+            node_modules
+            ~/.cache/Cypress # needed for the Cypress binary
+            ~/.cache/ms-playwright
+          key: npm-dependencies-${{ hashFiles('pnpm-lock.yaml') }}
+      - run: cp nx.json.dist nx.json      
+      # Replacing the placeholder YOUR-SENSITIVE-VALUE-HERE for nxCloudAccessToken
+      # with an appropriate secret value
+      - run: sed 's/YOUR-SENSITIVE-VALUE-HERE/${{ secrets.nx_cloud_access_token_readonly }}/' nx.json > temp.json && mv temp.json nx.json
+      - run: pnpm install --frozen-lockfile      
+      # This command is commented out, because currently (2024-03-15) the usage 
+      # of NX Agents is only supported for payed plan. Wether it's a payed plan
+      # or not is determined by nx cloud access token provided in this repo as a secret.
+      # If you want to privide a different nx cloud access token to this repository
+      # and as the case may be uncomment this line you will most probably need to fork it.
+      # - run: pnpm exec nx-cloud start-ci-run --distribute-on="3 linux-medium-js" --stop-agents-after="affected:test-storybook"
+      # We currently (2024-03-15) need playwright for the task test-storybook
+      - run: pnpm exec playwright install
+      - run: pnpm cypress install
+      - name: Cache npm dependencies
+        id: cache-dependencies-save
+        uses: actions/cache/save@v3
+        with:
+          path: |
+            node_modules
+            ~/.cache/Cypress # needed for the Cypress binary
+            ~/.cache/ms-playwright
+          key: ${{ steps.cache-dependencies-restore.outputs.cache-primary-key }}
+      - uses: nrwl/nx-set-shas@v3
+      # This line is needed for nx affected to work when CI is running on a PR
+      - run: git branch --track main origin/main            
+      - run: pnpm ci:lint-test-build
+      - run: pnpm ci:e2e
+      - run: pnpm ci:test-storybook
