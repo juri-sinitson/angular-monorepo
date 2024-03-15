@@ -22,8 +22,11 @@ jobs:
           path: |
             node_modules
             ~/.cache/Cypress # needed for the Cypress binary
+            ~/.cache/ms-playwright
           key: npm-dependencies-${{ hashFiles('pnpm-lock.yaml') }}
       - run: pnpm install --frozen-lockfile
+      - run: pnpm exec playwright install
+      - run: pnpm cypress install
       - name: Cache npm dependencies
         id: cache-dependencies-save
         uses: actions/cache/save@v3
@@ -31,6 +34,7 @@ jobs:
           path: |
             node_modules
             ~/.cache/Cypress # needed for the Cypress binary
+            ~/.cache/ms-playwright
           key: ${{ steps.cache-dependencies-restore.outputs.cache-primary-key }}
       - uses: nrwl/nx-set-shas@v3
       # This line is needed for nx affected to work when CI is running on a PR
@@ -39,7 +43,6 @@ jobs:
       # Replacing the placeholder YOUR-SENSITIVE-VALUE-HERE for nxCloudAccessToken
       # with an empty sting
       - run: sed 's/YOUR-SENSITIVE-VALUE-HERE//' nx.json > temp.json && mv temp.json nx.json      
-      - run: pnpm cypress install
-      - run: pnpm nx affected -t lint test build --parallel
+      - run: pnpm ci:lint-test-build
       - run: pnpm ci:e2e
-      - run: pnpm ci:test-storybook      
+      - run: pnpm ci:test-storybook
