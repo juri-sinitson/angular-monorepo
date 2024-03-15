@@ -103,6 +103,9 @@ devDependencies:
   '@angular/language-service':
     specifier: 17.2.3
     version: 17.2.3
+  '@nrwl/nx-cloud':
+    specifier: ^18.0.0
+    version: 18.0.0
   '@nx/cypress':
     specifier: 18.0.7
     version: 18.0.7(@swc-node/register@1.8.0)(@swc/core@1.3.101)(@types/node@18.16.9)(cypress@13.6.1)(nx@18.0.7)(typescript@5.3.3)
@@ -5317,6 +5320,14 @@ packages:
       - verdaccio
     dev: true
 
+  /@nrwl/nx-cloud@18.0.0:
+    resolution: {integrity: sha512-rjjcJgzDmKwFD1QVIMs5O3X4SoMQIk0bzh3pL90ZP/B5YJUlTySv7+R0JoGQ6ROGwVQHjPFMVKKLB09zl5perA==}
+    dependencies:
+      nx-cloud: 18.0.0
+    transitivePeerDependencies:
+      - debug
+    dev: true
+
   /@nrwl/storybook@18.0.8(@swc-node/register@1.8.0)(@swc/core@1.3.101)(@types/node@18.16.9)(cypress@13.6.1)(nx@18.0.7)(typescript@5.3.3):
     resolution: {integrity: sha512-UnO1Y28DAtPNlePkDhxbxA02CePFYRXn8i7zaCn9ZABrkC3U+urJ5rasZCMtoqjgrmctDxAV56+SVs7PjBQiJA==}
     dependencies:
@@ -8697,6 +8708,16 @@ packages:
   /aws4@1.12.0:
     resolution: {integrity: sha512-NmWvPnx0F1SfrQbYwOi7OeaNGokp9XhzNioJ/CSBs8Qa4vxug81mhJEAVZwxXuBmYB5KDRfMq/F3RR0BIU7sWg==}
 
+  /axios@1.1.3:
+    resolution: {integrity: sha512-00tXVRwKx/FZr/IDVFt4C+f9FYairX517WoGCL6dpOntqLkZofjhu43F/Xl44UOpqa+9sLFDrG/XAnFsUYgkDA==}
+    dependencies:
+      follow-redirects: 1.15.6(debug@4.3.4)
+      form-data: 4.0.0
+      proxy-from-env: 1.1.0
+    transitivePeerDependencies:
+      - debug
+    dev: true
+
   /axios@1.6.0:
     resolution: {integrity: sha512-EZ1DYihju9pwVB+jg67ogm+Tmqc6JmhamRN6I4Zt8DfZu5lbcQGw3ozH9lFejSJgs/ibaef3A9PMXPLeefFGJg==}
     dependencies:
@@ -10377,6 +10398,11 @@ packages:
   /dotenv-expand@10.0.0:
     resolution: {integrity: sha512-GopVGCpVS1UKH75VKHGuQFqS1Gusej0z4FyQkPdwjil2gNIv+LNsqBlboOzpJFZKVT95GkCyWJbBSdFEFUWI2A==}
     engines: {node: '>=12'}
+
+  /dotenv@10.0.0:
+    resolution: {integrity: sha512-rlBi9d8jpv9Sf1klPjNfFAuWDjKLwTIJJ/VxtoTwIR6hnZxcEOQCZg2oIL3MWBYw5GpUDKOEnND7LXTbIpQ03Q==}
+    engines: {node: '>=10'}
+    dev: true
 
   /dotenv@16.3.1:
     resolution: {integrity: sha512-IPzF4w4/Rd94bA9imS68tZBaYyBWSCE47V1RGuMrB94iyTOIEwRmVL2x/4An+6mETpLrKJ5hQkB8W4kFAadeIQ==}
@@ -14005,6 +14031,24 @@ packages:
   /nwsapi@2.2.7:
     resolution: {integrity: sha512-ub5E4+FBPKwAZx0UwIQOjYWGHTEq5sPqHQNRN8Z9e4A7u3Tj1weLJsL59yH9vmvqEtBHaOmT6cYQKIZOxp35FQ==}
 
+  /nx-cloud@18.0.0:
+    resolution: {integrity: sha512-VpPywcHmFIU3GSWb3KV3nQ+TAMLc06DTO39vTFsM+HreB6qRloDxbADRvfM5eHAbY26TNmwflT7wxd0fluv2+A==}
+    hasBin: true
+    dependencies:
+      '@nrwl/nx-cloud': 18.0.0
+      axios: 1.1.3
+      chalk: 4.1.2
+      dotenv: 10.0.0
+      fs-extra: 11.2.0
+      node-machine-id: 1.1.12
+      open: 8.4.2
+      strip-json-comments: 3.1.1
+      tar: 6.1.11
+      yargs-parser: 21.1.1
+    transitivePeerDependencies:
+      - debug
+    dev: true
+
   /nx@18.0.7(@swc-node/register@1.8.0)(@swc/core@1.3.101):
     resolution: {integrity: sha512-jcJ7ohP/rgqI9X6FJ8WnsPHpzm99oBV9qmaUeOUHWsdjp8r+2ptSHDmMmA67BPT+J6T+/ILhVlgzboXV1W7Ccg==}
     hasBin: true
@@ -16779,6 +16823,18 @@ packages:
       fs-constants: 1.0.0
       inherits: 2.0.4
       readable-stream: 3.6.2
+
+  /tar@6.1.11:
+    resolution: {integrity: sha512-an/KZQzQUkZCkuoAA64hM92X0Urb6VpRhAFllDzz44U2mcD5scmT3zBc4VgVpkugF580+DQn8eAFSyoQt0tznA==}
+    engines: {node: '>= 10'}
+    dependencies:
+      chownr: 2.0.0
+      fs-minipass: 2.1.0
+      minipass: 3.3.6
+      minizlib: 2.1.2
+      mkdirp: 1.0.4
+      yallist: 4.0.0
+    dev: true
 
   /tar@6.2.0:
     resolution: {integrity: sha512-/Wo7DcT0u5HUV486xg675HtjNd3BXZ6xDbzsCUZPt5iw8bTQ63bP0Raut3mvro9u+CUyq7YQd8Cx55fsZXxqLQ==}
