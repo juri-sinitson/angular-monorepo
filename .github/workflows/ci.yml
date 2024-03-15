@@ -39,5 +39,6 @@ jobs:
       # Replacing YOUR-SENSITIVE-VALUE-HERE for nxCloudAccessToken
       # with en empty sting 
       - run: sed 's/YOUR-SENSITIVE-VALUE-HERE//' nx.json > temp.json && mv temp.json nx.json      
+      - run: pnpm cypress install
       - run: pnpm nx affected -t lint test build --parallel=3
       - run: pnpm nx affected -t e2e --parallel=1
