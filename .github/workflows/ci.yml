@@ -1,5 +1,7 @@
-# See https://nx.dev/ci/intro/tutorials/github-actions
-# and https://nx.dev/ci/intro/ci-with-nx
+# See also:
+# https://nx.dev/ci/recipes/set-up/monorepo-ci-github-actions
+# https://nx.dev/ci/intro/tutorials/github-actions
+# https://nx.dev/ci/intro/ci-with-nx
 name: CI
 on:
   push:
@@ -32,10 +34,10 @@ jobs:
       - run: sed 's/YOUR-SENSITIVE-VALUE-HERE/${{ secrets.nx_cloud_access_token_readonly }}/' nx.json > temp.json && mv temp.json nx.json
       - run: pnpm install --frozen-lockfile      
       # This command is commented out, because currently (2024-03-15) the usage 
-      # of NX Agents is only supported for payed plan. Wether it's a payed plan
+      # of NX Agents is only supported for a payed plan. Wether it's a payed plan
       # or not is determined by nx cloud access token provided in this repo as a secret.
-      # If you want to privide a different nx cloud access token to this repository
-      # and as the case may be uncomment this line you will most probably need to fork it.
+      # If you want to privide a different nx cloud access token for the CI of this repo you most probably
+      # need to fork this repo. Also if you want to uncomment this line you may need to fork it.
       # - run: pnpm exec nx-cloud start-ci-run --distribute-on="3 linux-medium-js" --stop-agents-after="affected:test-storybook"
       # We currently (2024-03-15) need playwright for the task test-storybook
       - run: pnpm exec playwright install

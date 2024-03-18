@@ -25,6 +25,8 @@
     - [Unit tests](#unit-tests)
     - [E2E tests and Storybook interaction tests](#e2e-tests-and-storybook-interaction-tests)
     - [DRY](#dry)
+  - [CI](#ci)
+    - [What to do to by changes in a shared library?](#what-to-do-to-by-changes-in-a-shared-library)
 - [Commits](#commits)
   - [Own additions/modifications](#own-additionsmodifications-1)
 - [Generated documentation](#generated-documentation)
@@ -76,12 +78,20 @@ in a config file with the dist extension (in this example `nx.json.dist`).
 2. Create the copy of the dist-file without dist (in this example copy `nx.json.dist`  to 
 `nx.json`).
 3. Replace the placeholder mentioned above with your sensitive value.
-4. The file without dist shouldn't be versioned! Ensure once more it's really the case!
-If not, contact the repo admin. 
+4. The file without dist shouldn't be versioned! If it's somewhere not the case e.g. because of overlooking, contact the admin of this repo or make ap pull request.
 
 <!-- TOC --><a name="the-list"></a>
 ## The list
-1. `nx.json.dist` - this file contains the token for the nx workspace in the cloud
+1. `nx.json.dist` - this file contains the token `nxCloudAccessToken` for the nx workspace in the cloud
+   > **NOTE!**
+   >
+   > You can leave the token empty for this file and add it to some later point. Everything should
+   still work fine. If you just want to play around with this repo, you most probably even
+   don't need a token now.
+   >
+   > If you want to test [remote caching](https://nx.dev/ci/features/remote-cache) as the case
+   may be with a team mate, than you need to obtain the token now. This is and most probably will in the future be included in the free plan of nx cloud. See also the [security
+   considerations](https://nx.dev/ci/concepts/cache-security) before using an access token.
 
 
 <!-- TOC --><a name="execution"></a>
@@ -301,6 +311,38 @@ To avoid repeating e.g. for such standard states like, loading, error and no dat
 1. The depiction of states is unified and can be changed in one place
 2. One saves time just wrapping the data component instead of writing those 
    routines again and again.
+
+## CI
+Currently (2024-03-18) [github actions](https://docs.github.com/en/actions) for a 
+pull request are used. Especially the [cache](https://github.com/actions/cache) in combination with the [affected](https://nx.dev/nx-api/nx/documents/affected) tool of [nx](nx.dev). You will find the configuration [here](https://github.com/juri-sinitson/angular-monorepo/blob/main/.github/workflows/ci.yml).
+
+Goals:
+1. The pipeline becomes much faster, because:
+>1. With the cache mentioned above the dependencies, especially `node_modules` are reused by the subsequent CI executions instead of
+   redownloading them every time.
+>2. With the affected command mentioned above only the changes and their dependencies are processed instead of processing everything.
+
+### What to do to by changes in a shared library?
+Often the whole codebase depends on a shared library. If you make changes to a library where it's
+the case, then you run into the worst case of a CI pipeline execution time. Because the whole code base has to be processed.
+
+To gain a significant speed up especially for the worst case, there is such a solution like [distributed task execution](https://nx.dev/ci/features/distribute-task-execution) from [nx](nx.dev).
+There seems to be no free plan though.
+
+It's imaginable that there are other providers of such a solution or other solutions with the same goals. It's also imaginable that there are even solutions with a free plan. Which solution is the best is currently the subject of research and depends on the project.
+
+The goals of such a solution like the one of [nx](nx.dev) e.g. for E2E:
+1. E2E tasks are parallelized on file level (the specs of E2E will be run on different machines in the cloud).
+2. An automatic machine allocation and deallocation is used.
+
+**NOTE!**
+
+The [distributed task execution](https://nx.dev/ci/features/distribute-task-execution)
+by the command `nx-cloud` is already put to the 
+[ci configuration](https://github.com/juri-sinitson/angular-monorepo/blob/main/.github/workflows/ci.yml), 
+but is commented out because no payed plan is currently used in this repo. If you decide to use a payed plan of [nx](nx.dev) you are free to uncomment and test this line (you may need to fork this repo also). The same is valid for another
+payed solution. In case of the payed [nx](nx.dev) solution you also may need to check the documentation of [nx](nx.dev), especially [these](https://nx.dev/ci/intro/tutorials/github-actions) instructions if 
+you are using [github actions](https://docs.github.com/en/actions).
 
 <!-- TOC --><a name="commits"></a>
 # Commits
