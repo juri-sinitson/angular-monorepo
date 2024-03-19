@@ -4,13 +4,10 @@
 # https://nx.dev/ci/intro/ci-with-nx
 name: CI
 on:
-  push:
-    branches:
-      - main
   pull_request:
 
 jobs:
-  main:
+  process-affected-on-main:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -51,7 +48,12 @@ jobs:
             ~/.cache/Cypress # needed for the Cypress binary
             ~/.cache/ms-playwright
           key: ${{ steps.cache-dependencies-restore.outputs.cache-primary-key }}
-      - uses: nrwl/nx-set-shas@v3
+      - name: Set shas for affected command
+        id: set-shas
+        uses: nrwl/nx-set-shas@v3    
+      - run: |
+          echo "---------- BASE: ${{ env.NX_BASE }}"
+          echo "---------- HEAD: ${{ env.NX_HEAD }}"            
       # This line is needed for nx affected to work when CI is running on a PR
       - run: git branch --track main origin/main            
       - run: pnpm ci:lint-test-build
