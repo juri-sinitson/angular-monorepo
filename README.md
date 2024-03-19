@@ -78,20 +78,23 @@ in a config file with the dist extension (in this example `nx.json.dist`).
 2. Create the copy of the dist-file without dist (in this example copy `nx.json.dist`  to 
 `nx.json`).
 3. Replace the placeholder mentioned above with your sensitive value.
-4. The file without dist shouldn't be versioned! If it's somewhere not the case e.g. because of overlooking, contact the admin of this repo or make ap pull request.
+4. The file without dist shouldn't be versioned! If it's somewhere not the case e.g. because of overlooking, contact the admin of this repo and/or make ap pull request.
 
 <!-- TOC --><a name="the-list"></a>
 ## The list
-1. `nx.json.dist` - this file contains the token `nxCloudAccessToken` for the nx workspace in the cloud
+1. `nx.json.dist` - this file contains the [access token](https://nx.dev/ci/recipes/security/access-tokens) by in key `nxCloudAccessToken` for the nx workspace in the [nx cloud](nx.app/).
+
    > **NOTE!**
    >
-   > You can leave the token empty for this file and add it to some later point. Everything should
-   still work fine. If you just want to play around with this repo, you most probably even
+   > You can leave the token empty for this file and add it at some later point. Everything should
+   still work fine. If you just want to take a closer look to this repo, you most probably even
    don't need a token now.
    >
-   > If you want to test [remote caching](https://nx.dev/ci/features/remote-cache) as the case
-   may be with a team mate, than you need to obtain the token now. This is and most probably will in the future be included in the free plan of nx cloud. See also the [security
-   considerations](https://nx.dev/ci/concepts/cache-security) before using an access token.
+   > If you want to see [remote caching](https://nx.dev/ci/features/remote-cache) in action as the case
+   may be with a team mate on your and her/his machine, than you need to obtain the token now. 
+   This is and most probably will be in the future included in the free plan of [nx cloud](nx.app/). 
+   >
+   > See also the [security considerations](https://nx.dev/ci/concepts/cache-security) before using an access token.
 
 
 <!-- TOC --><a name="execution"></a>
