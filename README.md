@@ -277,6 +277,8 @@ changes by normal usage, etc.).
 The better side effects are separated from the rest of the code,
 the better testable and reliable it will be.
 
+See [this](https://github.com/juri-sinitson/angular-monorepo/blob/main/libs/shared-business/examples/src/lib/stores/product.store.ts) example and its [unit tests](https://github.com/juri-sinitson/angular-monorepo/blob/main/libs/shared-business/examples/src/lib/stores/product.store.spec.ts).
+
 ### State Management
 The state management is currently (2024-03-16) implemented using a
 [signal store](https://ngrx.io/guide/signals/signal-store) of NGRX. To provide an abstraction, the signal store is not available from the outside. Instead a service is used which provides the access to the pieces of the state and as the case may be triggers some side effects on the store.
@@ -286,6 +288,8 @@ The goal of this approach is a better predictability and better debugability wit
 the network requests are made as side effects on the appropriate store and that a store is the single
 source of truth.
 
+See [this](https://github.com/juri-sinitson/angular-monorepo/blob/main/libs/shared-business/examples/src/lib/stores/product.store.ts) example.
+
 ### Unit tests
 Unit tests are made to ensure a service behaves as expected. If the service to be tested 
 acts as a proxy to a store with side effects, than those side effects are mocked for different scenarios. E.g. in case of a GET network request the following scenarios are emulated: happy case, loading, error and no data (in case of angular with [this](https://angular.io/guide/http-test-requests#http-testing-library) testing library). For every scenario the behavior of the service or in other words its API to the outside is tested. Implementation details are 
@@ -293,6 +297,8 @@ not tested to keep the tests immune against refactoring (the changes which don't
 the behavior to the outside).
 
 There is also a [video](https://www.youtube.com/watch?v=EZ05e7EMOLM) from 2017 which is still current regarding this topic.
+
+See [this](https://github.com/juri-sinitson/angular-monorepo/blob/main/libs/shared-business/examples/src/lib/stores/product.store.spec.ts) example.
 
 ### E2E tests and Storybook interaction tests
 The same principle as for unit tests: the implementation details are not tested.
@@ -317,6 +323,8 @@ each component.
 If you have a lot of combinations to check, fill and post some data, it's reasonable to test e.g. the most important ten ones instead of 200 of them.
 
 To make a test better readable the page object approach is used.
+
+See [this](https://github.com/juri-sinitson/angular-monorepo/blob/main/apps/examples-frontend-e2e/src/e2e/main-page.cy.ts) example.
 
 ### DRY
 To avoid repeating e.g. for such standard states like, loading, error and no data, a wrapper
