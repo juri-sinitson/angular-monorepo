@@ -62,6 +62,7 @@ With the [modern technologies](https://nx.dev/) and a proper modern architecture
 (see below) it's not at all. It has great advantages for a modern enterprise 
 frontend/fullstack project.
 
+<!-- TOC --><a name="what-frameworks-are-supported"></a>
 # What frameworks are supported?
 Not only [Angular](https://nx.dev/nx-api/angular), [React](https://nx.dev/nx-api/react) and [Next.js](https://nx.dev/nx-api/next). See the the [full list](https://nx.dev/plugin-registry).
 
@@ -263,6 +264,7 @@ Examples for possible candidates:
 1. The person or address interfaces and most probably the routines for fetching this data
 2. Some statistics data on charts
 
+<!-- TOC --><a name="side-effects"></a>
 ### Side effects
 Side effects are separated from the rest of the code into a (signal) store.
 A method of the store should then have a prefix or postfix `sideEffects`.
@@ -279,6 +281,7 @@ the better testable and reliable it will be.
 
 See [this](https://github.com/juri-sinitson/angular-monorepo/blob/main/libs/shared-business/examples/src/lib/stores/product.store.ts) example and its [unit tests](https://github.com/juri-sinitson/angular-monorepo/blob/main/libs/shared-business/examples/src/lib/stores/product.store.spec.ts).
 
+<!-- TOC --><a name="state-management"></a>
 ### State Management
 The state management is currently (2024-03-16) implemented using a
 [signal store](https://ngrx.io/guide/signals/signal-store) of NGRX. To provide an abstraction, the signal store is not available from the outside. Instead a service is used which provides the access to the pieces of the state and as the case may be triggers some side effects on the store.
@@ -290,6 +293,7 @@ source of truth.
 
 See [this](https://github.com/juri-sinitson/angular-monorepo/blob/main/libs/shared-business/examples/src/lib/stores/product.store.ts) example.
 
+<!-- TOC --><a name="unit-tests"></a>
 ### Unit tests
 Unit tests are made to ensure a service behaves as expected. If the service to be tested 
 acts as a proxy to a store with side effects, than those side effects are mocked for different scenarios. E.g. in case of a GET network request the following scenarios are emulated: happy case, loading, error and no data (in case of angular with [this](https://angular.io/guide/http-test-requests#http-testing-library) testing library). For every scenario the behavior of the service or in other words its API to the outside is tested. Implementation details are 
@@ -300,6 +304,7 @@ There is also a [video](https://www.youtube.com/watch?v=EZ05e7EMOLM) from 2017 w
 
 See [this](https://github.com/juri-sinitson/angular-monorepo/blob/main/libs/shared-business/examples/src/lib/stores/product.store.spec.ts) example.
 
+<!-- TOC --><a name="e2e-tests-and-storybook-interaction-tests"></a>
 ### E2E tests and Storybook interaction tests
 The same principle as for unit tests: the implementation details are not tested.
 The implementation details in this case are css classes, ids and other stuff which
@@ -326,6 +331,7 @@ To make a test better readable the page object approach is used.
 
 See [this](https://github.com/juri-sinitson/angular-monorepo/blob/main/apps/examples-frontend-e2e/src/e2e/main-page.cy.ts) example.
 
+<!-- TOC --><a name="dry"></a>
 ### DRY
 To avoid repeating e.g. for such standard states like, loading, error and no data, a wrapper
 (here [`common-wrapper.component`](https://github.com/juri-sinitson/angular-monorepo/blob/main/libs/shared/ui-common/src/lib/components/common-wrapper/common-wrapper.component.ts)) is used. The goals:
@@ -333,6 +339,7 @@ To avoid repeating e.g. for such standard states like, loading, error and no dat
 2. One saves time just wrapping the data component instead of writing those 
    routines again and again.
 
+<!-- TOC --><a name="ci"></a>
 ## CI
 Currently (2024-03-18) [github actions](https://docs.github.com/en/actions) for a 
 pull request are used. Especially the [cache](https://github.com/actions/cache) in combination with the [affected](https://nx.dev/nx-api/nx/documents/affected) tool of [nx](nx.dev). You will find the configuration [here](https://github.com/juri-sinitson/angular-monorepo/blob/main/.github/workflows/ci.yml).
@@ -343,6 +350,7 @@ Goals:
    redownloading them every time.
 >2. With the affected command mentioned above only the changes and their dependencies are processed instead of processing everything.
 
+<!-- TOC --><a name="what-to-do-to-by-changes-in-a-shared-library"></a>
 ### What to do to by changes in a shared library?
 Often the whole codebase depends on a shared library. If you make changes to a library where it's
 the case, then you run into the worst case of a CI pipeline execution time. Because the whole code base has to be processed.
@@ -377,13 +385,18 @@ It's reasonable to put the issue/task number direct in front of the description 
 
 In this way you will get a good overview over your commits and issues.
 
+<!-- TOC --><a name="not-yet-documentedhard-to-find"></a>
 # Not yet documented/hard to find
+<!-- TOC --><a name="adding-of-missing-plugins-to-reduce-the-configuration"></a>
 ## Adding of missing plugins to reduce the configuration
 This seems not yet (2024-03-19) to be documented in nx 18.x and is made with the command `pnpm dlx nx@latest init` according to [this](https://youtu.be/PzCgpM7qtTU?t=1363) source. So if you issue this command in an existing monorepo nx asks you
 what configuration plugins you would like to install and adds the default config of them. If you don't understand why is configuration by plugins useful, it's most probably worth for you to watch the whole video.
 
+<!-- TOC --><a name="troubleshooting"></a>
 # Troubleshooting
+<!-- TOC --><a name="execution-1"></a>
 ## Execution
+<!-- TOC --><a name="nx-cloud-tries-to-execute-a-payed-plan-instead-of-the-free-one-and-fails"></a>
 ### Nx Cloud tries to execute a payed plan instead of the free one and fails
 **Cause**
 
