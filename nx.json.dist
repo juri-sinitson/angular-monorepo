@@ -75,15 +75,6 @@
       }
     },
     {
-      "plugin": "@nx/storybook/plugin",
-      "options": {
-        "buildStorybookTargetName": "build-storybook",
-        "serveStorybookTargetName": "storybook",
-        "testStorybookTargetName": "test-storybook",
-        "staticStorybookTargetName": "static-storybook"
-      }
-    },
-    {
       "plugin": "@nx/cypress/plugin",
       "options": {
         "ciTargetName": "e2e-ci",
