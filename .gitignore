@@ -43,3 +43,6 @@ Thumbs.db
 
 # Security: to avoid versioning access tokens, passwords, etc
 nx.json
+
+
+storybook-static
