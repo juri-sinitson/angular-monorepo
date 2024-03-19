@@ -2,6 +2,7 @@
 
 - [What is this repo for?](#what-is-this-repo-for)
 - [Is a monorepo an evil?](#is-a-monorepo-an-evil)
+- [What frameworks are supported?](#what-frameworks-are-supported)
 - [Before execution](#before-execution)
   - [Intro](#intro)
   - [Creating configs](#creating-configs)
@@ -29,6 +30,13 @@
     - [What to do to by changes in a shared library?](#what-to-do-to-by-changes-in-a-shared-library)
 - [Commits](#commits)
   - [Own additions/modifications](#own-additionsmodifications-1)
+- [Not yet documented/hard to find](#not-yet-documentedhard-to-find)
+  - [Adding of missing plugins to reduce the configuration](#adding-of-missing-plugins-to-reduce-the-configuration)
+- [Troubleshooting](#troubleshooting)
+  - [Execution](#execution-1)
+    - [Nx Cloud tries to execute a payed plan instead of the free one and fails](#nx-cloud-tries-to-execute-a-payed-plan-instead-of-the-free-one-and-fails)
+- [Update](#update)
+  - [Additions](#additions)
 - [Generated documentation](#generated-documentation)
   - [Start the app](#start-the-app)
   - [Generate code](#generate-code)
@@ -53,6 +61,9 @@ used here.
 With the [modern technologies](https://nx.dev/) and a proper modern architecture 
 (see below) it's not at all. It has great advantages for a modern enterprise 
 frontend/fullstack project.
+
+# What frameworks are supported?
+Not only [Angular](https://nx.dev/nx-api/angular), [React](https://nx.dev/nx-api/react) and [Next.js](https://nx.dev/nx-api/next). See the the [full list](https://nx.dev/plugin-registry).
 
 <!-- TOC --><a name="before-execution"></a>
 # Before execution
@@ -112,7 +123,6 @@ See also other relevant executable commands in the config of the lib `non-prod-s
 
 The lib `non-prod-storybook` doesn't contain any implementations. The only aim of this 
 lib is to execute storybook over all the libraries to get the whole catalogue at once.
-
 
 <!-- TOC --><a name="architecture"></a>
 # Architecture
@@ -358,6 +368,30 @@ It's reasonable to put the issue/task number direct in front of the description 
 `feat(some-xyz-lib): T-1256 add xyz functionality`
 
 In this way you will get a good overview over your commits and issues.
+
+# Not yet documented/hard to find
+## Adding of missing plugins to reduce the configuration
+This seems not yet (2024-03-19) to be documented in nx 18.x and is made with the command `pnpm dlx nx@latest init` according to [this](https://youtu.be/PzCgpM7qtTU?t=1363) source. So if you issue this command in an existing monorepo nx asks you
+what configuration plugins you would like to install and adds the default config of them. If you don't understand why is configuration by plugins useful, it's most probably worth for you to watch the whole video.
+
+# Troubleshooting
+## Execution
+### Nx Cloud tries to execute a payed plan instead of the free one and fails
+**Cause**
+
+This seems to appear du to a an outdated free plan organization or workspace in the cloud profile. 
+
+**Solution**
+
+Delete the organization and recreate. Try to avoid multiple organization in case
+of the free plan.
+
+# Update
+See [this](https://nx.dev/recipes/tips-n-tricks/advanced-update)
+
+## Additions
+1. Don't forget to update the dist files and their derivates e.g. `nx.json.dist` and its
+derivate `nx.json`.
 
 <!-- TOC --><a name="generated-documentation"></a>
 # Generated documentation
