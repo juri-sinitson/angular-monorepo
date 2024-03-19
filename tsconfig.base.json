@@ -21,11 +21,11 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "paths": {
-      "@angular-monorepo/shared-business/examples-e2e": [
-        "libs/shared-business/examples/src/index-e2e.ts"
-      ],
       "@angular-monorepo/shared-business/examples": [
         "libs/shared-business/examples/src/index.ts"
+      ],
+      "@angular-monorepo/shared-business/examples-e2e": [
+        "libs/shared-business/examples/src/index-e2e.ts"
       ],
       "@angular-monorepo/shared-business/feature-examples": [
         "libs/shared-business/feature-examples/src/index.ts"
@@ -36,7 +36,7 @@
       "@angular-monorepo/shared/ui-common": [
         "libs/shared/ui-common/src/index.ts"
       ],
-      "@angular-monorepo/shared/ui-menu": ["libs/shared/ui-menu/src/index.ts"],      
+      "@angular-monorepo/shared/ui-menu": ["libs/shared/ui-menu/src/index.ts"],
       "@angular-monorepo/shared/util-common": [
         "libs/shared/util-common/src/index.ts"
       ],
