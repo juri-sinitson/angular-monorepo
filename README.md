@@ -130,7 +130,7 @@ seem to work fine there in general. But there are following issues when you try
 to use the [remote cache](https://nx.dev/ci/features/remote-cache):
 1. It seems to be a problem to set a dynamic variable in windows before executing a 
 command (e.g. in this manner `NX_BRANCH=$(git branch --show-current) pnpm nx affected --verbose -t lint test build --parallel`).
-2. There seems to be issues with sending the cache in the cloud. E.g. the cloud command will
+2. There seem to be issues with sending the cache in the cloud. E.g. the cloud command will
 most probably "think" it's in a CI environment with a payed plan while it's on a local machine with a free plan. So it will then fail of course. Not sure if a payed plan will help here.
 
 To make it work under windows you most probably have to disable [remote cache](https://nx.dev/ci/features/remote-cache) by:
