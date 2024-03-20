@@ -53,7 +53,7 @@
 
 <!-- TOC --><a name="what-is-this-repo-for"></a>
 # What is this repo for?
-It's an example (it may be even used as a skeleton) for an enterprise monorepo 
+It's an example (it may be even used as a skeleton) of an enterprise monorepo 
 (what?! monorepo?! you might ask, but don't feel confused, keep on reading a 
 little further) which can (most probably will) have multiple apps. It might contain 
 some example implementations to get a general idea of e.g. the architecture 
