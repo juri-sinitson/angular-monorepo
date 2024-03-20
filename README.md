@@ -8,6 +8,9 @@
   - [Creating configs](#creating-configs)
   - [The list](#the-list)
 - [Execution](#execution)
+  - [NOTE for a local machine](#note-for-a-local-machine)
+    - [Current Ubuntu Linux with the current stable NodeJS](#current-ubuntu-linux-with-the-current-stable-nodejs)
+    - [Windows 10 (most probably 11 too)](#windows-10-most-probably-11-too)
   - [Own additions](#own-additions)
 - [Architecture](#architecture)
   - [Main Goals](#main-goals)
@@ -102,7 +105,7 @@ in a config file with the dist extension (in this example `nx.json.dist`).
    still work fine. If you just want to take a closer look to this repo, you most probably even
    don't need a token now.
    >
-   > If you want to see [remote caching](https://nx.dev/ci/features/remote-cache) in action as the case
+   > If you want to see [remote cache](https://nx.dev/ci/features/remote-cache) in action as the case
    may be with a team mate on your and her/his machine, than you need to obtain the token now. 
    This is and most probably will be in the future included in the free plan of [nx cloud](nx.app/). 
    >
@@ -114,6 +117,25 @@ in a config file with the dist extension (in this example `nx.json.dist`).
 We execute in general as described in the generated documentation below.
 Use the `npx` command in front of the `nx` e.g. `npx nx serve app1` to be 
 sure you use the nx executable from the current repo!
+
+## NOTE for a local machine
+### Current Ubuntu Linux with the current stable NodeJS
+Execute the commands in bash there, this should work fine.
+
+### Windows 10 (most probably 11 too)
+You can try to execute the commands in [GitBash](https://git-scm.com/download/win) 
+under Windows 10 (most probably it will behave the same in the version 11). 
+The commands of nx, especially [affected](https://nx.dev/nx-api/nx/documents/affected) 
+seem to work fine there in general. But there are following issues when you try 
+to use the [remote cache](https://nx.dev/ci/features/remote-cache):
+1. It seems to be a problem to set a dynamic variable in windows before executing a 
+command (e.g. in this manner `NX_BRANCH=$(git branch --show-current) pnpm nx affected --verbose -t lint test build --parallel`).
+2. There seems to be issues with sending the cache in the cloud. E.g. the cloud command will
+most probably "think" it's in a CI environment with a payed plan while it's on a local machine with a free plan. So it will then fail of course. Not sure if a payed plan will help here.
+
+To make it work under windows you most probably have to disable [remote cache](https://nx.dev/ci/features/remote-cache) by:
+1. Leaving the [access token](https://nx.dev/ci/recipes/security/access-tokens) mentioned above empty
+2. Not using dynamic variable in nx commands
 
 <!-- TOC --><a name="own-additions"></a>
 ## Own additions
@@ -400,12 +422,16 @@ what configuration plugins you would like to install and adds the default config
 ### Nx Cloud tries to execute a payed plan instead of the free one and fails
 **Cause**
 
-This seems to appear du to a an outdated free plan organization or workspace in the cloud profile. 
+This seems to appear: 
+1. On Windows 10 (other versions were not yet tested)
+2. Much less probably: due to a an outdated free plan organization or workspace in the cloud profile. 
+Or some out-of-sync with the current tokens you have in your nx cloud profile.
 
-**Solution**
-
-Delete the organization and recreate. Try to avoid multiple organization in case
-of the free plan.
+**Possible solutions**
+1. Try it in current Ubuntu with the current stable NodeJS. This will most probably
+solve the issue.
+2. You can also try to delete the organization and recreate your nx cloud profile. 
+Try to avoid multiple organizations in case of the free plan.
 
 # Update
 See [this](https://nx.dev/recipes/tips-n-tricks/advanced-update)
