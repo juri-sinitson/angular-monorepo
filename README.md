@@ -137,7 +137,7 @@ To make it work under windows you most probably have to:
 1. Disable [remote cache](https://nx.dev/ci/features/remote-cache) by 
    leaving the [access token](https://nx.dev/ci/recipes/security/access-tokens) 
    mentioned above empty
-2. Not using dynamic variable in nx commands
+2. Not using dynamic variables in nx commands
 
 <!-- TOC --><a name="own-additions"></a>
 ## Own additions
