@@ -30,7 +30,7 @@
     - [E2E tests and Storybook interaction tests](#e2e-tests-and-storybook-interaction-tests)
     - [DRY](#dry)
   - [CI](#ci)
-    - [What to do to by changes in a shared library?](#what-to-do-to-by-changes-in-a-shared-library)
+    - [Handling changes in a shared library](#handling-changes-in-a-shared-library)
 - [Commits](#commits)
   - [Own additions/modifications](#own-additionsmodifications-1)
 - [Not yet documented/hard to find](#not-yet-documentedhard-to-find)
@@ -81,7 +81,7 @@ while the original (in this example `nx.json`) is ignored.
 
 Why?
 
-To avoid the exposing by such sensitive data like tokes, passwords, etc. by versioning and 
+To avoid the exposing of such sensitive data like tokes, passwords, etc. by versioning and 
 publishing to a repo.
 
 So instead of the sensitive value you will find the placeholder "YOUR-SENSITIVE-VALUE-HERE" 
@@ -138,6 +138,10 @@ To make it work under windows you most probably have to:
    leaving the [access token](https://nx.dev/ci/recipes/security/access-tokens) 
    mentioned above empty
 2. Not using dynamic variables in nx commands
+
+**NOTE!**
+
+There is an [issue](https://github.com/juri-sinitson/angular-monorepo/issues/37) in progress to address the problems on windows mentioned above.
 
 <!-- TOC --><a name="own-additions"></a>
 ## Own additions
@@ -375,7 +379,7 @@ Goals:
 >2. With the affected command mentioned above only the changes and their dependencies are processed instead of processing everything.
 
 <!-- TOC --><a name="what-to-do-to-by-changes-in-a-shared-library"></a>
-### What to do to by changes in a shared library?
+### Handling changes in a shared library
 Often the whole codebase depends on a shared library. If you make changes to a library where it's
 the case, then you run into the worst case of a CI pipeline execution time. Because the whole code base has to be processed.
 
