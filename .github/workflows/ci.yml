@@ -38,7 +38,7 @@ jobs:
       # - run: pnpm exec nx-cloud start-ci-run --distribute-on="3 linux-medium-js" --stop-agents-after="affected:test-storybook"
       # We currently (2024-03-15) need playwright for the task test-storybook
       - run: pnpm exec playwright install
-      - run: pnpm cypress install
+      - run: pnpm exec cypress install
       - name: Cache npm dependencies
         id: cache-dependencies-save
         uses: actions/cache/save@v3

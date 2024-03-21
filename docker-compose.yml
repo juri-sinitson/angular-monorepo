@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  container:
+    image: frontend-juri-sinitson/image:dev
+    container_name: frontend-juri-sinitson-container-tests
+    build: .
+    volumes:
+      - .:/app
+      # Making an anonymous volume for node_modules
+      # so that we can overwrite it in the container
+      # and the changes will never be reflected 
+      # on the host
+      - /app/node_modules
+    working_dir: /app
+    # We want to keep this container running
+    # to be able to execute commands in it during development
+    command: tail -f /dev/null

@@ -8,9 +8,7 @@
   - [Creating configs](#creating-configs)
   - [The list](#the-list)
 - [Execution](#execution)
-  - [NOTE for a local machine](#note-for-a-local-machine)
-    - [Current Ubuntu Linux with the current stable NodeJS](#current-ubuntu-linux-with-the-current-stable-nodejs)
-    - [Windows 10 (most probably 11 too)](#windows-10-most-probably-11-too)
+  - [Local machine](#local-machine)
   - [Own additions](#own-additions)
 - [Architecture](#architecture)
   - [Main Goals](#main-goals)
@@ -37,6 +35,7 @@
   - [Adding of missing plugins to reduce the configuration](#adding-of-missing-plugins-to-reduce-the-configuration)
 - [Troubleshooting](#troubleshooting)
   - [Execution](#execution-1)
+    - [Nx mixes up the local machine with the CI one](#nx-mixes-up-the-local-machine-with-the-ci-one)
     - [Nx Cloud tries to execute a payed plan instead of the free one and fails](#nx-cloud-tries-to-execute-a-payed-plan-instead-of-the-free-one-and-fails)
 - [Update](#update)
   - [Additions](#additions)
@@ -118,30 +117,12 @@ We execute in general as described in the generated documentation below.
 Use the `npx` command in front of the `nx` e.g. `npx nx serve app1` to be 
 sure you use the nx executable from the current repo!
 
-## NOTE for a local machine
-### Current Ubuntu Linux with the current stable NodeJS
-Execute the commands in bash there, this should work fine.
-
-### Windows 10 (most probably 11 too)
-You can try to execute the commands in [GitBash](https://git-scm.com/download/win) 
-under Windows 10 (most probably it will behave the same in the version 11). 
-The commands of nx, especially [affected](https://nx.dev/nx-api/nx/documents/affected) 
-seem to work fine there in general. But there are following issues when you try 
-to use the [remote cache](https://nx.dev/ci/features/remote-cache):
-1. It seems to be a problem to set a dynamic variable in windows before executing a 
-command (e.g. in this manner `NX_BRANCH=$(git branch --show-current) pnpm nx affected --verbose -t lint test build --parallel`).
-2. There seem to be issues with sending the cache in the cloud. E.g. the cloud command will
-most probably "think" it's in a CI environment with a payed plan while it's on a local machine with a free plan. So it will then fail of course. Not sure if a payed plan will help here.
-
-To make it work under windows you most probably have to: 
-1. Disable [remote cache](https://nx.dev/ci/features/remote-cache) by 
-   leaving the [access token](https://nx.dev/ci/recipes/security/access-tokens) 
-   mentioned above empty
-2. Not using dynamic variables in nx commands
-
-**NOTE!**
-
-There is an [issue](https://github.com/juri-sinitson/angular-monorepo/issues/37) in progress to address the problems on windows mentioned above.
+## Local machine
+To have as less overhead as possible, execute the commands directly in your 
+operation system as much as possible. If you have issues executing the one 
+or another command, use the commands in `package.json` which are prepared 
+for a container (e.g. a Linux container). See also the 
+troubleshooting section for this case for more details.
 
 <!-- TOC --><a name="own-additions"></a>
 ## Own additions
@@ -424,20 +405,54 @@ what configuration plugins you would like to install and adds the default config
 # Troubleshooting
 <!-- TOC --><a name="execution-1"></a>
 ## Execution
-<!-- TOC --><a name="nx-cloud-tries-to-execute-a-payed-plan-instead-of-the-free-one-and-fails"></a>
-### Nx Cloud tries to execute a payed plan instead of the free one and fails
-**Cause**
+### Nx mixes up the local machine with the CI one
+In this case nx will ask you to set some variables which you most probably
+have never heard about and which may not even appear in the official documentation.
+See below the solutions.
 
-This seems to appear: 
-1. On Windows 10 (other versions were not yet tested)
-2. Much less probably: due to a an outdated free plan organization or workspace in the cloud profile. 
-Or some out-of-sync with the current tokens you have in your nx cloud profile.
+### Nx Cloud tries to execute a payed plan instead of the free one and fails
+**Causes**
+1. There seem to be issues on Windows 10 (other versions were not yet tested) 
+   when sending the cache of nx 18.x to the nx cloud. The cloud command mixes up the 
+   local machine environment with the CI one. At the same time the free plan
+   is mixed up with a payed one which also leads to a failure.
+2. Much less probably: due to a an outdated free plan organization or workspace 
+   in the cloud profile. Or some out-of-sync with the current tokens you have in 
+   your nx cloud profile.
 
 **Possible solutions**
-1. Try it in current Ubuntu with the current stable NodeJS. This will most probably
-solve the issue.
-2. You can also try to delete the organization and recreate your nx cloud profile. 
+1. Try it in the current Ubuntu with the current stable NodeJS, the issue was 
+   not observed there.
+2. You can also try to delete the organization and recreate it in your nx cloud profile.
 Try to avoid multiple organizations in case of the free plan.
+3. Disable the [remote cache](https://nx.dev/ci/features/remote-cache) by 
+   leaving the [access token](https://nx.dev/ci/recipes/security/access-tokens) 
+   empty
+4. If the [remote cache](https://nx.dev/ci/features/remote-cache) is disabled in you local
+   machine, than the issue is solved. To although use [remote cache](https://nx.dev/ci/features/remote-cache) you can install docker and use the commands for a container in `package.json` which were prepared for you. The issue was not observed on the container commands also.
+   > **NOTE!**
+   >
+   >1. Copy `nx-cloud-access-token.dist` to `nx-cloud-access-token` and put 
+   the [access token](https://nx.dev/ci/recipes/security/access-tokens) if not yet the case.
+   Remove this token from `nx.json` to not provoke this issue once more.
+   >1. The container commands mentioned above may affect your existing images 
+   and containers. So use them with caution. It's highly
+   recommended to understand well what those commands do exactly before executing
+   them. Especially the commands to stop the container, recreate the image and prune.
+   >2. When images and containers are used incorrectly, the amount of unused
+   images, containers and volumes grows pretty fast. This may lead to such inconsistencies like e.g. unintentional wiping of the packages from the user cache which were preinstalled during the build phase. It's also a problem, when the amount of running images goes out of control.
+   >When you explicitly use named images and containers, the amount of them 
+   is usually under control. It's although highly recommended to observe the containers, images and volumes in e.g. a docker client like Docker Desktop and as the case may be [prune](https://docs.docker.com/reference/cli/docker/system/prune/) them. You can also manually prune in a docker client like e.g. Docker Desktop by selecting and deleting. 
+   >
+   > If [prune](https://docs.docker.com/reference/cli/docker/system/prune/) works too
+   slow for you, you can prune single parts. Pruning of a single part is usually very
+   fast:
+   >
+   > https://docs.docker.com/reference/cli/docker/image/prune/
+   > https://docs.docker.com/reference/cli/docker/container/prune/
+   > https://docs.docker.com/reference/cli/docker/network/prune/
+   > https://docs.docker.com/reference/cli/docker/volume/prune/
+   > https://docs.docker.com/reference/cli/docker/buildx/prune/
 
 # Update
 See [this](https://nx.dev/recipes/tips-n-tricks/advanced-update)
