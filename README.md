@@ -449,9 +449,13 @@ Try to avoid multiple organizations in case of the free plan.
    fast:
    >
    > https://docs.docker.com/reference/cli/docker/image/prune/
+   > 
    > https://docs.docker.com/reference/cli/docker/container/prune/
+   > 
    > https://docs.docker.com/reference/cli/docker/network/prune/
+   > 
    > https://docs.docker.com/reference/cli/docker/volume/prune/
+   > 
    > https://docs.docker.com/reference/cli/docker/buildx/prune/
 
 # Update
