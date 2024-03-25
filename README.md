@@ -123,8 +123,9 @@ sure you use the nx executable from the current repo!
 
 **NOTE!**
 
-For execution use either a Linux machine and a bash terminal or 
-[GitBash](https://git-scm.com/download/win) in case of Windows.
+For execution use either a Linux machine 
+(directly or e.g. in a docker container) with a bash terminal or 
+a Windows machine with [GitBash](https://git-scm.com/download/win).
 The latter is usually included in the git installer for Windows
 and is installed together with git by default.
 
