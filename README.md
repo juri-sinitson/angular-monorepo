@@ -33,6 +33,7 @@
   - [Own additions/modifications](#own-additionsmodifications-1)
 - [Not yet documented/hard to find](#not-yet-documentedhard-to-find)
   - [Adding of missing plugins to reduce the configuration](#adding-of-missing-plugins-to-reduce-the-configuration)
+- [Handling vulnerability fixes](#handling-vulnerability-fixes)
 - [Troubleshooting](#troubleshooting)
   - [Execution](#execution-1)
     - [Nx mixes up the local machine with the CI one](#nx-mixes-up-the-local-machine-with-the-ci-one)
@@ -57,6 +58,9 @@ It's an example (it may be even used as a skeleton) of an enterprise monorepo
 little further) which can (most probably will) have multiple apps. It might contain 
 some example implementations to get a general idea of e.g. the architecture 
 used here.
+
+This repo can also be seen as sharing of knowledge by hands-on examples or
+even a help to avoid certain stumbles.
 
 <!-- TOC --><a name="is-a-monorepo-an-evil"></a>
 # Is a monorepo an evil?
@@ -116,6 +120,14 @@ in a config file with the dist extension (in this example `nx.json.dist`).
 We execute in general as described in the generated documentation below.
 Use the `npx` command in front of the `nx` e.g. `npx nx serve app1` to be 
 sure you use the nx executable from the current repo!
+
+**NOTE!**
+
+For execution use either a Linux machine and a bash terminal or 
+[GitBash](https://git-scm.com/download/win) in case of Windows.
+The latter is usually included in the git installer for Windows
+and is installed together with git by default.
+
 
 ## Local machine
 To have as less overhead as possible, execute the commands directly in your 
@@ -402,6 +414,40 @@ This seems not yet (2024-03-19) to be documented in nx 18.x and is made with the
 what configuration plugins you would like to install and adds the default config of them. If you don't understand why is configuration by plugins useful, it's most probably worth for you to watch the whole video.
 
 <!-- TOC --><a name="troubleshooting"></a>
+
+# Handling vulnerability fixes
+If you the dependency vulnerabilities are fixed (e.g. manually or by
+[dependabot](https://docs.github.com/en/code-security/dependabot/working-with-dependabot)),
+it's reasonable to test if you code base still works. In this case the 
+[nx cache](https://nx.dev/features/cache-task-results) will not be invalidated 
+automatically because there are no changes in the code base.
+
+The options to test if your code still works as expected are:
+
+1. Make a spot check by running the typical tasks for selected projects with 
+   the [nx cache](https://nx.dev/features/cache-task-results) deactivated.
+   
+   Pros: although the cache is deactivated it's still fast.
+   
+   Cons: there is still a certain possibility that some tasks in some 
+   libraries will not work as expected, especially in case of 
+   [Independently Maintained Dependencies](https://nx.dev/concepts/more-concepts/dependency-management#independently-maintained-dependencies)
+
+2. Testing the whole code base. 
+   
+   Pros: high fidelity.
+
+   Cons: depending on the size of the code base and usage of 
+   [nx agents](https://nx.dev/ci/features/distribute-task-execution)
+   (currently (2024-03-25) it's a payed feature) the testing can last from 
+   10 minutes till over an hour.
+
+**NOTE!**
+
+Currently (2024-03-25) this repo uses [Single Version Policy](https://nx.dev/concepts/more-concepts/dependency-management#single-version-policy),
+thus the spot check approach is used in this repo. You can run the spot
+check by `pnpm spot-check`.
+
 # Troubleshooting
 <!-- TOC --><a name="execution-1"></a>
 ## Execution
@@ -435,14 +481,14 @@ Try to avoid multiple organizations in case of the free plan.
    >1. Copy `nx-cloud-access-token.dist` to `nx-cloud-access-token` and put 
    the [access token](https://nx.dev/ci/recipes/security/access-tokens) if not yet the case.
    Remove this token from `nx.json` to not provoke this issue once more.
-   >1. The container commands mentioned above may affect your existing images 
+   >2. The container commands mentioned above may affect your existing images 
    and containers. So use them with caution. It's highly
    recommended to understand well what those commands do exactly before executing
    them. Especially the commands to stop the container, recreate the image and prune.
-   >2. When images and containers are used incorrectly, the amount of unused
+   >3. When images and containers are used incorrectly, the amount of unused
    images, containers and volumes grows pretty fast. This may lead to such inconsistencies like e.g. unintentional wiping of the packages from the user cache which were preinstalled during the build phase. It's also a problem, when the amount of running images goes out of control.
    >When you explicitly use named images and containers, the amount of them 
-   is usually under control. It's although highly recommended to observe the containers, images and volumes in e.g. a docker client like Docker Desktop and as the case may be [prune](https://docs.docker.com/reference/cli/docker/system/prune/) them. You can also manually prune in a docker client like e.g. Docker Desktop by selecting and deleting. 
+   is usually under control. It's although highly recommended to observe the containers, images and volumes in e.g. a docker client like Docker Desktop and as the case may be [prune](https://docs.docker.com/config/pruning/) them. You can also manually prune in a docker client like e.g. Docker Desktop by selecting and deleting. 
    >
    > If [prune](https://docs.docker.com/reference/cli/docker/system/prune/) works too
    slow for you, you can prune single parts. Pruning of a single part is usually very
@@ -457,6 +503,11 @@ Try to avoid multiple organizations in case of the free plan.
    > https://docs.docker.com/reference/cli/docker/volume/prune/
    > 
    > https://docs.docker.com/reference/cli/docker/buildx/prune/
+   >
+   >4. Don't mix up the usage of [.dockerignore](https://docs.docker.com/build/building/context/#dockerignore-files) and an anonymous volume.
+   > While the first one is used at the building stage, the latter one
+   > is used at runtime. See also [this](https://stackoverflow.com/a/78205816) 
+   post regarding an anonymous volume.
 
 # Update
 See [this](https://nx.dev/recipes/tips-n-tricks/advanced-update)
