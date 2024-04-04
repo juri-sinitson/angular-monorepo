@@ -27,6 +27,7 @@
     - [Unit tests](#unit-tests)
     - [E2E tests and Storybook interaction tests](#e2e-tests-and-storybook-interaction-tests)
     - [DRY](#dry)
+  - [SSR/SSG](#ssrssg)
   - [CI](#ci)
     - [Handling changes in a shared library](#handling-changes-in-a-shared-library)
 - [Commits](#commits)
@@ -360,6 +361,13 @@ To avoid repeating e.g. for such standard states like, loading, error and no dat
 1. The depiction of states is unified and can be changed in one place
 2. One saves time just wrapping the data component instead of writing those 
    routines again and again.
+
+## SSR/SSG
+Examples are currently [in progress](https://github.com/juri-sinitson/angular-monorepo/issues/44).
+
+SSR/SSG is especially important in a shop system and other systems where the content
+to be loaded can be more or less predicted. And thus the data can be delivered directly 
+in the DOM instead of being loaded by a separate network request.
 
 <!-- TOC --><a name="ci"></a>
 ## CI
