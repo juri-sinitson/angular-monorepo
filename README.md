@@ -2,7 +2,7 @@
 
 - [What is this repo for?](#what-is-this-repo-for)
 - [Is a monorepo an evil?](#is-a-monorepo-an-evil)
-- [What frameworks are supported?](#what-frameworks-are-supported)
+- [You're talking about angular here, what about other frameworks?](#youre-talking-about-angular-here-what-about-other-frameworks)
 - [Before execution](#before-execution)
   - [Intro](#intro)
   - [Creating configs](#creating-configs)
@@ -70,8 +70,12 @@ With the [modern technologies](https://nx.dev/) and a proper modern architecture
 frontend/fullstack project.
 
 <!-- TOC --><a name="what-frameworks-are-supported"></a>
-# What frameworks are supported?
-Not only [Angular](https://nx.dev/nx-api/angular), [React](https://nx.dev/nx-api/react) and [Next.js](https://nx.dev/nx-api/next). See the the [full list](https://nx.dev/plugin-registry).
+# You're talking about angular here, what about other frameworks?
+You can transfer the most or even most probably all the ideas and principles described in this
+document to other frameworks, especially to React and Vue. E.g. the counterparts of 
+[PrimeNG](https://primeng.org/) are [PrimeReact](https://primereact.org/) and [PrimeVue](https://primevue.org/). Regarding [storybook](https://storybook.js.org) you can also see [here](https://storybook.js.org/docs/get-started#install-storybook), that especially React and Vue are also supported.
+
+And here is the [full list](https://nx.dev/plugin-registry) of the frameworks supported by [nx](https://nx.dev/).
 
 <!-- TOC --><a name="before-execution"></a>
 # Before execution
