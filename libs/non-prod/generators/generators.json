@@ -1,0 +1,24 @@
+{
+  "generators": {
+    "entity-components": {
+      "factory": "./src/generators/entity-components/generator",
+      "schema": "./src/generators/entity-components/schema.json",
+      "description": "entity-components generator"
+    },
+    "entity-store-service": {
+      "factory": "./src/generators/entity-store-service/generator",
+      "schema": "./src/generators/entity-store-service/schema.json",
+      "description": "entity-store-service generator"
+    },
+    "entity-backend-mock": {
+      "factory": "./src/generators/entity-backend-mock/generator",
+      "schema": "./src/generators/entity-backend-mock/schema.json",
+      "description": "entity-backend-mock generator"
+    },
+    "entity-e2e-tests": {
+      "factory": "./src/generators/entity-e2e-tests/generator",
+      "schema": "./src/generators/entity-e2e-tests/schema.json",
+      "description": "entity-e2e-tests generator"
+    }
+  }
+}
