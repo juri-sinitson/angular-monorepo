@@ -1,0 +1,141 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`entity-store-service generator should match snapshot ON any BY any 1`] = `
+"import { Injectable } from '@angular/core';
+
+// TODO! Adjust the project tags.
+// eslint-disable-next-line @nx/enforce-module-boundaries
+import { AbstractEntityStoreService } from '@angular-monorepo/shared/util-common';
+
+// -- STEP 1: ADJUST THE URL! --
+import { getAllMyProductsUrl } from './urls';
+// -- STEP 2: ADJUST THE INTERFACE PATH! --
+import { MyProductInterface } from '../interfaces/my-product.interface';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class MyProductEntityStoreService extends AbstractEntityStoreService<MyProductInterface> {
+  protected override getDevToolsScope(): string {
+    return 'MyProducts';
+  }
+
+  protected override getGetUrl(): string {
+    return getAllMyProductsUrl;
+  }
+}
+"
+`;
+
+exports[`entity-store-service generator should match snapshot ON any BY any 2`] = `
+"import { TestBed } from '@angular/core/testing';
+import {
+  HttpClientTestingModule,
+  HttpTestingController,
+} from '@angular/common/http/testing';
+
+// TODO: adjust the project tags
+// eslint-disable-next-line @nx/enforce-module-boundaries
+import { MessageInterface } from '@angular-monorepo/shared/util-common';
+
+import { MyProductEntityStoreService } from './my-product-entity-store.service';
+// -- STEP 1: ADJUST THE URL! --
+import { getAllMyProductsUrl } from './urls';
+// -- STEP 2: ADJUST THE INTERFACE PATH! --
+import { MyProductInterface } from '../interfaces/my-product.interface';
+
+describe('MyProductEntityStoreService', () => {
+  let service: MyProductEntityStoreService;
+  let httpMock: HttpTestingController;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule],
+      providers: [MyProductEntityStoreService],
+    });
+    service = TestBed.inject(MyProductEntityStoreService);
+    httpMock = TestBed.inject(HttpTestingController);
+  });
+
+  afterEach(() => {
+    httpMock.verify(); // Ensure that there are no outstanding requests.
+  });
+
+  // -- STEP 3: ADJUST THE MOCK DATA! --
+  // You can tell an AI-Solution (e.g. GitHub copilot)
+  // to do this for you by telling which entity interface
+  // should be used for this.
+  const mockProducts: MyProductInterface[] = [
+    {
+      id: '1000',
+      code: 'f230fh0g3',
+      name: 'Bamboo Watch',
+      description: 'Product Description',
+      price: 65,
+      category: 'Accessories',
+      quantity: 24,
+      inventoryStatus: 'INSTOCK',
+      rating: 5,
+    },
+    {
+      id: '1001',
+      code: 'nvklal433',
+      name: 'Black Watch',
+      description: 'Product Description',
+      price: 72,
+      category: 'Accessories',
+      quantity: 61,
+      inventoryStatus: 'OUTOFSTOCK',
+      rating: 4,
+    },
+  ];
+
+  const productPage = {
+    flushEntities: () => {
+      const req = httpMock.expectOne(getAllMyProductsUrl);
+      expect(req.request.method).toBe('GET');
+      req.flush(mockProducts);
+    },
+    flushEmpty: () => {
+      const req = httpMock.expectOne(getAllMyProductsUrl);
+      expect(req.request.method).toBe('GET');
+      req.flush([]);
+    },
+    flushError: () => {
+      const req = httpMock.expectOne(getAllMyProductsUrl);
+      req.flush('Not Found', { status: 404, statusText: 'Not Found' });
+    },
+    flushUnknownError: () => {
+      const req = httpMock.expectOne(getAllMyProductsUrl);
+      req.error(new ProgressEvent(''));
+    },
+  };
+
+  it('should have MyProducts ON data success BY any', () => {
+    productPage.flushEntities();
+    expect(service.entities()).toEqual(mockProducts);
+  });
+
+  it('should toggle loading ON data loading BY any', () => {
+    expect(service.isLoading()).toBe(true);
+    productPage.flushEntities();
+    expect(service.isLoading()).toBe(false);
+  });
+
+  it('should have no MyProducts ON data success BY no data', () => {
+    productPage.flushEmpty();
+    expect(service.noData()).toBe(true);
+  });
+
+  it('should have error ON network error BY any', () => {
+    productPage.flushError();
+    const error: MessageInterface = {
+      severity: 'error',
+      summary: 'Error loading products',
+      detail: \`Http failure response for \${getAllMyProductsUrl}: 404 Not Found\`,
+    };
+    expect(service.messages()).toEqual([error]);
+  });
+});
+"
+`;

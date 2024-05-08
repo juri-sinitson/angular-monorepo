@@ -1,0 +1,24 @@
+import { Injectable } from '@angular/core';
+
+// TODO! Adjust the project tags.
+// eslint-disable-next-line @nx/enforce-module-boundaries
+import { AbstractEntityStoreService } from '@angular-monorepo/shared/util-common';
+
+// -- STEP 1: ADJUST THE URL! --
+import { <%= getUrlName %> }  from './urls';
+// -- STEP 2: ADJUST THE INTERFACE PATH! --
+import { <%= interfaceName %> } from '../interfaces/<%= entityName %>.interface';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class <%= className %>EntityStoreService extends AbstractEntityStoreService<<%= interfaceName %>> {
+  
+  protected override getDevToolsScope(): string {
+    return '<%= classNamePlural %>';
+  }
+
+  protected override getGetUrl(): string {
+    return getAll<%= classNamePlural %>Url;
+  }
+}
