@@ -3,12 +3,18 @@ import {
   Component,
   input,
   computed,
+  output,
 } from '@angular/core';
-import { NgFor, KeyValuePipe, TitleCasePipe } from '@angular/common';
+import { KeyValuePipe, TitleCasePipe } from '@angular/common';
 
+import { ConfirmationService } from 'primeng/api';
+import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 import { TableColumn } from '../../types/table';
+import { Entity } from '../../types/entity';
+
 
 /**
  * A basic table component that displays a list of items in a table.
@@ -16,8 +22,22 @@ import { TableColumn } from '../../types/table';
 @Component({
   selector: 'common-basic-table',
   standalone: true,
-  imports: [TableModule, NgFor, KeyValuePipe],
-  providers: [TitleCasePipe],
+  imports: [
+    // Angular
+    KeyValuePipe,
+
+    // PrimeNG
+    TableModule, 
+    ButtonModule,
+    ConfirmDialogModule,
+  ],
+  providers: [
+    // Angular
+    TitleCasePipe,
+    
+    // PrimeNg
+    ConfirmationService,
+  ],
   template: `
     <!-- PrimeNG table -->
     <p-table [value]="data()" [tableStyle]="{ 'min-width': '50rem' }">
@@ -32,6 +52,9 @@ import { TableColumn } from '../../types/table';
           @for (col of computedColumns(); track $index) {
             <th [attr.data-testid]="'col-' + col[0]">{{ col[1] }}</th>
           }
+          @if (crud()) {
+            <th></th>
+          }
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-item>
@@ -40,9 +63,25 @@ import { TableColumn } from '../../types/table';
           @for (col of computedColumns(); track $index) {
             <td [attr.data-testid]="'val-' + col[0]">{{ item[col[0]] }}</td>
           }
+          @if (crud()) {
+            <td data-testid="crud">
+              <button pButton pRipple data-testid="edit" 
+                icon="pi pi-pencil" 
+                class="p-button-rounded p-button-success mr-2"
+                (click)="edit(item)">
+              </button>
+              <button pButton pRipple data-testid="delete" 
+                icon="pi pi-trash"
+                class="p-button-rounded p-button-warning"
+                (click)="delete(item)">
+              </button>
+            </td>
+          }
         </tr>
       </ng-template>
     </p-table>
+    <!-- TODO! unify the dialog max width with a utility class -->
+    <p-confirmDialog [style]="{ maxWidth: '450px' }"></p-confirmDialog>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -57,6 +96,20 @@ export class BasicTableComponent {
    * the key of the object.
    */
   columns = input<TableColumn | undefined>();
+
+  /**
+  * If it's a CRUD table or not.
+  */
+  crud = input<boolean>(false);
+
+  /**
+   * Emits the item on delete
+   */
+  onDelete = output<Entity>();
+  /**
+   * Emits the item on edit
+   */
+  onEdit = output<Entity>();
   
   computedColumns = computed<TableColumn>(() => {
     
@@ -80,5 +133,23 @@ export class BasicTableComponent {
     return result;
   });
 
-  constructor(private titleCasePipe: TitleCasePipe) {}
+  constructor(
+    private titleCasePipe: TitleCasePipe,
+    private confirmationService: ConfirmationService
+  ) {}
+
+  delete(item: Entity) {    
+    this.confirmationService.confirm({
+      message: 'Are you sure you want to delete this item?',
+      header: 'Confirm',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.onDelete.emit(item);
+      }
+    });
+  }
+
+  edit(item: Entity) {
+    this.onEdit.emit(item);
+  }
 }

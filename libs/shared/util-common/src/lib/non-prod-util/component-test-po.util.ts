@@ -34,6 +34,12 @@ export const expectElem = async (testId: string, canvas: any): Promise<void> => 
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const expectElemOfMultiple = async (testId: string, canvas: any): Promise<void> => {
+  const elem = await getFirstElem(testId, canvas);
+  expect(elem).toBeTruthy();
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const expectNoElem = async (testId: string, canvas: any): Promise<void> => {
   const elem = canvas.queryByTestId(testId, canvas);
   expect(elem).toBeFalsy();
@@ -55,8 +61,8 @@ export const expectNoText = async (text: string, canvas: any): Promise<void> => 
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const expectTableColElemText = async (testId: string, textContent: string, canvas: any): Promise<void> => {
-  const elem = await getElem(testId, canvas);
+export const expectToHaveText = async (testId: string, textContent: string, canvas: any): Promise<void> => {
+  const elem = await getElem(testId, canvas);  
   expect(elem).toHaveTextContent(textContent);
 }
 
@@ -64,4 +70,109 @@ export const expectTableColElemText = async (testId: string, textContent: string
 export const expectTableValueElemText = async (testId: string, textContent: string, canvas: any): Promise<void> => {
   const elem = await getFirstElem(testId, canvas);  
   expect(elem).toHaveTextContent(textContent);
+}
+
+export const expectTableColElemText = async (testId: string, textContent: string, 
+  canvas: HTMLCanvasElement): Promise<void> => {
+  expectToHaveText(testId, textContent, canvas);
+}
+
+// ----- FORM
+// -- form inputs
+export const expectTextInputValue = async (testId: string, value: string, 
+  canvas: HTMLCanvasElement): Promise<void> => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const elem: any = await getElem(testId, canvas); 
+  expect(elem.value).toBe(value);
+}
+
+export const expectNumberInputValue = async (testId: string, value: string, 
+  canvas: HTMLCanvasElement): Promise<void> => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const parentElem: any = await getElem(testId, canvas); 
+  const elem = parentElem.querySelector('input');
+  expect(elem.value).toBe(value);
+}
+
+export const expectDropdownValue = async (testId: string, value: string, 
+  canvas: HTMLCanvasElement): Promise<void> => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const parentElem: any = await getElem(testId, canvas); 
+  const elem = parentElem.querySelector('span');
+  expect(elem).toHaveTextContent(value);
+}
+
+const getInputElem = async (testId: string, canvas: HTMLCanvasElement): Promise<HTMLInputElement> => {  
+  const elem: HTMLElement = await getElem(testId, canvas);  
+  let result: HTMLInputElement | null = null;
+  
+  if (elem.tagName === 'INPUT') {
+    result = elem as HTMLInputElement;
+  } else {
+    result = elem.querySelector('input');
+  }
+  
+  if(!result) {
+    throw new Error(`Element with testId ${testId} doesn't seem to be an input!`);
+  }
+
+  return Promise.resolve(result);
+}
+
+const typeToTextInput = async (testId: string, value: string, 
+  canvas: HTMLCanvasElement, defocus = true): Promise<void> => {  
+  const inputElem: HTMLInputElement = await getInputElem(testId, canvas); 
+  await userEvent.type(inputElem, value);
+  inputElem.value = value;
+  if (defocus) {
+    await userEvent.tab();
+  }
+}
+
+const clearTextInput = async (testId: string, canvas: HTMLCanvasElement): Promise<void> => {  
+  const elem: HTMLElement = await getInputElem(testId, canvas);
+  await userEvent.clear(elem);
+}
+
+const getTextInputValue = async (testId: string, canvas: HTMLCanvasElement): Promise<string> => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const elem: any = await getInputElem(testId, canvas);
+  return Promise.resolve(elem.value);
+}
+
+const expectSubmitButtonDisabled = async (canvas: HTMLCanvasElement): Promise<void> => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const submitButton: any = await getElem('submit-button', canvas);
+  const submitButtonChild: HTMLElement = submitButton.querySelector('button');
+  expect(submitButtonChild).toBeDisabled();
+}
+
+const expectSubmitButtonEnabled = async (canvas: HTMLCanvasElement): Promise<void> => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const submitButton: any = await getElem('submit-button', canvas);
+  const submitButtonChild: HTMLElement = submitButton.querySelector('button');
+  expect(submitButtonChild).not.toBeDisabled();
+}
+
+export const expectFormInvalid = async (canvas: HTMLCanvasElement): Promise<void> => {  
+  const form: HTMLElement = await getElem('form', canvas);
+  // click somewhere in the form to trigger validation
+  await userEvent.click(form);  
+  expect(form).toHaveClass('ng-invalid');
+  await expectSubmitButtonDisabled(canvas);
+}
+
+export const expectFormValid = async (canvas: HTMLCanvasElement): Promise<void> => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const form: any = await getElem('form', canvas);
+  expect(form).toHaveClass('ng-valid');  
+  await expectSubmitButtonEnabled(canvas);  
+}
+
+export const expectFormInvalidByTextInput = async (testId: string, 
+  canvas: HTMLCanvasElement): Promise<void> => {  
+  const valueBackup: string = await getTextInputValue(testId, canvas);
+  await clearTextInput(testId, canvas);
+  await expectFormInvalid(canvas);
+  await typeToTextInput(testId, valueBackup, canvas);
 }

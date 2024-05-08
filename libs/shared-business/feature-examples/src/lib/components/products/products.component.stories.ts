@@ -1,6 +1,9 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { applicationConfig, type Meta, type StoryObj } from '@storybook/angular';
 
+import { ConfirmationService } from 'primeng/api';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+
 import { ProductsComponent } from './products.component';
 // TODO: Adjust the project tags.
 // eslint-disable-next-line @nx/enforce-module-boundaries
@@ -16,6 +19,7 @@ import {
   getCanvas,
   loadingStory,
   noDataStory,
+  ConfirmNotImplementedWrapperComponent,
 } from '@angular-monorepo/shared/util-common-non-prod';
 
 const productsList: ProductInterface[] = [
@@ -79,7 +83,14 @@ const productsList: ProductInterface[] = [
 @Component({
   selector: 'angular-monorepo-products-test-wrapper',
   standalone: true,
-  imports: [ProductsComponent],
+  providers: [ConfirmationService],
+  imports: [
+    // PrimeNG
+    ConfirmDialogModule,
+
+    // Own
+    ProductsComponent,
+  ],
   template: `
     <angular-monorepo-products
       [data]="data"
@@ -87,12 +98,15 @@ const productsList: ProductInterface[] = [
       [isLoading]="isLoading"
       [header]="header"
       [noData]="noData"
+      (onEdit)="onCrudOperation('Data editing')"
+      (onDelete)="onCrudOperation('Data deletion')"
     >
     </angular-monorepo-products>
+    <p-confirmDialog [style]="{ maxWidth: '450px' }"></p-confirmDialog>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ProductsTestWrapperComponent {
+export class ProductWrapperComponent extends ConfirmNotImplementedWrapperComponent {
   @Input() data: ProductInterface[] = [];
   @Input() messages: MessageInterface[] = [];
   @Input() isLoading = false;
@@ -100,13 +114,13 @@ export class ProductsTestWrapperComponent {
   @Input() header: string | undefined = undefined;
 }
 
-const meta: Meta<ProductsTestWrapperComponent> = {
-  component: ProductsTestWrapperComponent,
+const meta: Meta<ProductWrapperComponent> = {
+  component: ProductWrapperComponent,
   decorators: [applicationConfig({ ...commonAppConfig })],
   title: 'shared-business/feature-examples/Products',
 };
 export default meta;
-type Story = StoryObj<ProductsTestWrapperComponent>;
+type Story = StoryObj<ProductWrapperComponent>;
 
 const expectCols = async (canvas: HTMLElement) => {
   await expectText('Name', canvas);

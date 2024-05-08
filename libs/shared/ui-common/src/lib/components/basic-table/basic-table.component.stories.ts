@@ -8,13 +8,17 @@ import { commonAppConfig } from '@angular-monorepo/shared/util-common';
 import { BasicTableComponent } from './basic-table.component';
 
 import {
+  expectElemOfMultiple,
   expectNoElem,
   expectTableColElemText,
   expectTableValueElemText,
   getCanvas,
+  ConfirmNotImplementedWrapperComponent,
 } from '@angular-monorepo/shared/util-common-non-prod';
 
 import { TableColumn } from '../../types/table';
+import { ConfirmationService } from 'primeng/api';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 export interface ProductInterface {
   code: string;
@@ -59,22 +63,38 @@ const productsList: ProductInterface[] = [
 @Component({
   selector: 'common-basic-table-test-wrapper',
   standalone: true,
-  imports: [BasicTableComponent],
+  imports: [
+    // PrimeNG
+    ConfirmDialogModule,
+    
+    // Own
+    BasicTableComponent
+  ],
+  providers: [
+    // PrimeNg
+    ConfirmationService,
+  ],
   template: `
     <common-basic-table
       [data]="products"
       [columns]="columns"
+      [crud]="crud"
+      (onEdit)="onCrudOperation('Editing')"
+      (onDelete)="onCrudOperation('Deletion')"
     ></common-basic-table>
+    <!-- TODO! unify the dialog max width with a utility class -->
+    <p-confirmDialog [style]="{ maxWidth: '450px' }"></p-confirmDialog>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BasicTableTestWrapperComponent {
+export class BasicTableTestWrapperComponent extends ConfirmNotImplementedWrapperComponent {
   // TODO! Figure how to use signal
   // inputs here that the controls
   // of storybook stay usable.
   // If you figure out, you can remove this wrapper.
   @Input() products: ProductInterface[] = [];
   @Input() columns: TableColumn | undefined = undefined;
+  @Input() crud = false;
 }
 
 const meta: Meta<BasicTableTestWrapperComponent> = {
@@ -133,6 +153,20 @@ export const colNamesProvided: Story = {
     await expectTableValueElemText('val-name', 'Bamboo Watch', canvas);
     await expectTableValueElemText('val-category', 'Accessories', canvas);
     await expectTableValueElemText('val-quantity', '24', canvas);
+  },
+};
+
+export const crud: Story = {
+  args: {
+    products: productsList,
+    crud: true,
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = getCanvas(canvasElement);
+
+    // Checking the first row only, that should be enough.
+    await expectElemOfMultiple('edit', canvas);
+    await expectElemOfMultiple('delete', canvas);
   },
 };
 

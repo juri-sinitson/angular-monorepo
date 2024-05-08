@@ -1,5 +1,5 @@
 @use 'primeng/resources/primeng.css';
-@use 'primeng/resources/themes/lara-light-blue/theme.css';
+@use 'primeng/resources/themes/aura-dark-noir/theme.css';
 @use 'primeflex/primeflex.css';
 @use 'primeicons/primeicons.css';
 
@@ -33,4 +33,13 @@
 .icon-cog {
   @extend .abstract-icon;
   @extend .pi-cog;
+}
+
+// -- FORM --
+.field-margin-top {
+  @extend .mt-2;
+}
+
+.button-margin-top {
+  @extend .mt-3;
 }
