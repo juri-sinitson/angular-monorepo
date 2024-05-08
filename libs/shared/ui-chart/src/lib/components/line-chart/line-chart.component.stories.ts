@@ -1,17 +1,15 @@
-import type { Meta, StoryObj } from '@storybook/angular';
-import { LineChartComponent } from './line-chart.component';
-import { input } from '@angular/core';
+import { applicationConfig, type Meta, type StoryObj } from '@storybook/angular';
+import { ChangeDetectionStrategy, Component, Input, input } from '@angular/core';
 
-const meta: Meta<LineChartComponent> = {
-  component: LineChartComponent,
-  title: 'shared/ui-chart/Line Chart',
-};
-export default meta;
-type Story = StoryObj<LineChartComponent>;
+import { LineChartComponent } from './line-chart.component';
+
+// TODO: Adjust the project tags.
+// eslint-disable-next-line @nx/enforce-module-boundaries
+import { commonAppConfig } from '@angular-monorepo/shared/util-common';
 
 const documentStyle = getComputedStyle(document.documentElement);
 
-const dataContent = {
+const data = {
   labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
   datasets: [
     {
@@ -31,13 +29,36 @@ const dataContent = {
   ],
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const data = input<any>(dataContent);
+@Component({
+  selector: 'chart-line-chart-test-wrapper',
+  standalone: true,
+  imports: [LineChartComponent],
+  template: `
+    <chart-line-chart [data]="data"></chart-line-chart>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class LineChartTestWrapperComponent {
+  // TODO! Figure how to use signal
+  // inputs here that the controls
+  // of storybook stay usable.
+  // If you figure out, you can remove this wrapper.
+  @Input() data: unknown = null;  
+}
+
+const meta: Meta<LineChartTestWrapperComponent> = {
+  component: LineChartTestWrapperComponent,
+  decorators: [applicationConfig({ ...commonAppConfig })],
+  title: 'shared/ui-chart/Line Chart',
+};
+export default meta;
+type Story = StoryObj<LineChartTestWrapperComponent>;
+
 
 // TODO: Make visual regression tests for this component
 // See https://storybook.js.org/docs/writing-tests/visual-testing
 export const primary: Story = {
   args: {
-    data: data(),
+    data,
   },
 };
