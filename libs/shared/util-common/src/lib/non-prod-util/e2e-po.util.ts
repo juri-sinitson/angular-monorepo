@@ -1,9 +1,14 @@
+import { RequestEvents, CyHttpMessages } from "cypress/types/net-stubbing";
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+declare const cy: any;
+
 export const getGreeting = () => cy.get('h1');
 
 export const getElemByTestId = (dataTestId: string) => 
   cy.get(`[data-testid="${dataTestId}"]`);
 
-export const expectText = (dataTestId: string, expectedText: string) => 
+export const expectE2EText = (dataTestId: string, expectedText: string) => 
   getElemByTestId(dataTestId).should('contain', expectedText);
 
 export const expectTableDataValue = (columnKey: string, expectedText: string) => {
@@ -26,9 +31,9 @@ export const expectNoData = () =>
       .should('be.visible');
 
 export const createDelayedInterceptor = (url: string, delay: number) => 
-  cy.intercept(url, (req) => {
-    req.on('response', (res) => {
-      // Introduce a to delay e.g. for the loading indicator.
+  cy.intercept(url, (req: RequestEvents ) => {
+    req.on('response', (res: CyHttpMessages.IncomingHttpResponse) => {
+      // Introduce a delay e.g. for the loading indicator.
       // Cypress will not wait for the response to be sent
       // unless we explicitly wait for it.
       res.setDelay(delay);
@@ -39,6 +44,7 @@ export const createErrorInterceptor = (url: string) =>
   cy.intercept(url, { forceNetworkError: true });
 
 export const createEmptyDataInterceptor = (url: string) => 
-  cy.intercept(url, (req) => {
+  cy.intercept(url, (req: CyHttpMessages.IncomingHttpRequest) => {
     req.reply(200, []);
-  });  
+  });
+  

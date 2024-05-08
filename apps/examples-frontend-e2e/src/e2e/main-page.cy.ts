@@ -2,8 +2,10 @@
 // eslint-disable-next-line @nx/enforce-module-boundaries
 import { getAllProductsUrl, getAllOtherProductsUrl } from '@angular-monorepo/shared-business/examples-e2e';
 
+// TODO! Adjust the project tags.
+// eslint-disable-next-line @nx/enforce-module-boundaries
 import {
-  expectText,
+  expectE2EText as expectText,
   expectTableDataValue,
   getElemByTestId,  
   expectLoadingShown,
@@ -13,15 +15,15 @@ import {
   createDelayedInterceptor,
   createErrorInterceptor,
   createEmptyDataInterceptor,
-} from '../support/app.po';
+} from '@angular-monorepo/shared/util-common-non-prod';
 
-const products = 'products';
-const otherProducts = 'other-products';
-const productsFeature = 'products-feature';
-const otherProductsFeature = 'other-products-feature';
+const entities = 'products';
+const otherEntities = 'other-products';
+const entitiesFeature = 'products-feature';
+const otherEntitiesFeature = 'other-products-feature';
 
-const productsUrl = getAllProductsUrl;
-const otherProductsUrl = getAllOtherProductsUrl;
+const entitiesUrl = getAllProductsUrl;
+const otherEntitiesUrl = getAllOtherProductsUrl;
 
 // TODO! Create generator for E2E tests
 // from this suite.
@@ -48,7 +50,7 @@ describe('Main Page', () => {
       });
 
       it('should display data for products feature ON data success BY any', () => {
-        getElemByTestId(productsFeature).within(() => {
+        getElemByTestId(entitiesFeature).within(() => {
 
           expectCols();
 
@@ -81,7 +83,7 @@ describe('Main Page', () => {
       });
 
       it('should display data for other products feature ON data success BY any', () => {
-        getElemByTestId(otherProductsFeature).within(() => {
+        getElemByTestId(otherEntitiesFeature).within(() => {
           // Assert columns are there
           expectCols();
 
@@ -116,9 +118,9 @@ describe('Main Page', () => {
 
     describe('Loading', () => {                
       before(() => {
-        const delay = 1000;
-        createDelayedInterceptor(productsUrl, delay);
-        createDelayedInterceptor(otherProductsUrl, delay);
+        const delay = 4000;
+        createDelayedInterceptor(entitiesUrl, delay);
+        createDelayedInterceptor(otherEntitiesUrl, delay);
         cy.visit('/');
       });
 
@@ -127,25 +129,25 @@ describe('Main Page', () => {
         // Thus loading indicators should get enough time to show up.
         // If we don't wait for the responses explicitly, Cypress
         // will not wait for them and just continue to the next test.        
-        getElemByTestId(productsFeature).within(() =>expectLoadingShown());
-        getElemByTestId(otherProductsFeature).within(() => expectLoadingShown());
+        getElemByTestId(entitiesFeature).within(() =>expectLoadingShown());
+        getElemByTestId(otherEntitiesFeature).within(() => expectLoadingShown());
       });
     });
 
     describe('Errors', () => {
       before(() => {
-        createErrorInterceptor(productsUrl).as(`${products}Error`);
-        createErrorInterceptor(otherProductsUrl).as(`${otherProducts}Error`);
+        createErrorInterceptor(entitiesUrl).as(`${entities}Error`);
+        createErrorInterceptor(otherEntitiesUrl).as(`${otherEntities}Error`);
         cy.visit('/');
       });
 
       it('should show errors ON network error BY any', () => {
         
-        cy.wait(`@${products}Error`)
-          .then(() => cy.wait(`@${otherProducts}Error`))
+        cy.wait(`@${entities}Error`)
+          .then(() => cy.wait(`@${otherEntities}Error`))
           .then(() => {
-            getElemByTestId(productsFeature).within(() => expectErrorShown());
-            getElemByTestId(otherProductsFeature).within(() => expectErrorShown());
+            getElemByTestId(entitiesFeature).within(() => expectErrorShown());
+            getElemByTestId(otherEntitiesFeature).within(() => expectErrorShown());
             expectLoadingNotShown();
           });        
       });
@@ -153,18 +155,18 @@ describe('Main Page', () => {
 
     describe('No data', () => {
       before(() => {
-        createEmptyDataInterceptor(productsUrl).as(`${products}NoData`);
-        createEmptyDataInterceptor(otherProductsUrl).as(`${otherProducts}NoData`);
+        createEmptyDataInterceptor(entitiesUrl).as(`${entities}NoData`);
+        createEmptyDataInterceptor(otherEntitiesUrl).as(`${otherEntities}NoData`);
         cy.visit('/');
       });
 
       it('should show no data ON data success BY no data', () => {
         
-        cy.wait(`@${products}NoData`)
-          .then(() => cy.wait(`@${otherProducts}NoData`))
+        cy.wait(`@${entities}NoData`)
+          .then(() => cy.wait(`@${otherEntities}NoData`))
           .then(() => {
-            getElemByTestId(productsFeature).within(() => expectNoData());
-            getElemByTestId(otherProductsFeature).within(() => expectNoData());
+            getElemByTestId(entitiesFeature).within(() => expectNoData());
+            getElemByTestId(otherEntitiesFeature).within(() => expectNoData());
             expectLoadingNotShown();
           });
       });
