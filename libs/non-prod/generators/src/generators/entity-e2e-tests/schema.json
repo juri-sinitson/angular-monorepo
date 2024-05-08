@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/schema",
+  "$id": "EntityE2eTests",
+  "title": "",
+  "type": "object",
+  "properties": {
+    "entityName": {
+      "type": "string",
+      "description": "The name of the component to create.",
+      "x-prompt": "What component name would you like to use?"
+    },
+    "project": {
+      "type": "string",
+      "description": "The name of the project.",
+      "x-prompt": "What project name would you like to use?"
+    }
+  },
+  "required": ["entityName", "project"]
+}
