@@ -1,6 +1,10 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { applicationConfig, type Meta, type StoryObj } from '@storybook/angular';
 
-import type { Meta, StoryObj } from '@storybook/angular';
+// TODO: Adjust the project tags.
+// eslint-disable-next-line @nx/enforce-module-boundaries
+import { commonAppConfig } from '@angular-monorepo/shared/util-common';
+
 import { BasicTableComponent } from './basic-table.component';
 
 import {
@@ -75,6 +79,7 @@ export class BasicTableTestWrapperComponent {
 
 const meta: Meta<BasicTableTestWrapperComponent> = {
   component: BasicTableTestWrapperComponent,
+  decorators: [applicationConfig({ ...commonAppConfig })],
   title: 'shared/ui-common/Basic Table',
 };
 export default meta;

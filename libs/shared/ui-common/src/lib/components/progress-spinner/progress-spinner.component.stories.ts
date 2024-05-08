@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/angular';
-import { ProgressSpinnerComponent } from './progress-spinner.component';
+import { applicationConfig, type Meta, type StoryObj } from '@storybook/angular';
+
 import {
   expectElem,
   expectNoElem,
@@ -7,6 +7,12 @@ import {
   getCanvas,
 } from '@angular-monorepo/shared/util-common-non-prod';
 import { Component, Input } from '@angular/core';
+
+// TODO: Adjust the project tags.
+// eslint-disable-next-line @nx/enforce-module-boundaries
+import { commonAppConfig } from '@angular-monorepo/shared/util-common';
+// eslint-disable-next-line @nx/enforce-module-boundaries
+import { ProgressSpinnerComponent } from './progress-spinner.component';
 
 @Component({
   selector: 'common-messages-test-wrapper',
@@ -27,6 +33,7 @@ export class ProgressSpinnerTestWrapperComponent {
 
 const meta: Meta<ProgressSpinnerTestWrapperComponent> = {
   component: ProgressSpinnerTestWrapperComponent,
+  decorators: [applicationConfig({ ...commonAppConfig })],
   title: 'shared/ui-common/Progress Spinner',
 };
 export default meta;
