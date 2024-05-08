@@ -1,12 +1,12 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import type { Meta, StoryObj } from '@storybook/angular';
+import { applicationConfig, type Meta, type StoryObj } from '@storybook/angular';
 
 import { ProductsComponent } from './products.component';
 // TODO: Adjust the project tags.
 // eslint-disable-next-line @nx/enforce-module-boundaries
 import { ProductInterface } from '@angular-monorepo/shared-business/examples';
 // eslint-disable-next-line @nx/enforce-module-boundaries
-import { MessageInterface } from '@angular-monorepo/shared/util-common';
+import { MessageInterface, commonAppConfig } from '@angular-monorepo/shared/util-common';
 // eslint-disable-next-line @nx/enforce-module-boundaries
 import {
   errorStory,
@@ -102,6 +102,7 @@ export class ProductsTestWrapperComponent {
 
 const meta: Meta<ProductsTestWrapperComponent> = {
   component: ProductsTestWrapperComponent,
+  decorators: [applicationConfig({ ...commonAppConfig })],
   title: 'shared-business/feature-examples/Products',
 };
 export default meta;

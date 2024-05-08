@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 
 // TODO: Adjust the project tags.
 // eslint-disable-next-line @nx/enforce-module-boundaries
-import { OtherProductService } from '@angular-monorepo/shared-business/examples';
+import { OtherProductEntityStoreService } from '@angular-monorepo/shared-business/examples';
 import { ProductsComponent } from './products.component';
 
 /**
@@ -16,13 +16,13 @@ import { ProductsComponent } from './products.component';
   selector: 'angular-monorepo-other-products-smart',
   standalone: true,
   imports: [ProductsComponent],
-  providers: [OtherProductService],
+  providers: [OtherProductEntityStoreService],
   template: `
     <div data-testid="other-products-feature">
-      <angular-monorepo-products [data]="productService.products()"
-        [isLoading]="!!productService.isLoading()"
-        [messages]="productService.messages()"
-        [noData]="productService.noData()"
+      <angular-monorepo-products [data]="entityService.entities()"
+        [isLoading]="!!entityService.isLoading()"
+        [messages]="entityService.messages()"
+        [noData]="entityService.noData()"
         [header]="'Other Products'"
       >
       </angular-monorepo-products>
@@ -31,5 +31,5 @@ import { ProductsComponent } from './products.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OtherProductsSmartComponent {
-  productService = inject(OtherProductService);
+  entityService = inject(OtherProductEntityStoreService);
 }

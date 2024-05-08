@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
-import { OtherProductService } from './other-product.store';
+import { OtherProductEntityStoreService } from './other-product-entity-store.service';
 import { getAllOtherProductsUrl } from './urls'
 import { ProductInterface } from '../interfaces/product.interface';
 // TODO: adjust the project tags
@@ -10,15 +10,15 @@ import { MessageInterface } from '@angular-monorepo/shared/util-common';
 
 // TODO! Crete the test generator
 describe('ProductService', () => {
- let service: OtherProductService;
+ let service: OtherProductEntityStoreService;
  let httpMock: HttpTestingController;
 
  beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [OtherProductService]
+      providers: [OtherProductEntityStoreService]
     });
-    service = TestBed.inject(OtherProductService);
+    service = TestBed.inject(OtherProductEntityStoreService);
     httpMock = TestBed.inject(HttpTestingController);
  });
 
@@ -74,7 +74,7 @@ const productPage = {
 
  it('should have products ON data success BY any', () => {        
     productPage.flushProducts();
-    expect(service.products()).toEqual(mockProducts);    
+    expect(service.entities()).toEqual(mockProducts);    
  });
 
  it('should toggle loading ON data loading BY any', () => {            

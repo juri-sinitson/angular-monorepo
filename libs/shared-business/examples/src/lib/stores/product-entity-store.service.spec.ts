@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
-import { ProductService } from './product.store';
+import { ProductEntityStoreService } from './product-entity-store.service';
 import { getAllProductsUrl } from './urls'
 // TODO: adjust the project tags
 // eslint-disable-next-line @nx/enforce-module-boundaries
@@ -11,15 +11,15 @@ import { ProductInterface } from '../interfaces/product.interface';
 // TODO! Crete the test generator
 
 describe('ProductService', () => {
- let service: ProductService;
+ let service: ProductEntityStoreService;
  let httpMock: HttpTestingController;
 
  beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [ProductService]
+      providers: [ProductEntityStoreService]
     });
-    service = TestBed.inject(ProductService);
+    service = TestBed.inject(ProductEntityStoreService);
     httpMock = TestBed.inject(HttpTestingController);
  });
 
@@ -75,7 +75,7 @@ const productPage = {
 
  it('should have products ON data success BY any', () => {        
     productPage.flushProducts();
-    expect(service.products()).toEqual(mockProducts);    
+    expect(service.entities()).toEqual(mockProducts);    
  });
 
  it('should toggle loading ON data loading BY any', () => {            
