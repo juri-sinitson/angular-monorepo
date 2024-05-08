@@ -1,0 +1,117 @@
+import express from 'express';
+
+// TODO: adjust project tags and as the case may be
+// rearrange the libs. 
+// eslint-disable-next-line @nx/enforce-module-boundaries
+// -- STEP 1: Adjust the entity interface path --
+import { <%= entityInterfaceName %> } from '@angular-monorepo/shared-business/examples';
+
+const host = process.env['HOST'] ?? 'localhost';
+const port = process.env['PORT'] ? Number(process.env['PORT']) : 3000;
+
+const app = express();
+
+// -- STEP 2: ADJUST THE MOCK DATA! --
+ // You can tell an AI-Solution (e.g. GitHub copilot) 
+ // to do this for you by telling which entity interface 
+ // should be used for this.
+const entitiesList: <%= entityInterfaceName %>[] = [
+  {
+    id: '1000',
+    code: 'f230fh0g3',
+    name: 'Bamboo Watch',
+    description: 'Product Description',    
+    price: 65,
+    category: 'Accessories',
+    quantity: 24,
+    inventoryStatus: 'INSTOCK',
+    rating: 5,
+  },
+  {
+    id: '1001',
+    code: 'nvklal433',
+    name: 'Black Watch',
+    description: 'Product Description',
+    price: 72,
+    category: 'Accessories',
+    quantity: 61,
+    inventoryStatus: 'OUTOFSTOCK',
+    rating: 4,
+  },
+  {
+    id: '1002',
+    code: 'zz21cz3c1',
+    name: 'Blue Band',
+    description: 'Product Description',
+    price: 79,
+    category: 'Fitness',
+    quantity: 2,
+    inventoryStatus: 'LOWSTOCK',
+    rating: 3,
+  },
+  {
+    id: '1003',
+    code: '244wgerg2',
+    name: 'Blue T-Shirt',
+    description: 'Product Description',
+    price: 29,
+    category: 'Clothing',
+    quantity: 25,
+    inventoryStatus: 'INSTOCK',
+    rating: 5,
+  },
+  {
+    id: '1004',
+    code: 'h456wer53',
+    name: 'Bracelet',
+    description: 'Product Description',
+    price: 15,
+    category: 'Accessories',
+    quantity: 73,
+    inventoryStatus: 'INSTOCK',
+    rating: 4,
+  },
+  {
+    id: '1005',
+    code: 'av2231fwg',
+    name: 'Brown Purse',
+    description: 'Product Description',
+    price: 120,
+    category: 'Accessories',
+    quantity: 0,
+    inventoryStatus: 'OUTOFSTOCK',
+    rating: 4,
+  },
+]
+
+app.use(express.json());
+
+app.get('/api/examples/<%= entityInUrlNamePlural %>', (req, res) => {
+  res.send(entitiesList);
+});
+
+app.post('/api/examples/<%= entityInUrlNamePlural %>/:id', (req, res) => {  
+  const newEntity: <%= entityInterfaceName %> = req.body;
+
+  // Add the new product to the products list
+  entitiesList.push(newEntity);
+
+  res.sendStatus(200);
+});
+
+app.put('/api/examples/<%= entityInUrlNamePlural %>/:id', (req, res) => {
+  const id = req.params.id;
+  const updatedEntity: <%= entityInterfaceName %> = req.body;
+
+  // Find the product and update it
+  const entityIndex = entitiesList.findIndex(entity => entity.id === id);
+  if (entityIndex !== -1) {
+    entitiesList[entityIndex] = updatedEntity;
+  }
+
+  res.sendStatus(200);
+});
+
+app.listen(port, host, () => {
+  console.log(`[ ready ] http://${host}:${port}`);
+});
