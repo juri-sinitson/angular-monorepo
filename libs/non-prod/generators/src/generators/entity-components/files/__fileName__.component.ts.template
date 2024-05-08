@@ -1,0 +1,50 @@
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+// TODO! Adjust the project tags.
+// eslint-disable-next-line @nx/enforce-module-boundaries
+import { 
+  BasicTableComponent,
+  CommonWrapperComponent,
+} from '@angular-monorepo/shared/ui-common';
+
+// TODO! Adjust the project tags.
+// eslint-disable-next-line @nx/enforce-module-boundaries
+import { AbstractEntitiesListComponent } from '@angular-monorepo/shared/ui-common';
+
+// -- STEP 1: ADJUST THE ENTITY INTERFACE PATH! --
+// TODO! Adjust the project tags.
+// eslint-disable-next-line @nx/enforce-module-boundaries
+import { <%= entityInterfaceName %> } from '@angular-monorepo/shared-business/examples';
+
+@Component({
+  selector: 'angular-monorepo-<%= selectorName %>',
+  standalone: true,
+  imports: [BasicTableComponent, CommonWrapperComponent],
+  template: `
+    <common-common-wrapper [messages]="messages()" 
+      [isLoading]="isLoading()"
+      [header]="header()"
+      [noData]="noData()"
+    >
+      <common-basic-table [columns]="columns" [data]="data()"></common-basic-table>
+    </common-common-wrapper>
+  `,  
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class <%= className %>Component extends AbstractEntitiesListComponent<<%= entityInterfaceName %>> {
+  
+  protected override getColumns(): Array<[keyof <%= entityInterfaceName %>, string]> {
+    // -- STEP 2: ADJUST THE COLUMNS NAMES AND THE SEQUENCE!
+    // Adjusting the columns names and the sequence
+    return [
+      ['name', 'Name'],
+      ['category', 'Category'],
+      ['description', 'Description'],
+      ['inventoryStatus', 'Status'],
+      ['code', 'Code'],
+      ['price', 'Price'],
+      ['quantity', 'Quantity'],
+      ['rating', 'Rating'],
+    ];
+  }
+}
