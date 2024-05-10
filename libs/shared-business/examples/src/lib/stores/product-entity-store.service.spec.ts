@@ -52,50 +52,49 @@ const mockProducts: ProductInterface[] =  [
   },
 ];
 
-const productPage = {
-  flushProducts: () => {
-     const req = httpMock.expectOne(getAllProductsUrl);
-     expect(req.request.method).toBe('GET');
-     req.flush(mockProducts);
-  },
-  flushEmpty: () => {
-     const req = httpMock.expectOne(getAllProductsUrl);
-     expect(req.request.method).toBe('GET');
-     req.flush([]);
-  },
-  flushError: () => {
-     const req = httpMock.expectOne(getAllProductsUrl);
-     req.flush('Not Found', { status: 404, statusText: 'Not Found' });
-  },
-  flushUnknownError: () => {
-    const req = httpMock.expectOne(getAllProductsUrl);
-    req.error(new ProgressEvent(''));
- }
-};
+describe('List Endpoint with the method GET', () => {
+   const pageObject = {
+      mockListEndpoint: () => {
+         const req = httpMock.expectOne(getAllProductsUrl);
+         expect(req.request.method).toBe('GET');
+         req.flush(mockProducts);
+      },
+      mockListEndpointByEmptyList: () => {
+         const req = httpMock.expectOne(getAllProductsUrl);
+         expect(req.request.method).toBe('GET');
+         req.flush([]);
+      },
+      simulateErrorOfListEndpoint: () => {
+         const req = httpMock.expectOne(getAllProductsUrl);
+         req.flush('Not Found', { status: 404, statusText: 'Not Found' });
+      },
+   };
+   
+   it('should have entities ON data success BY any', () => {        
+      pageObject.mockListEndpoint();
+      expect(service.entities()).toEqual(mockProducts);    
+   });
+   
+   it('should toggle loading ON data loading BY any', () => {            
+      expect(service.isLoading()).toBe(true);
+      pageObject.mockListEndpoint();
+      expect(service.isLoading()).toBe(false);
+   });
+   
+   it('should have no entities ON data success BY no data', () => {
+      pageObject.mockListEndpointByEmptyList();
+      expect(service.noData()).toBe(true);    
+   });
+   
+   it('should have error ON network error BY any', () => {
+      pageObject.simulateErrorOfListEndpoint();
+      const error: MessageInterface = {
+         severity: 'error',
+         summary: 'Error of network request',
+         detail: `Http failure response for ${getAllProductsUrl}: 404 Not Found`
+      }
+      expect(service.messages()).toEqual([error]);
+   });
+});
 
- it('should have products ON data success BY any', () => {        
-    productPage.flushProducts();
-    expect(service.entities()).toEqual(mockProducts);    
- });
-
- it('should toggle loading ON data loading BY any', () => {            
-    expect(service.isLoading()).toBe(true);
-    productPage.flushProducts();
-    expect(service.isLoading()).toBe(false);
- });
-
- it('should have no products ON data success BY no data', () => {
-   productPage.flushEmpty();
-   expect(service.noData()).toBe(true);    
- });
-
- it('should have error ON network error BY any', () => {
-    productPage.flushError();
-    const error: MessageInterface = {
-      severity: 'error',
-      summary: 'Error loading products',
-      detail: `Http failure response for ${getAllProductsUrl}: 404 Not Found`
-    }
-    expect(service.messages()).toEqual([error]);
- });
 });
