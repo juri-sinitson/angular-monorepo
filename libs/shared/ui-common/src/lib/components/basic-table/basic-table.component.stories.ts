@@ -79,8 +79,8 @@ const productsList: ProductInterface[] = [
       [data]="products"
       [columns]="columns"
       [crud]="crud"
-      (onEdit)="onCrudOperation('Editing')"
-      (onDelete)="onCrudOperation('Deletion')"
+      (onEdit)="crudOperationHandler('Editing')"
+      (onDelete)="crudOperationHandler('Deletion')"
     ></common-basic-table>
     <!-- TODO! unify the dialog max width with a utility class -->
     <p-confirmDialog [style]="{ maxWidth: '450px' }"></p-confirmDialog>

@@ -16,11 +16,13 @@ import {
   expectFormInvalidByTextInput,
   expectFormValid,
   expectFormInvalid,
+  loadingStory,
+  errorStory,
 } from '@angular-monorepo/shared/util-common-non-prod';
 
 // TODO! Adjust the project tags.
 // eslint-disable-next-line @nx/enforce-module-boundaries
-import { commonAppConfig } from '@angular-monorepo/shared/util-common';
+import { MessageInterface, commonAppConfig } from '@angular-monorepo/shared/util-common';
 
 // TODO! Adjust the project tags.
 // eslint-disable-next-line @nx/enforce-module-boundaries
@@ -41,14 +43,22 @@ import { ProductFormComponent } from './product-form.component';
   ],
   providers: [ConfirmationService],
   template: `
-    <angular-monorepo-product-form [data]="data"
-      (onSubmit)="onCrudOperation('Data submitting')"
+    <angular-monorepo-product-form 
+      [data]="data"
+      [messages]="messages"
+      [isLoading]="isLoading"
+      [header]="header"  
+      (onSubmit)="crudOperationHandler('Data submitting')"
+      (onCancel)="cancelHandler()"
     ></angular-monorepo-product-form>
     <p-confirmDialog [style]="{ maxWidth: '450px' }"></p-confirmDialog>
   `,
 })
 class ProductFormWrapperComponent extends ConfirmNotImplementedWrapperComponent {
   @Input() data: ProductInterface | null = null;
+  @Input() messages: MessageInterface[] = [];
+  @Input() isLoading = false;  
+  @Input() header: string | undefined = undefined;
 }
 
 const meta: Meta<ProductFormWrapperComponent> = {
@@ -75,6 +85,7 @@ const data: ProductInterface = {
 
 export const primary: Story = {
   args: {
+    header: 'Product',
     data,
   },
   play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
@@ -103,6 +114,7 @@ export const primary: Story = {
 
 export const newEntry: Story = {
   args: {
+    header: 'Product',
     data: null,
   },
   play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
@@ -119,4 +131,18 @@ export const newEntry: Story = {
     await expectNumberInputValue('rating-input', '', canvas);
     await expectFormInvalid(canvas);
   },
+};
+
+export const Loading: Story = {
+  args: {
+    ...loadingStory.args,
+    data,
+    header: 'Product',
+  },
+  play: loadingStory.play,
+};
+
+export const Error: Story = {
+  args: { ...errorStory.args, data, header: 'Product' },
+  play: errorStory.play,
 };

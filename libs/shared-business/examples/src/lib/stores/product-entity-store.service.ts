@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 // eslint-disable-next-line @nx/enforce-module-boundaries
 import { AbstractEntityStoreService } from '@angular-monorepo/shared/util-common';
 
-import { getAllProductsUrl }  from './urls';
+import { productsUrl }  from './urls';
 import { ProductInterface } from '../interfaces/product.interface';
 
 @Injectable({
@@ -17,6 +17,6 @@ export class ProductEntityStoreService extends AbstractEntityStoreService<Produc
   }
 
   protected override getGetUrl(): string {
-    return getAllProductsUrl;
+    return productsUrl;
   }
 }

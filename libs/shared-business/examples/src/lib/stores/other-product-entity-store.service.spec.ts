@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
 import { OtherProductEntityStoreService } from './other-product-entity-store.service';
-import { getAllOtherProductsUrl } from './urls'
+import { otherProductsUrl } from './urls'
 import { ProductInterface } from '../interfaces/product.interface';
 // TODO: adjust the project tags
 // eslint-disable-next-line @nx/enforce-module-boundaries
@@ -53,21 +53,21 @@ const mockProducts: ProductInterface[] =  [
 
 const productPage = {
   flushProducts: () => {
-     const req = httpMock.expectOne(getAllOtherProductsUrl);
+     const req = httpMock.expectOne(otherProductsUrl);
      expect(req.request.method).toBe('GET');
      req.flush(mockProducts);
   },
   flushEmpty: () => {
-     const req = httpMock.expectOne(getAllOtherProductsUrl);
+     const req = httpMock.expectOne(otherProductsUrl);
      expect(req.request.method).toBe('GET');
      req.flush([]);
   },
   flushError: () => {
-     const req = httpMock.expectOne(getAllOtherProductsUrl);
+     const req = httpMock.expectOne(otherProductsUrl);
      req.flush('Not Found', { status: 404, statusText: 'Not Found' });
   },
   flushUnknownError: () => {
-    const req = httpMock.expectOne(getAllOtherProductsUrl);
+    const req = httpMock.expectOne(otherProductsUrl);
     req.error(new ProgressEvent(''));
  }
 };
@@ -92,8 +92,8 @@ const productPage = {
     productPage.flushError();
     const error: MessageInterface = {
       severity: 'error',
-      summary: 'Error loading products',
-      detail: `Http failure response for ${getAllOtherProductsUrl}: 404 Not Found`
+      summary: 'Network error',
+      detail: `Http failure response for ${otherProductsUrl}: 404 Not Found`
     }
     expect(service.messages()).toEqual([error]);
  });

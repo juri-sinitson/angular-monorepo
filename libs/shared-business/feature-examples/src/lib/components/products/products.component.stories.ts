@@ -98,8 +98,10 @@ const productsList: ProductInterface[] = [
       [isLoading]="isLoading"
       [header]="header"
       [noData]="noData"
-      (onEdit)="onCrudOperation('Data editing')"
-      (onDelete)="onCrudOperation('Data deletion')"
+      [crud]="true"
+      (onDelete)="crudOperationHandler('Data deletion')"
+      (onNew)="crudOperationHandler('Data submitting')"
+      (onUpdate)="crudOperationHandler('Data submission')"
     >
     </angular-monorepo-products>
     <p-confirmDialog [style]="{ maxWidth: '450px' }"></p-confirmDialog>

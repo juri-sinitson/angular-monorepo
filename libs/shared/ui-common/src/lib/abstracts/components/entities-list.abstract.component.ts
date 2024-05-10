@@ -12,17 +12,19 @@ export abstract class AbstractEntitiesListComponent<T extends Entity> {
   isLoading = input<boolean>(false);
   noData = input<boolean>(false);
   header = input<string | undefined>(undefined);  
+  crud = input<boolean>(false);
   readonly columns!: Array<[keyof T, string]>;
 
   // -- CRUD
-  /**
-   * Emits the item on delete
-   */
+  isError = input<boolean>(false);
   onDelete = output<Entity>();
-  /**
-   * Emits the item on edit
-   */
-  onEdit = output<Entity>();
+  onUpdate = output<Entity>();
+  onNew = output<Entity>();
+
+  currentEntity: T | null = null;  
+  showEntityDialog = false;
+
+  protected isNewEntity = false;
   // --
 
   protected abstract getColumns(): Array<[keyof T, string]>;
@@ -32,6 +34,28 @@ export abstract class AbstractEntitiesListComponent<T extends Entity> {
   }
 
   // -- CRUD
+  cancelHandler() {
+    this.showEntityDialog = false;
+  }
+  
+  submitHandler($event: T) {
+    if (this.isNewEntity) {
+      // We assume the item of correct type is coming here.
+      // If not we will most probably detect it in 
+      // the E2E tests.
+      this.onNew.emit($event);
+    } else {
+      // We assume the item of correct type is coming here.
+      // If not we will most probably detect it in 
+      // the E2E tests.
+      this.onUpdate.emit($event);
+    }
+    
+    if(!this.isLoading() && !this.isError()) {
+      this.showEntityDialog = false;
+    }
+  }
+
   deleteHandler(item: Entity) {
     // We assume the item of correct type is coming here.
     // If not we will most probably detect it in 
@@ -43,7 +67,10 @@ export abstract class AbstractEntitiesListComponent<T extends Entity> {
     // We assume the item of correct type is coming here.
     // If not we will most probably detect it in 
     // the E2E tests.
-    this.onEdit.emit(item as T);
+    this.currentEntity = item as T;
+    
+    this.showEntityDialog = true;
+    this.isNewEntity = false;        
   }
   // --
 

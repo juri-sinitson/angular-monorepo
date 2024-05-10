@@ -5,17 +5,26 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "Attach by Process ID",
+      "processId": "${command:PickProcess}",
+      "request": "attach",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "type": "node"
+    },
+    {
       "type": "node",
       "request": "launch",
       "name": "Debug Jest",
       "program": "${workspaceFolder}/node_modules/jest/bin/jest.js",
       "args": [
+        "libs/shared-business/examples/src/lib/stores/product-entity-store.service.spec.ts",
         "--runInBand"
       ],
       "cwd": "${workspaceFolder}",
       "console": "integratedTerminal",
-      "internalConsoleOptions": "neverOpen",
-      "disableOptimisticBPs": true,
+      "internalConsoleOptions": "neverOpen",      
       "outFiles": [
         "${workspaceFolder}/**/*.js"
       ]

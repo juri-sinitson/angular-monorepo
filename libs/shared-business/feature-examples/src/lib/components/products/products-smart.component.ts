@@ -20,6 +20,8 @@ import { ProductsComponent } from './products.component';
         [messages]="entityService.messages()"
         [noData]="entityService.noData()"
         [header]="'Products'"
+        [crud]="true"
+        [isError]="entityService.isError()"
       >
       </angular-monorepo-products>
     </div>

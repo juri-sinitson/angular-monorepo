@@ -45,35 +45,44 @@ const createStore = <T  extends Entity>(url: string, devToolsScope: string): unk
     withDevToolsFunc(devToolsScope),
     withEntities<T>(),
     withState(initialState),
-    withMethods((store) => ({
+    withMethods((store, httpClient = inject(HttpClient)) => ({
 
       loadWithSideEffects: rxMethod<T[]>(
         pipe(
           tap(() => patchState(store, {isLoading: true, error: null})),        
-          exhaustMap(() => inject(HttpClient).get<T[]>(url).pipe(
-            tapResponse({
-              next: (products: T[]) => patchState(store, setAllEntities(products)),
-              error: (error: Error) => patchState(store, { error }),
-              finalize: () => patchState(store, {isLoading: false })              
-            }))
+          exhaustMap(() => {
+            
+            return httpClient.get<T[]>(url).pipe(
+              tapResponse({
+                next: (products: T[]) => {
+                  return patchState(store, setAllEntities(products));
+                },
+                error: (error: Error) => patchState(store, { error }),
+                finalize: () => patchState(store, {isLoading: false })              
+              }))
+          }
           ),
       )),
       
       addWithSideEffects: rxMethod<T>(
         pipe(
           tap(() => patchState(store, {isLoading: true, error: null})),
-          exhaustMap((entity: T) => inject(HttpClient).post<T>(url, entity).pipe(
-            tapResponse({
-              next: (entity: T) => patchState(store, addEntity(entity)),
-              error: (error: Error) => patchState(store, { error }),
-              finalize: () => patchState(store, {isLoading: false })              
-            }))
+          exhaustMap((entity: T) => {
+            return httpClient.post<T>(url, entity).pipe(
+              tapResponse({
+                next: () => {
+                  return patchState(store, addEntity(entity));
+                },
+                error: (error: Error) => patchState(store, { error }),
+                finalize: () => patchState(store, {isLoading: false })              
+              }))
+           }
           ),
       ),),
 
       updateWithSideEffects: rxMethod<T>(pipe(
         tap(() => patchState(store, {isLoading: true, error: null})),
-        exhaustMap((entity: T) => inject(HttpClient).put<T>(`${url}/${entity.id}`, entity).pipe(
+        exhaustMap((entity: T) => httpClient.put<T>(`${url}/${entity.id}`, entity).pipe(
           tapResponse({
             next: (entity: T) => patchState(store, updateEntity({id: entity.id, changes: entity})),
             error: (error: Error) => patchState(store, { error }),
@@ -84,7 +93,7 @@ const createStore = <T  extends Entity>(url: string, devToolsScope: string): unk
       
       deleteWithSideEffects: rxMethod<EntityId>(pipe(
         tap(() => patchState(store, {isLoading: true, error: null})),
-        exhaustMap((id: EntityId) => inject(HttpClient).delete<void>(`${url}/${id}`).pipe(
+        exhaustMap((id: EntityId) => httpClient.delete<void>(`${url}/${id}`).pipe(
           tapResponse({
             next: () => patchState(store, removeEntity(id)),
             error: (error: Error) => patchState(store, { error }),
@@ -101,7 +110,7 @@ const createStore = <T  extends Entity>(url: string, devToolsScope: string): unk
 export abstract class AbstractEntityStoreService<T  extends Entity> {
   
   protected store!: BasicEntityStore<T>;
-
+  
   addEntity(entity: T): void {
     this.store.addWithSideEffects(entity);
   }
@@ -132,27 +141,28 @@ export abstract class AbstractEntityStoreService<T  extends Entity> {
   get messages(): Signal<MessageInterface[]> {
     // TODO!
     // Add a standard error routine
-    return computed(() => {
-      if (this.store.error()) {
+    return computed(() => {      
+      const error =  this.store.error();  
+      if (error) {        
         return [{
           severity: 'error',
-          summary: 'Error of network request',
-          detail: this.store.error()?.message 
-            // ?? 'Unknown error' // Can't provoke 'Unknown error' with
-            // the current (2024-03-12) http testing API of Angular.
-            // So commenting out to avoid dead code.
+          summary: 'Network error',
+          detail: error.message 
         }];
       }
       return [];
     })
   }
 
+  get isError(): Signal<boolean> {
+    return computed(() => !!this.store.error());
+  }
+
   constructor() {
     const store = createStore<T>(this.getGetUrl(), this.getDevToolsScope());
     this.store = inject(store as Provider<T>);
   }
-  
-  // protected abstract initStore(): void;
+    
   protected abstract getDevToolsScope(): string;
   protected abstract getGetUrl(): string;
 }

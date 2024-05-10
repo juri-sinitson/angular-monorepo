@@ -1,4 +1,4 @@
-import { Component, Input, output } from '@angular/core';
+import { Component, Input, input, output } from '@angular/core';
 import {
   FormGroup,
   Validators,
@@ -17,6 +17,9 @@ import { ProductInterface } from '@angular-monorepo/shared-business/examples';
 // TODO! Adjust the project tags.
 // eslint-disable-next-line @nx/enforce-module-boundaries
 import { CommonWrapperComponent } from '@angular-monorepo/shared/ui-common';
+// TODO! Adjust the project tags.
+// eslint-disable-next-line @nx/enforce-module-boundaries
+import { MessageInterface } from '@angular-monorepo/shared/util-common';
 
 type Status = 'INSTOCK' | 'OUTOFSTOCK' | 'LOWSTOCK';
 interface StatusOption {
@@ -42,7 +45,11 @@ interface StatusOption {
     CommonWrapperComponent,
   ],
   template: ` <div class="flex justify-content-center">
-    <common-common-wrapper>
+    <common-common-wrapper
+      [messages]="messages()" 
+      [isLoading]="isLoading()"
+      [header]="header()"      
+    >
       <form [formGroup]="entityForm" data-testid="form">
         <div class="flex flex-column gap-2">
           <label for="id">ID</label>
@@ -150,10 +157,16 @@ interface StatusOption {
       </form>
       <div class="flex justify-content-end button-margin-top">
         <p-button
+          label="Cancel"  
+          (click)="cancelHandler()"
+          data-testid="cancel-button"
+        ></p-button>
+        <p-button
           label="Submit"
           [disabled]="!entityForm.valid"
           (click)="submitHandler()"
           data-testid="submit-button"
+          class="button-margin-left"
         ></p-button>
       </div>
     </common-common-wrapper>
@@ -175,7 +188,12 @@ export class ProductFormComponent {
     }
   }
 
+  messages = input<MessageInterface[]>([]);
+  isLoading = input<boolean>(false);
+  header = input<string | undefined>(undefined);  
+
   onSubmit = output<ProductInterface>();
+  onCancel = output<void>();
 
   entityForm = new FormGroup({
     id: new FormControl<string>('0', { nonNullable: true }),
@@ -204,6 +222,10 @@ export class ProductFormComponent {
 
   submitHandler() {
     this.onSubmit.emit(this.getFormValue());
+  }
+
+  cancelHandler() {
+    this.onCancel.emit();
   }
 
   private getFormValue(): ProductInterface {
