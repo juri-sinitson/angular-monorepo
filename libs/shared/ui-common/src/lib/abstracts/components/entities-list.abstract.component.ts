@@ -1,9 +1,8 @@
-import { Component, input, output } from "@angular/core";
+import { Component, computed, input, output } from "@angular/core";
 
 // TODO! Adjust the project tags.
 // eslint-disable-next-line @nx/enforce-module-boundaries
-import { MessageInterface } from "@angular-monorepo/shared/util-common";
-import { Entity } from "../../types/entity";
+import { MessageInterface, Entity, EntityId } from "@angular-monorepo/shared/util-common";
 
 @Component({template: ``,})
 export abstract class AbstractEntitiesListComponent<T extends Entity> {
@@ -13,18 +12,27 @@ export abstract class AbstractEntitiesListComponent<T extends Entity> {
   noData = input<boolean>(false);
   header = input<string | undefined>(undefined);  
   crud = input<boolean>(false);
+  isError = input<boolean>(false);
   readonly columns!: Array<[keyof T, string]>;
 
-  // -- CRUD
-  isError = input<boolean>(false);
-  onDelete = output<Entity>();
+  isFormLoading = computed<boolean>(() => this.isLoading() && this.showEntityDialog());
+  isListLoading = computed<boolean>(() => this.isLoading() && !this.showEntityDialog());
+
+  // -- CRUD  
+  selectedEntity = input<Entity | null>(null);
+  isNewBeforeSubmitBeingEdited = input<boolean>(false);
+  onNewBeforeSubmit = output<void>();
+  onEdit = output<EntityId>();
+  onDelete = output<EntityId>();
   onUpdate = output<Entity>();
   onNew = output<Entity>();
+  onCancel = output<void>();
 
-  currentEntity: T | null = null;  
-  showEntityDialog = false;
+  showEntityDialog = computed<boolean>(() => 
+    !!this.selectedEntity() || this.isNewBeforeSubmitBeingEdited()
+  );
 
-  protected isNewEntity = false;
+  protected isNewEntity = computed<boolean>(() => this.isNewBeforeSubmitBeingEdited());
   // --
 
   protected abstract getColumns(): Array<[keyof T, string]>;
@@ -35,42 +43,36 @@ export abstract class AbstractEntitiesListComponent<T extends Entity> {
 
   // -- CRUD
   cancelHandler() {
-    this.showEntityDialog = false;
+    this.onCancel.emit();
   }
   
   submitHandler($event: T) {
-    if (this.isNewEntity) {
+    if (this.isNewEntity()) {
       // We assume the item of correct type is coming here.
-      // If not we will most probably detect it in 
+      // If not the probability is very to detect it in 
       // the E2E tests.
       this.onNew.emit($event);
     } else {
       // We assume the item of correct type is coming here.
-      // If not we will most probably detect it in 
+      // If not the probability is very to detect it in 
       // the E2E tests.
       this.onUpdate.emit($event);
-    }
-    
-    if(!this.isLoading() && !this.isError()) {
-      this.showEntityDialog = false;
-    }
+    }    
   }
 
   deleteHandler(item: Entity) {
     // We assume the item of correct type is coming here.
-    // If not we will most probably detect it in 
+    // If not the probability is very to detect it in 
     // the E2E tests.
-    this.onDelete.emit(item as T);    
+    this.onDelete.emit(item.id);    
   }
 
   editHandler(item: Entity) {
-    // We assume the item of correct type is coming here.
-    // If not we will most probably detect it in 
-    // the E2E tests.
-    this.currentEntity = item as T;
-    
-    this.showEntityDialog = true;
-    this.isNewEntity = false;        
+    this.onEdit.emit(item.id);
+  }
+
+  newHandler() {
+    this.onNewBeforeSubmit.emit();
   }
   // --
 

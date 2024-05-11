@@ -43,6 +43,9 @@
       ],
       "@angular-monorepo/shared/util-common-non-prod": [
         "libs/shared/util-common/src/index-non-prod.ts"
+      ],
+      "@angular-monorepo/shared/util-common-non-prod-e2e": [
+        "libs/shared/util-common/src/index-non-prod-e2e.ts"
       ]
     }
   },

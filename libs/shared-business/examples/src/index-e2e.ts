@@ -1,1 +1,1 @@
-export { getAllProductsUrl, getAllOtherProductsUrl } from './lib/stores/urls';
+export * from './lib/stores/urls';

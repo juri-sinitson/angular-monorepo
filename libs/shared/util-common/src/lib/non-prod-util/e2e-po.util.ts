@@ -5,29 +5,29 @@ declare const cy: any;
 
 export const getGreeting = () => cy.get('h1');
 
-export const getElemByTestId = (dataTestId: string) => 
+export const getByTestId = (dataTestId: string) => 
   cy.get(`[data-testid="${dataTestId}"]`);
 
 export const expectE2EText = (dataTestId: string, expectedText: string) => 
-  getElemByTestId(dataTestId).should('contain', expectedText);
+  getByTestId(dataTestId).should('contain', expectedText);
 
 export const expectTableDataValue = (columnKey: string, expectedText: string) => {
-  getElemByTestId(`val-${columnKey}`).should('contain', expectedText);
+  return getByTestId(`val-${columnKey}`).should('contain', expectedText);
 }
 
-export const expectLoadingShown = () => 
-  getElemByTestId('loading').should('be.visible');
+export const expectLoadingIsShown = () => 
+  getByTestId('loading').should('be.visible');
 
-export const expectLoadingNotShown = () => 
-  getElemByTestId('loading').should('not.exist');
+export const expectLoadingIsNotShown = () => 
+  getByTestId('loading').should('not.exist');
 
-export const expectErrorShown = () => 
-  getElemByTestId('messages')
+export const expectErrorIsShown = () => 
+  getByTestId('messages')
     .should('be.visible')          
     .contains(/error/i);
 
 export const expectNoData = () => 
-    getElemByTestId('no-data')
+    getByTestId('no-data')
       .should('be.visible');
 
 export const createDelayedInterceptor = (url: string, delay: number) => 
@@ -47,4 +47,39 @@ export const createEmptyDataInterceptor = (url: string) =>
   cy.intercept(url, (req: CyHttpMessages.IncomingHttpRequest) => {
     req.reply(200, []);
   });
-  
+
+// -- FORM --
+//
+// NOTE! 
+// The selectors here may be UI library specific!
+// The current library is PrimeNG.
+// 
+// NOTE!
+// Don't forget to mark the PrimeNG specific selectors
+// with the appropriate comment!
+
+// Confirm Dialog
+export const getConfirmDialog = () => cy.get('.confirm-dialog');
+export const confirmYes = () => getConfirmDialog().contains('Yes').click();
+export const confirmNo = () => getConfirmDialog().contains('No').click();
+
+// Dropdown: the current PrimeNG implementation
+// uses ul li and span instead of select and option.
+export const selectDropdownValue = (dataTestId: string, value: string) => 
+  getByTestId(dataTestId).click()
+  // PrimeNG specific
+  .then(() => cy.get('.dropdown-panel').should('be.visible'))
+    // PrimeNG specific  
+    .within(() => cy.get('ul li span').contains(value).click());
+
+// CRUD
+export const expectCrudIsDisabled = () => {
+  getByTestId('new-button').should('be.disabled');
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return getByTestId('row').each((row: any) => {
+    cy.wrap(row).within(() => {
+      getByTestId('delete').should('be.disabled');
+      getByTestId('edit').should('be.disabled');
+    });
+  });
+}

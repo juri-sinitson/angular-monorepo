@@ -1,4 +1,4 @@
-import { Component, Input, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, computed, effect, input, output, signal } from '@angular/core';
 import {
   FormGroup,
   Validators,
@@ -19,7 +19,7 @@ import { ProductInterface } from '@angular-monorepo/shared-business/examples';
 import { CommonWrapperComponent } from '@angular-monorepo/shared/ui-common';
 // TODO! Adjust the project tags.
 // eslint-disable-next-line @nx/enforce-module-boundaries
-import { MessageInterface } from '@angular-monorepo/shared/util-common';
+import { Entity, MessageInterface } from '@angular-monorepo/shared/util-common';
 
 type Status = 'INSTOCK' | 'OUTOFSTOCK' | 'LOWSTOCK';
 interface StatusOption {
@@ -44,9 +44,9 @@ interface StatusOption {
     // Own
     CommonWrapperComponent,
   ],
-  template: ` <div class="flex justify-content-center">
+  template: ` <div class="flex justify-content-center" data-testid="product-form">
     <common-common-wrapper
-      [messages]="messages()" 
+      [messages]="formMessages()" 
       [isLoading]="isLoading()"
       [header]="header()"      
     >
@@ -134,9 +134,10 @@ interface StatusOption {
           <label for="inventoryStatus">Inventory Status</label>
           <p-dropdown
             id="inventoryStatus"
-            data-testid="inventoryStatus-input"
+            data-testid="inventory-status-input"
             formControlName="inventoryStatus"
             [options]="inventoryStatusOptions"
+            [panelStyleClass]="'dropdown-panel'"
             optionLabel="name"
             placeholder="Select Inventory Status"
           ></p-dropdown>
@@ -154,46 +155,39 @@ interface StatusOption {
             [max]="5"
           ></p-inputNumber>
         </div>
+        <div class="flex justify-content-end button-margin-top">
+          <p-button
+            label="Cancel"  
+            (click)="cancelHandler()"
+            data-testid="cancel-button"
+          ></p-button>
+          <p-button
+            label="Submit"
+            [disabled]="isSubmitDisabled()"
+            (click)="submitHandler()"
+            data-testid="submit-button"
+            class="button-margin-left"
+          ></p-button>
+        </div>
       </form>
-      <div class="flex justify-content-end button-margin-top">
-        <p-button
-          label="Cancel"  
-          (click)="cancelHandler()"
-          data-testid="cancel-button"
-        ></p-button>
-        <p-button
-          label="Submit"
-          [disabled]="!entityForm.valid"
-          (click)="submitHandler()"
-          data-testid="submit-button"
-          class="button-margin-left"
-        ></p-button>
-      </div>
+
     </common-common-wrapper>
   </div>`,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductFormComponent {
-  @Input() set data(data: ProductInterface | null) {
-    if (!data) {
-      this.entityForm.reset();
-    } else {
-      const statusOption = this.inventoryStatusOptions.find(
-        (option) => option.value === data.inventoryStatus
-      );
 
-      this.entityForm.patchValue({
-        ...data,
-        inventoryStatus: statusOption,
-      });
-    }
-  }
+  data = input<Entity | null>(null);
 
   messages = input<MessageInterface[]>([]);
+  
   isLoading = input<boolean>(false);
-  header = input<string | undefined>(undefined);  
+  header = input<string | undefined>(undefined);   
 
   onSubmit = output<ProductInterface>();
   onCancel = output<void>();
+
+  formMessages = signal<MessageInterface[]>([]);
 
   entityForm = new FormGroup({
     id: new FormControl<string>('0', { nonNullable: true }),
@@ -213,11 +207,48 @@ export class ProductFormComponent {
     { name: 'In Stock', value: 'INSTOCK' },
     { name: 'Out of Stock', value: 'OUTOFSTOCK' },
     { name: 'Low Stock', value: 'LOWSTOCK' },
-  ];
+  ];  
 
   constructor() {
     this.entityForm.get('id')?.disable();
     this.entityForm.get('code')?.disable();
+
+    // Set the correct data in the form
+    effect(() => {
+      const data = {...this.data()} as ProductInterface;
+      if (!data) {
+        this.entityForm.reset();
+      } else {
+        const statusOption = this.inventoryStatusOptions.find(
+          (option) => option.value === data.inventoryStatus
+        );
+  
+        this.entityForm.patchValue({
+          ...data,
+          inventoryStatus: statusOption,
+        });
+      }
+    }, {allowSignalWrites: true});
+
+    // Show the modified error message
+    effect(() => {
+
+      // Not using computed here because the computed value is reflected to the 
+      // parent for some reason.
+      const messagesModif: MessageInterface[] = [...this.messages()].map((message) => {
+          const result: MessageInterface = message;
+          if(message.severity === 'error') {
+            result.detail = 'Submitting failure!';
+          }
+          return result;
+        });
+
+      this.formMessages.set(messagesModif);
+    }, {allowSignalWrites: true});
+  }
+
+  isSubmitDisabled(): boolean {
+    return !this.entityForm.valid;
   }
 
   submitHandler() {

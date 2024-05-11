@@ -11,10 +11,12 @@ import { ConfirmationService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ToolbarModule } from 'primeng/toolbar';
 
 import { TableColumn } from '../../types/table';
-import { Entity } from '../../types/entity';
-
+// TODO! Adjust the project tags.
+// eslint-disable-next-line @nx/enforce-module-boundaries
+import { Entity } from '@angular-monorepo/shared/util-common';
 
 /**
  * A basic table component that displays a list of items in a table.
@@ -30,6 +32,7 @@ import { Entity } from '../../types/entity';
     TableModule, 
     ButtonModule,
     ConfirmDialogModule,
+    ToolbarModule,
   ],
   providers: [
     // Angular
@@ -39,7 +42,25 @@ import { Entity } from '../../types/entity';
     ConfirmationService,
   ],
   template: `
-    <!-- PrimeNG table -->
+    @if (crud()) {
+      <p-toolbar styleClass="mb-4 gap-2">
+        <ng-template pTemplate="left"></ng-template>  
+        <ng-template pTemplate="right">
+          <button 
+              pRipple
+              pButton
+              data-testid="new-button"
+              severity="success" 
+              [disabled]="isError()"
+              label="New" 
+              icon="pi pi-plus" 
+              class="mr-2" 
+              (click)="newHandler()"
+            >
+          </button>
+        </ng-template>
+      </p-toolbar>
+    }
     <p-table [value]="data()" [tableStyle]="{ 'min-width': '50rem' }">
       <ng-template pTemplate="header">
         <tr>
@@ -66,11 +87,13 @@ import { Entity } from '../../types/entity';
           @if (crud()) {
             <td data-testid="crud">
               <button pButton pRipple data-testid="edit" 
+                [disabled]="isError()"
                 icon="pi pi-pencil" 
                 class="p-button-rounded p-button-success mr-2"
                 (click)="edit(item)">
               </button>
-              <button pButton pRipple data-testid="delete" 
+              <button pButton pRipple data-testid="delete"
+                [disabled]="isError()" 
                 icon="pi pi-trash"
                 class="p-button-rounded p-button-warning"
                 (click)="delete(item)">
@@ -81,7 +104,7 @@ import { Entity } from '../../types/entity';
       </ng-template>
     </p-table>
     <!-- TODO! unify the dialog max width with a utility class -->
-    <p-confirmDialog [style]="{ maxWidth: '450px' }"></p-confirmDialog>
+    <p-confirmDialog [style]="{ maxWidth: '450px' }" [styleClass]="'confirm-dialog'"></p-confirmDialog>    
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -97,19 +120,16 @@ export class BasicTableComponent {
    */
   columns = input<TableColumn | undefined>();
 
+  isError = input<boolean>(false);
+
   /**
   * If it's a CRUD table or not.
   */
   crud = input<boolean>(false);
 
-  /**
-   * Emits the item on delete
-   */
   onDelete = output<Entity>();
-  /**
-   * Emits the item on edit
-   */
   onEdit = output<Entity>();
+  onNew = output();
   
   computedColumns = computed<TableColumn>(() => {
     
@@ -137,6 +157,10 @@ export class BasicTableComponent {
     private titleCasePipe: TitleCasePipe,
     private confirmationService: ConfirmationService
   ) {}
+
+  newHandler() {
+    this.onNew.emit();
+  }
 
   delete(item: Entity) {    
     this.confirmationService.confirm({

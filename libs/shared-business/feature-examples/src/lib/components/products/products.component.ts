@@ -10,8 +10,6 @@ import {
 // eslint-disable-next-line @nx/enforce-module-boundaries
 import { AbstractEntitiesListComponent } from '@angular-monorepo/shared/ui-common';
 
-import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { ConfirmationService } from 'primeng/api';
 import { DialogModule } from 'primeng/dialog';
 
 // TODO! Adjust the project tags.
@@ -22,13 +20,8 @@ import { ProductFormComponent } from './product-form.component';
 @Component({
   selector: 'angular-monorepo-products',
   standalone: true,
-  providers: [
-    // PrimeNG
-    ConfirmationService,
-  ],
   imports: [
-    // PrimeNG
-    ConfirmDialogModule,
+    // PrimeNG    
     DialogModule,
     
     // Own
@@ -39,36 +32,40 @@ import { ProductFormComponent } from './product-form.component';
     template: `
     <common-common-wrapper 
       [messages]="messages()" 
-      [isLoading]="isLoading()"
+      [isLoading]="isListLoading()"
       [header]="header()"
       [noData]="noData()"
     >
       <common-basic-table 
         [columns]="columns" 
         [data]="data()"
-        [crud]="true"
+        [crud]="crud()"
+        [isError]="isError()"
         (onDelete)="deleteHandler($event)"
         (onEdit)="editHandler($event)"
+        (onNew)="newHandler()"
       ></common-basic-table>
     </common-common-wrapper>
     <!-- Generator template if CRUD is enabled -->
     @if (crud()) {
       <p-dialog 
-        [(visible)]="showEntityDialog" 
+        [visible]="showEntityDialog()"        
         [style]="{ width: '450px' }"        
         [modal]="true"
+        [closable]="false"        
         styleClass="p-fluid">
-          <ng-template pTemplate="content">
+          <ng-template pTemplate="content">            
             <angular-monorepo-product-form 
-              [header]="'Product'"
-              [data]="currentEntity"
+              [data]="selectedEntity()"
+              [header]="'Product'"              
+              [messages]="messages()"
+              [isLoading]="isFormLoading()"
               (onSubmit)="submitHandler($event)"
               (onCancel)="cancelHandler()"
             >
           </angular-monorepo-product-form>
           </ng-template>
-      </p-dialog>
-      <p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>
+      </p-dialog>      
     }
     <!-- Generator template -->
     `,  

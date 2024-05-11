@@ -11,7 +11,6 @@ import { productsUrl as url } from './urls';
 // eslint-disable-next-line @nx/enforce-module-boundaries
 import { MessageInterface } from '@angular-monorepo/shared/util-common';
 import { ProductInterface as EntityInterface } from '../interfaces/product.interface';
-import exp = require('constants');
 
 describe('ProductEntityStoreService', () => {
   
@@ -133,7 +132,7 @@ describe('ProductEntityStoreService', () => {
         const req = httpMock.expectOne(url);
         expect(req.request.method).toBe('POST');
         expect(req.request.body).toEqual(additionalEntity);   
-        req.flush({});
+        req.flush(additionalEntity);
       },
       triggerCreationError: () => {
         const req = httpMock.expectOne(url);        

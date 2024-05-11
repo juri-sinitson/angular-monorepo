@@ -20,8 +20,17 @@ import { ProductsComponent } from './products.component';
         [messages]="entityService.messages()"
         [noData]="entityService.noData()"
         [header]="'Products'"
-        [crud]="true"
+        [crud]="true"        
+        [selectedEntity]="entityService.selectedEntity()"        
+        [isNewBeforeSubmitBeingEdited]="entityService.isNewEntityBeingEdited()"
         [isError]="entityService.isError()"
+        (onNew)="entityService.addEntity($event)"
+        (onNewBeforeSubmit)="entityService.selectUncreatedEntity()"
+        (onUpdate)="entityService.updateEntity($event)"
+        (onDelete)="entityService.deleteEntity($event)"
+        (onEdit)="entityService.selectEntityId($event)"
+        (onCancel)="entityService.resetSelectedEntity()"
+
       >
       </angular-monorepo-products>
     </div>

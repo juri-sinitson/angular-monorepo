@@ -5,7 +5,7 @@ import { ProductInterface } from '../interfaces/product.interface';
 // TODO! Adjust the project tags.
 // eslint-disable-next-line @nx/enforce-module-boundaries
 import { AbstractEntityStoreService } from '@angular-monorepo/shared/util-common';
-import { getAllOtherProductsUrl }  from './urls';
+import { otherProductsUrl }  from './urls';
 
 /**
  * Created on the fast track for E2E testing demo purposes.
@@ -24,6 +24,6 @@ export class OtherProductEntityStoreService extends AbstractEntityStoreService<P
   }
 
   protected override getGetUrl(): string {
-    return getAllOtherProductsUrl;
+    return otherProductsUrl;
   }
 }

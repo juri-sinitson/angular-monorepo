@@ -62,6 +62,7 @@
     "@angular/cli": "~17.3.0",
     "@angular/compiler-cli": "17.3.7",
     "@angular/language-service": "17.3.7",
+    "@cypress/chrome-recorder": "^2.3.1",
     "@nx/cypress": "19.0.0",
     "@nx/devkit": "19.0.0",
     "@nx/esbuild": "19.0.0",

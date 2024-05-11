@@ -4,5 +4,5 @@
 // the framework context.
 
 // TODO! Add the 'api' prefix to an interceptor.
-export const getAllProductsUrl = '/api/examples/products';
-export const getAllOtherProductsUrl = '/api/examples/other-products';
+export const productsUrl = '/api/examples/products';
+export const otherProductsUrl = '/api/examples/other-products';
