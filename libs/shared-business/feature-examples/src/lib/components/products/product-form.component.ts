@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, computed, effect, input, output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect } from '@angular/core';
 import {
   FormGroup,
   Validators,
@@ -16,10 +16,7 @@ import { ButtonModule } from 'primeng/button';
 import { ProductInterface } from '@angular-monorepo/shared-business/examples';
 // TODO! Adjust the project tags.
 // eslint-disable-next-line @nx/enforce-module-boundaries
-import { CommonWrapperComponent } from '@angular-monorepo/shared/ui-common';
-// TODO! Adjust the project tags.
-// eslint-disable-next-line @nx/enforce-module-boundaries
-import { Entity, MessageInterface } from '@angular-monorepo/shared/util-common';
+import { CommonWrapperComponent, AbstractEntityFormComponent } from '@angular-monorepo/shared/ui-common';
 
 type Status = 'INSTOCK' | 'OUTOFSTOCK' | 'LOWSTOCK';
 interface StatusOption {
@@ -175,19 +172,7 @@ interface StatusOption {
   </div>`,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ProductFormComponent {
-
-  data = input<Entity | null>(null);
-
-  messages = input<MessageInterface[]>([]);
-  
-  isLoading = input<boolean>(false);
-  header = input<string | undefined>(undefined);   
-
-  onSubmit = output<ProductInterface>();
-  onCancel = output<void>();
-
-  formMessages = signal<MessageInterface[]>([]);
+export class ProductFormComponent extends AbstractEntityFormComponent<ProductInterface> {
 
   entityForm = new FormGroup({
     id: new FormControl<string>('0', { nonNullable: true }),
@@ -210,6 +195,8 @@ export class ProductFormComponent {
   ];  
 
   constructor() {
+    super();
+
     this.entityForm.get('id')?.disable();
     this.entityForm.get('code')?.disable();
 
@@ -228,38 +215,14 @@ export class ProductFormComponent {
           inventoryStatus: statusOption,
         });
       }
-    }, {allowSignalWrites: true});
-
-    // Show the modified error message
-    effect(() => {
-
-      // Not using computed here because the computed value is reflected to the 
-      // parent for some reason.
-      const messagesModif: MessageInterface[] = [...this.messages()].map((message) => {
-          const result: MessageInterface = message;
-          if(message.severity === 'error') {
-            result.detail = 'Submitting failure!';
-          }
-          return result;
-        });
-
-      this.formMessages.set(messagesModif);
-    }, {allowSignalWrites: true});
+    }, {allowSignalWrites: true});   
   }
 
-  isSubmitDisabled(): boolean {
-    return !this.entityForm.valid;
+  override isEntityFormValid(): boolean {
+    return this.entityForm.valid;
   }
 
-  submitHandler() {
-    this.onSubmit.emit(this.getFormValue());
-  }
-
-  cancelHandler() {
-    this.onCancel.emit();
-  }
-
-  private getFormValue(): ProductInterface {
+  protected override getFormValue(): ProductInterface {
     const inventoryStatusValue: Status = this.entityForm.get('inventoryStatus')
       ?.value?.value as Status;
     const result: ProductInterface = {
