@@ -36,6 +36,14 @@ export const primaryStory: CommonStory = {
   },
 };
 
+
+export const primaryTableStory: CommonStory = {
+  args: {
+    ...primaryStory.args,
+    noData: false,    
+  },
+}
+
 export const loadingStory: CommonStory = {
   args: {
     messages: [],

@@ -9,10 +9,8 @@ import { MessageInterface, commonAppConfig } from '@angular-monorepo/shared/util
 // eslint-disable-next-line @nx/enforce-module-boundaries
 import {
  errorStory,
- getFirstElemByText,
- expectNoElem,
+ getFirstElemByText, 
  expectText,
- getCanvas,
  loadingStory,
  noDataStory,
 } from '@angular-monorepo/shared/util-common-non-prod';
@@ -80,10 +78,19 @@ const <%= entityName %>List: <%= entityInterfaceName %>[] =
   },
 ];
 
+const header = '<%= entityName %>';
+
 @Component({
  selector: 'angular-monorepo-<%= selectorName %>-test-wrapper',
  standalone: true,
- imports: [<%= className %>Component],
+ providers: [ConfirmationService],
+ imports: [
+     // PrimeNG
+    ConfirmDialogModule,
+
+    // Own
+    EntitiesComponent,
+ ],
  template: `
     <angular-monorepo-<%= selectorName %>
       [data]="data"
@@ -91,28 +98,35 @@ const <%= entityName %>List: <%= entityInterfaceName %>[] =
       [isLoading]="isLoading"
       [header]="header"
       [noData]="noData"
+    <% if (crud) { %>
+      [crud]="true"
+      (onDelete)="crudOperationHandler('Data deletion')"
+      (onNew)="crudOperationHandler('Data submitting')"
+      (onUpdate)="crudOperationHandler('Data submission')"
+    <% } %>    
     >
     </angular-monorepo-<%= selectorName %>>
+    <p-confirmDialog [style]="{ maxWidth: '450px' }"></p-confirmDialog>
  `,
  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class <%= className %>TestWrapperComponent {
- @Input() data: <%= entityInterfaceName %>[] = [];
- @Input() messages: MessageInterface[] = [];
- @Input() isLoading = false;
- @Input() noData = false;
- @Input() header: string | undefined = undefined;
+export class EntityWrapperComponent extends ConfirmNotImplementedWrapperComponent {
+  @Input() data: ProductInterface[] = [];
+  @Input() messages: MessageInterface[] = [];
+  @Input() isLoading = false;
+  @Input() noData = false;
+  @Input() header: string | undefined = undefined;
 }
 
-const meta: Meta<<%= className %>TestWrapperComponent> = {
- component: <%= className %>TestWrapperComponent,
- decorators: [applicationConfig({ ...commonAppConfig })],
- // -- STEP 2: Adjust the title for the storybook to place in the 
- // correct place of the components tree
- title: 'shared-business/feature-examples/<%= className %>',
+const meta: Meta<EntityWrapperComponent> = {
+  component: EntityWrapperComponent,
+  decorators: [applicationConfig({ ...commonAppConfig })],
+  // -- STEP 2: Adjust the title for the storybook to place in the 
+  // correct place of the components tree  
+  title: 'shared-business/feature-examples/Products',
 };
 export default meta;
-type Story = StoryObj<<%= className %>TestWrapperComponent>;
+type Story = StoryObj<EntityWrapperComponent>;
 
 const expectCols = async (canvas: HTMLElement) => {
   // -- STEP 3: Adjust the columns --
@@ -149,40 +163,34 @@ const expectValues = async (canvas: HTMLElement) => {
 };
 
 export const Primary: Story = {
- args: {
-   data: <%= entityName %>List,
-   messages: [],
-   isLoading: false,
-   noData: false,
-   header: '<%= entityName %>',
- },
- play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
-   const canvas = getCanvas(canvasElement);
+  args: {...primaryTableStory.args, data: entitiesList, header},
+  play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
+    const canvas = getCanvas(canvasElement);
 
-   await expectCols(canvas);
-   await expectValues(canvas);
+    await expectCols(canvas);
+    await expectValues(canvas);
 
-   await expectNoElem('loading', canvas);
-   await expectNoElem('messages', canvas);
-   await expectNoElem('no-data', canvas);
- },
+    await expectNoElem('loading', canvas);
+    await expectNoElem('messages', canvas);
+    await expectNoElem('no-data', canvas);
+  }
 };
 
 export const Loading: Story = {
- args: {
-   ...loadingStory.args,
-   data: <%= entityName %>List,
-   header: '<%= entityName %>',
- },
- play: loadingStory.play,
+  args: {
+    ...loadingStory.args,
+    data: entitiesList,
+    header,
+  },
+  play: loadingStory.play,
 };
 
 export const Error: Story = {
- args: { ...errorStory.args, header: '<%= entityName %>' },
- play: errorStory.play,
+  args: { ...errorStory.args, header },
+  play: errorStory.play,
 };
 
 export const noData: Story = {
- args: { ...noDataStory.args, header: '<%= entityName %>' },
- play: noDataStory.play,
+  args: { ...noDataStory.args, header },
+  play: noDataStory.play,
 };

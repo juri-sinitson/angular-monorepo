@@ -3,24 +3,35 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 // TODO! Adjust the project tags.
 // eslint-disable-next-line @nx/enforce-module-boundaries
 // -- STEP 1: adjust the entity service path
-import { <%= entityServiceClassName %> } from '@angular-monorepo/shared-business/examples';
-import { <%= className %>Component } from './<%= fileName %>.component';
+import { <%= entityServiceClassName %> as EntityStoreService } from '@angular-monorepo/shared-business/examples';
+import { <%= className %>Component as EntityComponent } from './<%= fileName %>.component';
 
+const entityHeader = '<%= entityName %>s';
 
-// TODO! Add the wrapper and add the 
-// appropriate entries to storybook.
 @Component({
   selector: 'angular-monorepo-<%= selectorName %>-smart',
   standalone: true,
-  imports: [<%= className %>Component],
-  providers: [<%= entityServiceClassName %>],
+  imports: [EntityComponent],
+  providers: [EntityStoreService],
   template: `
     <div data-testid="<%= selectorName %>-feature">
       <angular-monorepo-<%= selectorName %> [data]="entityService.entities()"
         [isLoading]="!!entityService.isLoading()"
         [messages]="entityService.messages()"
         [noData]="entityService.noData()"
-        [header]="'<%= entityName %>s'"
+        [header]="header"                
+      <% if (crud) { %>
+        [crud]="true"
+        [selectedEntity]="entityService.selectedEntity()"        
+        [isNewBeforeSubmitBeingEdited]="entityService.isNewEntityBeingEdited()"
+        [isError]="entityService.isError()"        
+        (onNew)="entityService.addEntity($event)"
+        (onNewBeforeSubmit)="entityService.selectUncreatedEntity()"
+        (onUpdate)="entityService.updateEntity($event)"
+        (onDelete)="entityService.deleteEntity($event)"
+        (onEdit)="entityService.selectEntityId($event)"
+        (onCancel)="entityService.resetSelectedEntity()"
+      <% } %>    
       >
       </angular-monorepo-<%= selectorName %>>
     </div>
@@ -28,5 +39,6 @@ import { <%= className %>Component } from './<%= fileName %>.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class <%= className %>SmartComponent {
-  entityService = inject(<%= entityServiceClassName %>);
+  header = entityHeader;
+  entityService = inject(EntityStoreService);
 }

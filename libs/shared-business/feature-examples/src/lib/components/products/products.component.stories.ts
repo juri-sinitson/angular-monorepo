@@ -4,7 +4,7 @@ import { applicationConfig, type Meta, type StoryObj } from '@storybook/angular'
 import { ConfirmationService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
-import { ProductsComponent } from './products.component';
+import { ProductsComponent as EntitiesComponent } from './products.component';
 // TODO: Adjust the project tags.
 // eslint-disable-next-line @nx/enforce-module-boundaries
 import { ProductInterface } from '@angular-monorepo/shared-business/examples';
@@ -14,15 +14,16 @@ import { MessageInterface, commonAppConfig } from '@angular-monorepo/shared/util
 import {
   errorStory,
   getFirstElemByText,
-  expectNoElem,
   expectText,
-  getCanvas,
   loadingStory,
   noDataStory,
   ConfirmNotImplementedWrapperComponent,
+  primaryTableStory,
+  getCanvas,
+  expectNoElem,
 } from '@angular-monorepo/shared/util-common-non-prod';
 
-const productsList: ProductInterface[] = [
+const entitiesList: ProductInterface[] = [
   {
     id: '1001',
     code: 'abc123',
@@ -80,6 +81,8 @@ const productsList: ProductInterface[] = [
   },
 ];
 
+const header = 'Products';
+
 @Component({
   selector: 'angular-monorepo-products-test-wrapper',
   standalone: true,
@@ -89,7 +92,7 @@ const productsList: ProductInterface[] = [
     ConfirmDialogModule,
 
     // Own
-    ProductsComponent,
+    EntitiesComponent,
   ],
   template: `
     <angular-monorepo-products
@@ -108,7 +111,7 @@ const productsList: ProductInterface[] = [
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ProductWrapperComponent extends ConfirmNotImplementedWrapperComponent {
+export class EntityWrapperComponent extends ConfirmNotImplementedWrapperComponent {
   @Input() data: ProductInterface[] = [];
   @Input() messages: MessageInterface[] = [];
   @Input() isLoading = false;
@@ -116,13 +119,13 @@ export class ProductWrapperComponent extends ConfirmNotImplementedWrapperCompone
   @Input() header: string | undefined = undefined;
 }
 
-const meta: Meta<ProductWrapperComponent> = {
-  component: ProductWrapperComponent,
+const meta: Meta<EntityWrapperComponent> = {
+  component: EntityWrapperComponent,
   decorators: [applicationConfig({ ...commonAppConfig })],
   title: 'shared-business/feature-examples/Products',
 };
 export default meta;
-type Story = StoryObj<ProductWrapperComponent>;
+type Story = StoryObj<EntityWrapperComponent>;
 
 const expectCols = async (canvas: HTMLElement) => {
   await expectText('Name', canvas);
@@ -156,13 +159,7 @@ const expectValues = async (canvas: HTMLElement) => {
 };
 
 export const Primary: Story = {
-  args: {
-    data: productsList,
-    messages: [],
-    isLoading: false,
-    noData: false,
-    header: 'Products',
-  },
+  args: {...primaryTableStory.args, data: entitiesList, header},
   play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
     const canvas = getCanvas(canvasElement);
 
@@ -172,24 +169,24 @@ export const Primary: Story = {
     await expectNoElem('loading', canvas);
     await expectNoElem('messages', canvas);
     await expectNoElem('no-data', canvas);
-  },
+  }
 };
 
 export const Loading: Story = {
   args: {
     ...loadingStory.args,
-    data: productsList,
-    header: 'Products',
+    data: entitiesList,
+    header,
   },
   play: loadingStory.play,
 };
 
 export const Error: Story = {
-  args: { ...errorStory.args, header: 'Products' },
+  args: { ...errorStory.args, header },
   play: errorStory.play,
 };
 
 export const noData: Story = {
-  args: { ...noDataStory.args, header: 'Products' },
+  args: { ...noDataStory.args, header },
   play: noDataStory.play,
 };
