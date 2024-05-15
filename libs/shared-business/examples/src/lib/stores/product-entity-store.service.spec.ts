@@ -5,8 +5,8 @@ import {
   TestRequest,
 } from '@angular/common/http/testing';
 
-import { ProductEntityStoreService } from './product-entity-store.service';
-import { productsUrl as url } from './urls';
+import { ProductEntityStoreService as EntityStoreService } from './product-entity-store.service';
+import { productsUrl as entitiesUrl } from './urls';
 // TODO: adjust the project tags
 // eslint-disable-next-line @nx/enforce-module-boundaries
 import { MessageInterface } from '@angular-monorepo/shared/util-common';
@@ -14,12 +14,12 @@ import { ProductInterface as EntityInterface } from '../interfaces/product.inter
 
 describe('ProductEntityStoreService', () => {
   
-  let service: ProductEntityStoreService;
+  let service: EntityStoreService;
   let httpMock: HttpTestingController;
 
   const additionalEntity: EntityInterface = {
-    id: '1002',
-    code: 'nvklal433',
+    id: '',
+    code: '',
     name: 'Blue Watch',
     description: 'An extra blue watch',
     price: 72,
@@ -57,9 +57,9 @@ describe('ProductEntityStoreService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [ProductEntityStoreService],
+      providers: [EntityStoreService],
     });
-    service = TestBed.inject(ProductEntityStoreService);
+    service = TestBed.inject(EntityStoreService);
     httpMock = TestBed.inject(HttpTestingController);
   });
 
@@ -68,7 +68,7 @@ describe('ProductEntityStoreService', () => {
   });
 
   const triggerListMock = (): void => {
-    const req = httpMock.expectOne(url);
+    const req = httpMock.expectOne(entitiesUrl);
     expect(req.request.method).toBe('GET');
     req.flush(entitiesList);
   };
@@ -77,7 +77,7 @@ describe('ProductEntityStoreService', () => {
     const error: MessageInterface = {
       severity: 'error',
       summary: 'Network error',
-      detail: `Http failure response for ${url}: 404 Not Found`,
+      detail: `Http failure response for ${entitiesUrl}: 404 Not Found`,
     };
     expect(service.messages()).toEqual([error]);
     expect(service.isError()).toBe(true);
@@ -91,12 +91,12 @@ describe('ProductEntityStoreService', () => {
     const pageObject = {
       triggerListMock,
       triggerListMockByEmptyList: () => {
-        const req = httpMock.expectOne(url);
+        const req = httpMock.expectOne(entitiesUrl);
         expect(req.request.method).toBe('GET');
         req.flush([]);
       },
       triggerListError: () => {
-        const req = httpMock.expectOne(url);
+        const req = httpMock.expectOne(entitiesUrl);
         flushError(req);
       },
       expectError,
@@ -129,13 +129,13 @@ describe('ProductEntityStoreService', () => {
     const pageObject = {
       triggerListMock,
       triggerEntityCreatingMock: () => {            
-        const req = httpMock.expectOne(url);
+        const req = httpMock.expectOne(entitiesUrl);
         expect(req.request.method).toBe('POST');
         expect(req.request.body).toEqual(additionalEntity);   
         req.flush(additionalEntity);
       },
       triggerCreationError: () => {
-        const req = httpMock.expectOne(url);        
+        const req = httpMock.expectOne(entitiesUrl);        
         expect(req.request.method).toBe('POST');
         expect(req.request.body).toEqual(additionalEntity);        
         flushError(req);
@@ -192,13 +192,13 @@ describe('ProductEntityStoreService', () => {
     const pageObject = {
       triggerListMock,
       triggerDeleteMock: () => {        
-        const req = httpMock.expectOne(`${url}/${entityId}`);        
+        const req = httpMock.expectOne(`${entitiesUrl}/${entityId}`);        
         expect(req.request.method).toBe('DELETE');
-        expect(req.request.url).toBe(`${url}/${entityId}`);        
+        expect(req.request.url).toBe(`${entitiesUrl}/${entityId}`);        
         req.flush({});
       },
       triggerDeleteError: () => {
-        const req = httpMock.expectOne(`${url}/${entityId}`);
+        const req = httpMock.expectOne(`${entitiesUrl}/${entityId}`);
         expect(req.request.method).toBe('DELETE');
         flushError(req);
       },
@@ -250,13 +250,13 @@ describe('ProductEntityStoreService', () => {
     const pageObject = {
       triggerListMock,
       triggerUpdateMock: () => {        
-        const req = httpMock.expectOne(`${url}/${entityId}`);        
+        const req = httpMock.expectOne(`${entitiesUrl}/${entityId}`);        
         expect(req.request.method).toBe('PUT');
         expect(req.request.body).toBe(updatedEntity);
         req.flush(updatedEntity);
       },
       triggerUpdateError: () => {
-        const req = httpMock.expectOne(`${url}/${entityId}`);
+        const req = httpMock.expectOne(`${entitiesUrl}/${entityId}`);
         expect(req.request.method).toBe('PUT');
         flushError(req);
       },
@@ -264,7 +264,7 @@ describe('ProductEntityStoreService', () => {
         const error: MessageInterface = {
           severity: 'error',
           summary: 'Network error',
-          detail: `Http failure response for ${url}/${entityId}: 404 Not Found`,
+          detail: `Http failure response for ${entitiesUrl}/${entityId}: 404 Not Found`,
         };
         expect(service.messages()).toEqual([error]);
       },

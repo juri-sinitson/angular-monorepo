@@ -3,13 +3,14 @@
 exports[`entity-components generator should match snapshot ON any BY any 1`] = `
 "import { ChangeDetectionStrategy, Component } from '@angular/core';
 
+import { DialogModule } from 'primeng/dialog';
+
 // TODO! Adjust the project tags.
 // eslint-disable-next-line @nx/enforce-module-boundaries
 import {
   BasicTableComponent,
   CommonWrapperComponent,
 } from '@angular-monorepo/shared/ui-common';
-
 // TODO! Adjust the project tags.
 // eslint-disable-next-line @nx/enforce-module-boundaries
 import { AbstractEntitiesListComponent } from '@angular-monorepo/shared/ui-common';
@@ -17,29 +18,66 @@ import { AbstractEntitiesListComponent } from '@angular-monorepo/shared/ui-commo
 // -- STEP 1: ADJUST THE ENTITY INTERFACE PATH! --
 // TODO! Adjust the project tags.
 // eslint-disable-next-line @nx/enforce-module-boundaries
-import { MyProductInterface } from '@angular-monorepo/shared-business/examples';
+import { MyProductInterface as EntityInterface } from '@angular-monorepo/shared-business/examples';
+import { MyProductFormComponent as EntityFormComponent } from './MyProduct-form.component';
 
 @Component({
   selector: 'angular-monorepo-my-products',
   standalone: true,
-  imports: [BasicTableComponent, CommonWrapperComponent],
+  imports: [
+    // PrimeNG
+    DialogModule,
+
+    // Own
+    BasicTableComponent,
+    CommonWrapperComponent,
+    EntityFormComponent,
+  ],
   template: \`
     <common-common-wrapper
       [messages]="messages()"
-      [isLoading]="isLoading()"
+      [isLoading]="isListLoading()"
       [header]="header()"
       [noData]="noData()"
     >
       <common-basic-table
         [columns]="columns"
         [data]="data()"
+        [crud]="crud()"
+        [isError]="isError()"
+        (onDelete)="deleteHandler($event)"
+        (onEdit)="editHandler($event)"
+        (onNew)="newHandler()"
       ></common-basic-table>
     </common-common-wrapper>
+    <!-- Generator template if CRUD is enabled -->
+    @if (crud()) {
+    <p-dialog
+      [visible]="showEntityDialog()"
+      [style]="{ width: '450px' }"
+      [modal]="true"
+      [closable]="false"
+      styleClass="p-fluid"
+    >
+      <ng-template pTemplate="content">
+        <angular-monorepo-MyProduct-form
+          [data]="selectedEntity()"
+          [header]="'MyProduct'"
+          [messages]="messages()"
+          [isLoading]="isFormLoading()"
+          (onSubmit)="submitHandler($event)"
+          (onCancel)="cancelHandler()"
+        >
+        </angular-monorepo-MyProduct-form>
+      </ng-template>
+    </p-dialog>
+    }
+    <!-- Generator template -->
   \`,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MyProductsComponent extends AbstractEntitiesListComponent<MyProductInterface> {
-  protected override getColumns(): Array<[keyof MyProductInterface, string]> {
+export class MyProductsComponent extends AbstractEntitiesListComponent<EntityInterface> {
+  protected override getColumns(): Array<[keyof EntityInterface, string]> {
     // -- STEP 2: ADJUST THE COLUMNS NAMES AND THE SEQUENCE!
     // Adjusting the columns names and the sequence
     return [
@@ -65,9 +103,14 @@ import {
   type StoryObj,
 } from '@storybook/angular';
 
-import { MyProductsComponent } from './my-products.component';
+import { ConfirmationService } from 'primeng/api';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+
+import { MyProductsComponent as EntitiesComponent } from './my-products.component';
+// -- STEP 1: Adjust the path to the entity interface
+// TODO: Adjust the project tags.
 // eslint-disable-next-line @nx/enforce-module-boundaries
-import { MyProductInterface } from '@angular-monorepo/shared-business/examples';
+import { MyProductInterface as EntityInterface } from '@angular-monorepo/shared-business/examples';
 // eslint-disable-next-line @nx/enforce-module-boundaries
 import {
   MessageInterface,
@@ -77,15 +120,17 @@ import {
 import {
   errorStory,
   getFirstElemByText,
-  expectNoElem,
   expectText,
-  getCanvas,
   loadingStory,
   noDataStory,
+  ConfirmNotImplementedWrapperComponent,
+  primaryTableStory,
+  getCanvas,
+  expectNoElem,
 } from '@angular-monorepo/shared/util-common-non-prod';
 
-const MyProductList: MyProductInterface[] =
-  // -- STEP 1: Adjust the example data
+const entitiesList: EntityInterface[] =
+  // -- STEP 2: Adjust the example data
   // TIP: you can use copilot or similar AI-solution for this
   // by providing the entity interface to the AI and telling
   // to adjust this file to that entity interface for you.
@@ -94,7 +139,7 @@ const MyProductList: MyProductInterface[] =
       id: '1001',
       code: 'abc123',
       name: 'T-Shirt',
-      description: 'Product Description',
+      description: 'MyProduct Description',
       price: 20,
       category: 'Clothing',
       quantity: 50,
@@ -105,7 +150,7 @@ const MyProductList: MyProductInterface[] =
       id: '1002',
       code: 'def456',
       name: 'Jeans',
-      description: 'Product Description',
+      description: 'MyProduct Description',
       price: 50,
       category: 'Clothing',
       quantity: 30,
@@ -116,7 +161,7 @@ const MyProductList: MyProductInterface[] =
       id: '1003',
       code: 'ghi789',
       name: 'Shoes',
-      description: 'Product Description',
+      description: 'MyProduct Description',
       price: 80,
       category: 'Footwear',
       quantity: 20,
@@ -127,7 +172,7 @@ const MyProductList: MyProductInterface[] =
       id: '1004',
       code: 'h456wer53',
       name: 'Bracelet',
-      description: 'Product Description',
+      description: 'MyProduct Description',
       price: 15,
       category: 'Accessories',
       quantity: 73,
@@ -138,7 +183,7 @@ const MyProductList: MyProductInterface[] =
       id: '1005',
       code: 'jkl012',
       name: 'Hat',
-      description: 'Product Description',
+      description: 'MyProduct Description',
       price: 10,
       category: 'Clothing',
       quantity: 100,
@@ -147,10 +192,19 @@ const MyProductList: MyProductInterface[] =
     },
   ];
 
+const header = 'MyProduct';
+
 @Component({
   selector: 'angular-monorepo-my-products-test-wrapper',
   standalone: true,
-  imports: [MyProductsComponent],
+  providers: [ConfirmationService],
+  imports: [
+    // PrimeNG
+    ConfirmDialogModule,
+
+    // Own
+    EntitiesComponent,
+  ],
   template: \`
     <angular-monorepo-my-products
       [data]="data"
@@ -158,31 +212,38 @@ const MyProductList: MyProductInterface[] =
       [isLoading]="isLoading"
       [header]="header"
       [noData]="noData"
+      [crud]="true"
+      (onDelete)="crudOperationHandler('Data deletion')"
+      (onEdit)="crudOperationHandler('Data editing')"
+      (onNewBeforeSubmit)="crudOperationHandler('Data submitting')"
+      (onNew)="crudOperationHandler('Data submitting')"
+      (onUpdate)="crudOperationHandler('Data submission')"
     >
     </angular-monorepo-my-products>
+    <p-confirmDialog [style]="{ maxWidth: '450px' }"></p-confirmDialog>
   \`,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MyProductsTestWrapperComponent {
-  @Input() data: MyProductInterface[] = [];
+export class EntityWrapperComponent extends ConfirmNotImplementedWrapperComponent {
+  @Input() data: EntityInterface[] = [];
   @Input() messages: MessageInterface[] = [];
   @Input() isLoading = false;
   @Input() noData = false;
   @Input() header: string | undefined = undefined;
 }
 
-const meta: Meta<MyProductsTestWrapperComponent> = {
-  component: MyProductsTestWrapperComponent,
+const meta: Meta<EntityWrapperComponent> = {
+  component: EntityWrapperComponent,
   decorators: [applicationConfig({ ...commonAppConfig })],
-  // -- STEP 2: Adjust the title for the storybook to place in the
+  // -- STEP 3: Adjust the title for the storybook to place in the
   // correct place of the components tree
-  title: 'shared-business/feature-examples/MyProducts',
+  title: 'shared-business/feature-examples/MyProduct',
 };
 export default meta;
-type Story = StoryObj<MyProductsTestWrapperComponent>;
+type Story = StoryObj<EntityWrapperComponent>;
 
 const expectCols = async (canvas: HTMLElement) => {
-  // -- STEP 3: Adjust the columns --
+  // -- STEP 4: Adjust the columns --
   await expectText('Name', canvas);
   await expectText('Category', canvas);
   await expectText('Description', canvas);
@@ -194,20 +255,20 @@ const expectCols = async (canvas: HTMLElement) => {
 };
 
 const expectValues = async (canvas: HTMLElement) => {
-  // -- STEP 4: Adjust the values for the first row --
+  // -- STEP 5: Adjust the values for the first row --
   await expectText('T-Shirt', canvas);
   await getFirstElemByText('Clothing', canvas);
-  await getFirstElemByText('Product Description', canvas);
+  await getFirstElemByText('MyProduct Description', canvas);
   await getFirstElemByText('INSTOCK', canvas);
   await expectText('abc123', canvas);
   await getFirstElemByText('20', canvas);
   await getFirstElemByText('50', canvas);
   await getFirstElemByText('4', canvas);
 
-  // -- STEP 5: Adjust the values for the second row --
+  // -- STEP 6: Adjust the values for the second row --
   await expectText('Jeans', canvas);
   await getFirstElemByText('Clothing', canvas);
-  await getFirstElemByText('Product Description', canvas);
+  await getFirstElemByText('MyProduct Description', canvas);
   await getFirstElemByText('INSTOCK', canvas);
   await expectText('def456', canvas);
   await getFirstElemByText('50', canvas);
@@ -216,13 +277,7 @@ const expectValues = async (canvas: HTMLElement) => {
 };
 
 export const Primary: Story = {
-  args: {
-    data: MyProductList,
-    messages: [],
-    isLoading: false,
-    noData: false,
-    header: 'MyProduct',
-  },
+  args: { ...primaryTableStory.args, data: entitiesList, header },
   play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
     const canvas = getCanvas(canvasElement);
 
@@ -238,19 +293,19 @@ export const Primary: Story = {
 export const Loading: Story = {
   args: {
     ...loadingStory.args,
-    data: MyProductList,
-    header: 'MyProduct',
+    data: entitiesList,
+    header,
   },
   play: loadingStory.play,
 };
 
 export const Error: Story = {
-  args: { ...errorStory.args, header: 'MyProduct' },
+  args: { ...errorStory.args, header },
   play: errorStory.play,
 };
 
 export const noData: Story = {
-  args: { ...noDataStory.args, header: 'MyProduct' },
+  args: { ...noDataStory.args, header },
   play: noDataStory.play,
 };
 "
@@ -262,16 +317,16 @@ exports[`entity-components generator should match snapshot ON any BY any 3`] = `
 // TODO! Adjust the project tags.
 // eslint-disable-next-line @nx/enforce-module-boundaries
 // -- STEP 1: adjust the entity service path
-import { MyProductEntityStoreService } from '@angular-monorepo/shared-business/examples';
-import { MyProductsComponent } from './my-products.component';
+import { MyProductEntityStoreService as EntityStoreService } from '@angular-monorepo/shared-business/examples';
+import { MyProductsComponent as EntityComponent } from './my-products.component';
 
-// TODO! Add the wrapper and add the
-// appropriate entries to storybook.
+const entityHeader = 'MyProducts';
+
 @Component({
   selector: 'angular-monorepo-my-products-smart',
   standalone: true,
-  imports: [MyProductsComponent],
-  providers: [MyProductEntityStoreService],
+  imports: [EntityComponent],
+  providers: [EntityStoreService],
   template: \`
     <div data-testid="my-products-feature">
       <angular-monorepo-my-products
@@ -279,7 +334,17 @@ import { MyProductsComponent } from './my-products.component';
         [isLoading]="!!entityService.isLoading()"
         [messages]="entityService.messages()"
         [noData]="entityService.noData()"
-        [header]="'MyProducts'"
+        [header]="header"
+        [crud]="true"
+        [selectedEntity]="entityService.selectedEntity()"
+        [isNewBeforeSubmitBeingEdited]="entityService.isNewEntityBeingEdited()"
+        [isError]="entityService.isError()"
+        (onNew)="entityService.addEntity($event)"
+        (onNewBeforeSubmit)="entityService.selectUncreatedEntity()"
+        (onUpdate)="entityService.updateEntity($event)"
+        (onDelete)="entityService.deleteEntity($event)"
+        (onEdit)="entityService.selectEntityId($event)"
+        (onCancel)="entityService.resetSelectedEntity()"
       >
       </angular-monorepo-my-products>
     </div>
@@ -287,7 +352,8 @@ import { MyProductsComponent } from './my-products.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MyProductsSmartComponent {
-  entityService = inject(MyProductEntityStoreService);
+  header = entityHeader;
+  entityService = inject(EntityStoreService);
 }
 "
 `;

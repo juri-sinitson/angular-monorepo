@@ -3,42 +3,62 @@
 exports[`entity-e2e-tests generator should match snapshot ON any BY any 1`] = `
 "// TODO! Adjust the project tags.
 // eslint-disable-next-line @nx/enforce-module-boundaries
-
-// -- STEP 1: ADJUST THE URL AND ITS IMPORT PATH! --
-import { getAllMyProductsUrl as entitiesUrl } from '@angular-monorepo/shared-business/examples-e2e';
+// -- STEP 1: Adjust the URL
+import { myProductsUrl as entitiesUrl } from '@angular-monorepo/shared-business/examples-e2e';
 
 // TODO! Adjust the project tags.
 // eslint-disable-next-line @nx/enforce-module-boundaries
 import {
   expectE2EText as expectText,
   expectTableDataValue,
-  getElemByTestId,
-  expectLoadingShown,
-  expectLoadingNotShown,
-  expectErrorShown,
+  getByTestId,
+  expectLoadingIsShown,
+  expectLoadingIsNotShown,
+  expectErrorIsShown,
   expectNoData,
   createDelayedInterceptor,
   createErrorInterceptor,
   createEmptyDataInterceptor,
-} from '@angular-monorepo/shared/util-common-non-prod';
+  getConfirmDialog,
+  confirmYes,
+  expectCrudIsDisabled,
+  selectDropdownValue,
+} from '@angular-monorepo/shared/util-common-non-prod-e2e';
 
 const entities = 'my-products';
 const entitiesFeature = 'my-products-feature';
 
 // TODO! Create generator for E2E tests
 // from this suite.
-describe('Main Page', () => {
-  describe('Data reading of feature components', () => {
+describe('Main Page: MyProducts', () => {
+  // -- STEP 2: Adjust the todays time, if your app doesn't work with date and/or time, just leave it as is
+  const today = new Date('2024-05-17');
+  const mockDate = () => cy.clock(today);
+
+  const seed = () => {
+    cy.request({
+      method: 'POST',
+      url: '/api/seed', // Adjust the URL according to your application's routing
+      // Optionally, include any required headers or body data if needed
+    }).then((response) => {
+      // Check the response status and message to ensure the seed operation was successful
+      expect(response.status).to.eq(200);
+      expect(response.body.message).to.eq('Data restored successfully');
+    });
+  };
+
+  before(() => {
+    seed();
+  });
+
+  describe('READ', () => {
     // We deactivate test isolation of this suite to
     // to speed up e2e by saving page visits. One tends
     // to make a visit for each feature component. But
     // usually one visit is necessary for this suite.
-    describe('Happy case', { testIsolation: false }, () => {
-      // -- STEP 2: ADJUST THE COLUMNS! --
-      // You can tell an AI-Solution (e.g. GitHub copilot)
-      // to do this for you by telling which entity interface
-      // should be used for this.
+    describe('Happy case', () => {
       const expectCols = () => {
+        // -- STEP 3: Adjust the cols
         expectText('col-category', 'Category');
         expectText('col-description', 'Description');
         expectText('col-inventoryStatus', 'Status');
@@ -52,19 +72,16 @@ describe('Main Page', () => {
         cy.visit('/');
       });
 
-      it('should display data for products feature ON data success BY any', () => {
-        getElemByTestId(entitiesFeature).within(() => {
+      it('should display data ON any BY success', () => {
+        getByTestId(entitiesFeature).within(() => {
           expectCols();
 
-          getElemByTestId('row')
+          getByTestId('row')
             .first()
             .within(() => {
-              // -- STEP 3: ADJUST THE COLUMNS AND VALUES! --
-              // You can tell an AI-Solution (e.g. GitHub copilot)
-              // to do this for you by telling which entity interface
-              // should be used for this.
+              // -- STEP 4: Adjust the cols and values
               expectTableDataValue('category', 'Accessories');
-              expectTableDataValue('description', 'Product Description');
+              expectTableDataValue('description', 'Entity Description');
               expectTableDataValue('inventoryStatus', 'INSTOCK');
               expectTableDataValue('name', 'Bamboo Watch');
               expectTableDataValue('price', '65');
@@ -72,15 +89,12 @@ describe('Main Page', () => {
               expectTableDataValue('rating', '5');
             });
 
-          getElemByTestId('row')
+          getByTestId('row')
             .eq(1)
             .within(() => {
-              // -- STEP 4: ADJUST THE COLUMNS AND VALUES AGAIN! --
-              // You can tell an AI-Solution (e.g. GitHub copilot)
-              // to do this for you by telling which entity interface
-              // should be used for this.
+              // -- STEP 5: Adjust the cols and values
               expectTableDataValue('category', 'Accessories');
-              expectTableDataValue('description', 'Product Description');
+              expectTableDataValue('description', 'Entity Description');
               expectTableDataValue('inventoryStatus', 'OUTOFSTOCK');
               expectTableDataValue('name', 'Black Watch');
               expectTableDataValue('price', '72');
@@ -88,7 +102,7 @@ describe('Main Page', () => {
               expectTableDataValue('rating', '4');
             });
 
-          expectLoadingNotShown();
+          expectLoadingIsNotShown();
         });
       });
     });
@@ -100,16 +114,16 @@ describe('Main Page', () => {
         cy.visit('/');
       });
 
-      it('should toggle loading indicators ON data loading BY any', () => {
-        // Creating delayed interceptors to simulate loading.
+      it('should toggle loading indicator ON any BY data loading', () => {
+        // Using delayed interceptors to simulate loading.
         // Thus loading indicators should get enough time to show up.
         // If we don't wait for the responses explicitly, Cypress
         // will not wait for them and just continue to the next test.
-        getElemByTestId(entitiesFeature).within(() => expectLoadingShown());
+        getByTestId(entitiesFeature).within(() => expectLoadingIsShown());
       });
     });
 
-    describe('Errors', () => {
+    describe('Error', () => {
       before(() => {
         createErrorInterceptor(entitiesUrl).as(\`\${entities}Error\`);
         cy.visit('/');
@@ -117,8 +131,8 @@ describe('Main Page', () => {
 
       it('should show errors ON network error BY any', () => {
         cy.wait(\`@\${entities}Error\`).then(() => {
-          getElemByTestId(entitiesFeature).within(() => expectErrorShown());
-          expectLoadingNotShown();
+          getByTestId(entitiesFeature).within(() => expectErrorIsShown());
+          expectLoadingIsNotShown();
         });
       });
     });
@@ -131,8 +145,265 @@ describe('Main Page', () => {
 
       it('should show no data ON data success BY no data', () => {
         cy.wait(\`@\${entities}NoData\`).then(() => {
-          getElemByTestId(entitiesFeature).within(() => expectNoData());
-          expectLoadingNotShown();
+          getByTestId(entitiesFeature).within(() => expectNoData());
+          expectLoadingIsNotShown();
+        });
+      });
+    });
+  });
+
+  describe('UPDATE', () => {
+    const newValue = 'New Value';
+
+    describe('Happy case', () => {
+      before(() => {
+        cy.visit('/');
+      });
+
+      it('should update entity ON success BY any', () => {
+        const submitNewValue = getByTestId(entitiesFeature).within(() =>
+          getByTestId('row')
+            .first()
+            .within(() => getByTestId('edit').click())
+            .then(() => getByTestId('entity-form'))
+            .within(() =>
+              getByTestId('name-input')
+                .clear()
+                .type(newValue)
+                .then(() => getByTestId('submit-button').click())
+            )
+        );
+
+        submitNewValue.then(() =>
+          getByTestId(entitiesFeature).within(() =>
+            getByTestId('entity-form')
+              .should('not.exist')
+              .then(() =>
+                getByTestId('row')
+                  .first()
+                  .within(() => expectTableDataValue('name', newValue))
+              )
+          )
+        );
+      });
+    });
+
+    describe('Error', () => {
+      before(() => {
+        createErrorInterceptor(\`\${entitiesUrl}/*\`).as(\`\${entities}Error\`);
+        cy.visit('/');
+      });
+      it('dialog should show error and stay open ON update failure BY any', () => {
+        getByTestId(entitiesFeature).within(() => {
+          getByTestId('row')
+            .first()
+            .within(() => getByTestId('edit').click())
+            .then(() => getByTestId('entity-form'))
+            .within(() =>
+              getByTestId('name-input')
+                .clear()
+                .type(\`\${newValue}-2\`)
+                .then(() => getByTestId('submit-button').click())
+                .then(() => expectLoadingIsNotShown())
+                .then(() => expectErrorIsShown())
+                .then(() => getByTestId('cancel-button').click())
+            )
+            .then(() => getByTestId('entity-form').should('not.exist'))
+            .then(() => expectCrudIsDisabled());
+        });
+      });
+    });
+
+    describe('Loading', () => {
+      before(() => {
+        const delay = 4000;
+        createDelayedInterceptor(\`\${entitiesUrl}/*\`, delay);
+        cy.visit('/');
+      });
+
+      it('should toggle loading indicator ON data loading BY loading', () => {
+        const newName = 'New Name';
+
+        const submitNewValue = getByTestId(entitiesFeature).within(() => {
+          return getByTestId('row')
+            .first()
+            .within(() => getByTestId('edit').click())
+            .then(() => getByTestId('entity-form'))
+            .within(() =>
+              getByTestId('name-input')
+                .clear()
+                .type(newName)
+                .then(() => getByTestId('submit-button').click())
+            );
+        });
+
+        submitNewValue.then(() =>
+          getByTestId(entitiesFeature).within(() => expectLoadingIsShown())
+        );
+      });
+    });
+    // describe('Error', () => {});
+  });
+
+  describe('DELETE', () => {
+    describe('Happy case', () => {
+      before(() => {
+        cy.visit('/');
+      });
+
+      it('should delete entity ON success BY any', () => {
+        let rowsBefore = 0;
+
+        getByTestId(entitiesFeature).within(() => {
+          getByTestId('row')
+            .its('length')
+            .then((length: number) => {
+              rowsBefore = length;
+            })
+            .then(() => getByTestId('row').first())
+            .within(() => getByTestId('delete').click())
+            .then(() => getConfirmDialog())
+            .then(() => confirmYes())
+            .then(() =>
+              getByTestId('row').should('have.length', rowsBefore - 1)
+            );
+        });
+      });
+    });
+    describe('Loading', () => {
+      before(() => {
+        const delay = 4000;
+        createDelayedInterceptor(\`\${entitiesUrl}/*\`, delay);
+        cy.visit('/');
+      });
+
+      it('should toggle loading indicator ON delete loading BY loading', () => {
+        getByTestId(entitiesFeature).within(() => {
+          getByTestId('row')
+            .first()
+            .within(() => getByTestId('delete').click())
+            .then(() => getConfirmDialog())
+            .then(() => confirmYes())
+            .then(() => expectLoadingIsShown());
+        });
+      });
+    });
+    describe('Error', () => {
+      before(() => {
+        createErrorInterceptor(\`\${entitiesUrl}/*\`).as(\`\${entities}Error\`);
+        cy.visit('/');
+      });
+
+      it('should show error ON delete failure BY any', () => {
+        getByTestId(entitiesFeature).within(() => {
+          getByTestId('row')
+            .first()
+            .within(() => getByTestId('delete').click())
+            .then(() => getConfirmDialog())
+            .then(() => confirmYes())
+            .then(() => expectErrorIsShown())
+            .then(() => expectCrudIsDisabled());
+        });
+      });
+    });
+  });
+
+  describe('CREATE', () => {
+    // -- STEP 6: adjust the filling
+    const fillInFormAndSubmit = () => {
+      const newEntity = {
+        category: 'Accessories',
+        description: 'New Description',
+        inventoryStatus: 'In Stock',
+        name: 'New Entity',
+        price: '100',
+        quantity: '100',
+        rating: '5',
+      };
+
+      return getByTestId('entity-form').within(() => {
+        getByTestId('name-input').type(newEntity.name);
+        getByTestId('description-input').type(newEntity.description);
+        getByTestId('price-input').type(newEntity.price);
+        getByTestId('category-input').type(newEntity.category);
+        getByTestId('quantity-input').type(newEntity.quantity);
+        selectDropdownValue(
+          'inventory-status-input',
+          newEntity.inventoryStatus
+        );
+        getByTestId('rating-input').type(newEntity.rating);
+        return getByTestId('submit-button').click();
+      });
+    };
+
+    describe('Happy case', () => {
+      before(() => {
+        cy.visit('/');
+      });
+
+      it('should create entity ON success BY any', () => {
+        let rowsBefore = 0;
+
+        getByTestId(entitiesFeature).within(() => {
+          getByTestId('row')
+            .its('length')
+            .then((length: number) => {
+              rowsBefore = length;
+            })
+            .then(() => getByTestId('new-button').click())
+            .then(() => getByTestId('entity-form'))
+            .then(() => fillInFormAndSubmit())
+            .then(() => expectLoadingIsNotShown())
+            .then(() =>
+              getByTestId('row').should('have.length', rowsBefore + 1)
+            );
+        });
+      });
+    });
+    describe('Loading', () => {
+      before(() => {
+        cy.visit('/');
+      });
+
+      const delayRequest = () => {
+        const delay = 4000;
+        return createDelayedInterceptor(\`\${entitiesUrl}\`, delay);
+      };
+
+      it('should toggle loading indicator ON create loading BY loading', () => {
+        getByTestId(entitiesFeature).within(() =>
+          expectLoadingIsNotShown()
+            .then(() => delayRequest())
+            .then(() => getByTestId('new-button').click())
+            .then(() => fillInFormAndSubmit())
+            .then(() => getByTestId('entity-form'))
+            .within(() => expectLoadingIsShown())
+        );
+      });
+    });
+    describe('Error', () => {
+      before(() => {
+        cy.visit('/');
+      });
+
+      const provokeError = () => {
+        return createErrorInterceptor(\`\${entitiesUrl}\`).as(\`\${entities}Error\`);
+      };
+
+      it('should show error ON create failure BY any', () => {
+        getByTestId(entitiesFeature).within(() => {
+          expectLoadingIsNotShown()
+            .then(() => getByTestId('new-button').click())
+            .then(() => provokeError())
+            .then(() => fillInFormAndSubmit())
+            .then(() => getByTestId('entity-form'))
+            .within(() =>
+              expectErrorIsShown().then(() =>
+                getByTestId('cancel-button').click()
+              )
+            )
+            .then(() => expectCrudIsDisabled())
+            .then(() => expectErrorIsShown());
         });
       });
     });

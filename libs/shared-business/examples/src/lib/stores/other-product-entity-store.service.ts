@@ -23,7 +23,7 @@ export class OtherProductEntityStoreService extends AbstractEntityStoreService<P
     return 'Other Product';
   }
 
-  protected override getGetUrl(): string {
+  protected override getEntitiesUrl(): string {
     return otherProductsUrl;
   }
 }

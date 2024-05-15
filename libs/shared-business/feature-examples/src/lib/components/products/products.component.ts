@@ -1,5 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
+import { DialogModule } from 'primeng/dialog';
+
 // TODO! Adjust the project tags.
 // eslint-disable-next-line @nx/enforce-module-boundaries
 import {
@@ -9,8 +11,6 @@ import {
 // TODO! Adjust the project tags.
 // eslint-disable-next-line @nx/enforce-module-boundaries
 import { AbstractEntitiesListComponent } from '@angular-monorepo/shared/ui-common';
-
-import { DialogModule } from 'primeng/dialog';
 
 // TODO! Adjust the project tags.
 // eslint-disable-next-line @nx/enforce-module-boundaries

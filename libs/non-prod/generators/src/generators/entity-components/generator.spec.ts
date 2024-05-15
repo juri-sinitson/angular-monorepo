@@ -16,10 +16,12 @@ describe('entity-components generator', () => {
   const presentationalComponentFile = `${fileRoot}/${fileNamePrefix}.component.ts`;
   const storyFile = `${fileRoot}/${fileNamePrefix}.component.stories.ts`;
   const smartComponentFile = `${fileRoot}/${fileNamePrefix}-smart.component.ts`;
+  const crud = true;
 
   const options: EntityComponentsGeneratorSchema = {     
     entityName, 
-    project, 
+    project,
+    crud,
   };
 
   beforeEach(() => {

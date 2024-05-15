@@ -1,22 +1,31 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { applicationConfig, type Meta, type StoryObj } from '@storybook/angular';
 
-import { <%= className %>Component } from './<%= fileName %>.component';
+import { ConfirmationService } from 'primeng/api';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+
+import { <%= className %>Component as EntitiesComponent } from './<%= fileName %>.component';
+// -- STEP 1: Adjust the path to the entity interface
+// TODO: Adjust the project tags.
 // eslint-disable-next-line @nx/enforce-module-boundaries
-import { <%= entityInterfaceName %> } from '@angular-monorepo/shared-business/examples';
+import { <%= entityInterfaceName %> as EntityInterface } from '@angular-monorepo/shared-business/examples';
 // eslint-disable-next-line @nx/enforce-module-boundaries
 import { MessageInterface, commonAppConfig } from '@angular-monorepo/shared/util-common';
 // eslint-disable-next-line @nx/enforce-module-boundaries
 import {
- errorStory,
- getFirstElemByText, 
- expectText,
- loadingStory,
- noDataStory,
+  errorStory,
+  getFirstElemByText,
+  expectText,
+  loadingStory,
+  noDataStory,
+  ConfirmNotImplementedWrapperComponent,
+  primaryTableStory,
+  getCanvas,
+  expectNoElem,
 } from '@angular-monorepo/shared/util-common-non-prod';
 
-const <%= entityName %>List: <%= entityInterfaceName %>[] = 
-// -- STEP 1: Adjust the example data 
+const entitiesList: EntityInterface[] =
+// -- STEP 2: Adjust the example data 
 // TIP: you can use copilot or similar AI-solution for this
 // by providing the entity interface to the AI and telling
 // to adjust this file to that entity interface for you.
@@ -25,7 +34,7 @@ const <%= entityName %>List: <%= entityInterfaceName %>[] =
     id: '1001',
     code: 'abc123',
     name: 'T-Shirt',
-    description: 'Product Description',
+    description: '<%= entityName %> Description',
     price: 20,
     category: 'Clothing',
     quantity: 50,
@@ -36,7 +45,7 @@ const <%= entityName %>List: <%= entityInterfaceName %>[] =
     id: '1002',
     code: 'def456',
     name: 'Jeans',
-    description: 'Product Description',
+    description: '<%= entityName %> Description',
     price: 50,
     category: 'Clothing',
     quantity: 30,
@@ -47,7 +56,7 @@ const <%= entityName %>List: <%= entityInterfaceName %>[] =
     id: '1003',
     code: 'ghi789',
     name: 'Shoes',
-    description: 'Product Description',
+    description: '<%= entityName %> Description',
     price: 80,
     category: 'Footwear',
     quantity: 20,
@@ -58,7 +67,7 @@ const <%= entityName %>List: <%= entityInterfaceName %>[] =
     id: '1004',
     code: 'h456wer53',
     name: 'Bracelet',
-    description: 'Product Description',
+    description: '<%= entityName %> Description',
     price: 15,
     category: 'Accessories',
     quantity: 73,
@@ -69,7 +78,7 @@ const <%= entityName %>List: <%= entityInterfaceName %>[] =
     id: '1005',
     code: 'jkl012',
     name: 'Hat',
-    description: 'Product Description',
+    description: '<%= entityName %> Description',
     price: 10,
     category: 'Clothing',
     quantity: 100,
@@ -101,6 +110,8 @@ const header = '<%= entityName %>';
     <% if (crud) { %>
       [crud]="true"
       (onDelete)="crudOperationHandler('Data deletion')"
+      (onEdit)="crudOperationHandler('Data editing')"
+      (onNewBeforeSubmit)="crudOperationHandler('Data submitting')"
       (onNew)="crudOperationHandler('Data submitting')"
       (onUpdate)="crudOperationHandler('Data submission')"
     <% } %>    
@@ -111,7 +122,7 @@ const header = '<%= entityName %>';
  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EntityWrapperComponent extends ConfirmNotImplementedWrapperComponent {
-  @Input() data: ProductInterface[] = [];
+  @Input() data: EntityInterface[] = [];
   @Input() messages: MessageInterface[] = [];
   @Input() isLoading = false;
   @Input() noData = false;
@@ -121,15 +132,15 @@ export class EntityWrapperComponent extends ConfirmNotImplementedWrapperComponen
 const meta: Meta<EntityWrapperComponent> = {
   component: EntityWrapperComponent,
   decorators: [applicationConfig({ ...commonAppConfig })],
-  // -- STEP 2: Adjust the title for the storybook to place in the 
+  // -- STEP 3: Adjust the title for the storybook to place in the 
   // correct place of the components tree  
-  title: 'shared-business/feature-examples/Products',
+  title: 'shared-business/feature-examples/<%= entityName %>',
 };
 export default meta;
 type Story = StoryObj<EntityWrapperComponent>;
 
 const expectCols = async (canvas: HTMLElement) => {
-  // -- STEP 3: Adjust the columns --
+  // -- STEP 4: Adjust the columns --
   await expectText('Name', canvas);
   await expectText('Category', canvas);
   await expectText('Description', canvas);
@@ -141,20 +152,20 @@ const expectCols = async (canvas: HTMLElement) => {
 };
 
 const expectValues = async (canvas: HTMLElement) => {
-  // -- STEP 4: Adjust the values for the first row --
+  // -- STEP 5: Adjust the values for the first row --
   await expectText('T-Shirt', canvas);
   await getFirstElemByText('Clothing', canvas);
-  await getFirstElemByText('Product Description', canvas);
+  await getFirstElemByText('<%= entityName %> Description', canvas);
   await getFirstElemByText('INSTOCK', canvas);
   await expectText('abc123', canvas);
   await getFirstElemByText('20', canvas);
   await getFirstElemByText('50', canvas);
   await getFirstElemByText('4', canvas);
 
-  // -- STEP 5: Adjust the values for the second row --
+  // -- STEP 6: Adjust the values for the second row --
   await expectText('Jeans', canvas);
   await getFirstElemByText('Clothing', canvas);
-  await getFirstElemByText('Product Description', canvas);
+  await getFirstElemByText('<%= entityName %> Description', canvas);
   await getFirstElemByText('INSTOCK', canvas);
   await expectText('def456', canvas);
   await getFirstElemByText('50', canvas);

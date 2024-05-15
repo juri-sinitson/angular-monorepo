@@ -23,11 +23,14 @@ export async function entityComponentsGenerator(
   generateFiles(tree, path.join(__dirname, 'files'), filesRoot, {
     className: `${strings.classify(options.entityName)}s`,
     fileName: `${strings.dasherize(options.entityName)}s`,
-    entityName: strings.capitalize(options.entityName),
+    fileNameSingular: `${strings.dasherize(options.entityName)}`,
+    entityName,
     entityInterfaceName: `${entityName}Interface`,
     selectorName: `${strings.dasherize(options.entityName)}s`,
     entityServiceClassName: `${strings.classify(options.entityName)}EntityStoreService`,
     entityServiceName: `${strings.camelize(options.entityName)}Service`,
+    originalName: options.entityName,
+    crud: options.crud,
   });
 
   await formatFiles(tree);

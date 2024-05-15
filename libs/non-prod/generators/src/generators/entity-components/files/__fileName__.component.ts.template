@@ -1,12 +1,13 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
+import { DialogModule } from 'primeng/dialog';
+
 // TODO! Adjust the project tags.
 // eslint-disable-next-line @nx/enforce-module-boundaries
 import { 
   BasicTableComponent,
   CommonWrapperComponent,
 } from '@angular-monorepo/shared/ui-common';
-
 // TODO! Adjust the project tags.
 // eslint-disable-next-line @nx/enforce-module-boundaries
 import { AbstractEntitiesListComponent } from '@angular-monorepo/shared/ui-common';
@@ -14,26 +15,69 @@ import { AbstractEntitiesListComponent } from '@angular-monorepo/shared/ui-commo
 // -- STEP 1: ADJUST THE ENTITY INTERFACE PATH! --
 // TODO! Adjust the project tags.
 // eslint-disable-next-line @nx/enforce-module-boundaries
-import { <%= entityInterfaceName %> } from '@angular-monorepo/shared-business/examples';
+import { <%= entityInterfaceName %> as EntityInterface } from '@angular-monorepo/shared-business/examples';
+import { <%= entityName  %>FormComponent as EntityFormComponent } from './<%= originalName %>-form.component';
 
 @Component({
   selector: 'angular-monorepo-<%= selectorName %>',
   standalone: true,
-  imports: [BasicTableComponent, CommonWrapperComponent],
+  imports: [
+    // PrimeNG
+    DialogModule,
+
+    // Own
+    BasicTableComponent,
+    CommonWrapperComponent,
+    EntityFormComponent,
+  ],
   template: `
-    <common-common-wrapper [messages]="messages()" 
-      [isLoading]="isLoading()"
+    <common-common-wrapper
+      [messages]="messages()"
+      [isLoading]="isListLoading()"
       [header]="header()"
       [noData]="noData()"
     >
-      <common-basic-table [columns]="columns" [data]="data()"></common-basic-table>
+      <common-basic-table
+        [columns]="columns"
+        [data]="data()"
+        [crud]="crud()"
+      <% if (crud) { %>
+        [isError]="isError()"
+        (onDelete)="deleteHandler($event)"
+        (onEdit)="editHandler($event)"
+        (onNew)="newHandler()"
+      <% } %>        
+      ></common-basic-table>
     </common-common-wrapper>
-  `,  
+    <!-- Generator template if CRUD is enabled -->
+    @if (crud()) {
+    <p-dialog
+      [visible]="showEntityDialog()"
+      [style]="{ width: '450px' }"
+      [modal]="true"
+      [closable]="false"
+      styleClass="p-fluid"
+    >
+      <ng-template pTemplate="content">
+        <angular-monorepo-<%= originalName %>-form
+          [data]="selectedEntity()"
+          [header]="'<%= entityName %>'"
+          [messages]="messages()"
+          [isLoading]="isFormLoading()"
+          (onSubmit)="submitHandler($event)"
+          (onCancel)="cancelHandler()"
+        >
+        </angular-monorepo-<%= originalName %>-form>
+      </ng-template>
+    </p-dialog>
+    }
+    <!-- Generator template -->
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class <%= className %>Component extends AbstractEntitiesListComponent<<%= entityInterfaceName %>> {
+export class <%= className %>Component extends AbstractEntitiesListComponent<EntityInterface> {
   
-  protected override getColumns(): Array<[keyof <%= entityInterfaceName %>, string]> {
+  protected override getColumns(): Array<[keyof EntityInterface, string]> {
     // -- STEP 2: ADJUST THE COLUMNS NAMES AND THE SEQUENCE!
     // Adjusting the columns names and the sequence
     return [

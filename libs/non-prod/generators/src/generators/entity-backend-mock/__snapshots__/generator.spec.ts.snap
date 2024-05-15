@@ -3,11 +3,11 @@
 exports[`entity-backend-mock generator should match snapshot ON any BY any 1`] = `
 "import express from 'express';
 
+// -- STEP 1: ADJUST ENTITY INTERFACE PATH! --
 // TODO: adjust project tags and as the case may be
 // rearrange the libs.
 // eslint-disable-next-line @nx/enforce-module-boundaries
-// -- STEP 1: Adjust the entity interface path --
-import { MyProductInterface } from '@angular-monorepo/shared-business/examples';
+import { MyProductInterface as EntityInterface } from '@angular-monorepo/shared-business/examples';
 
 const host = process.env['HOST'] ?? 'localhost';
 const port = process.env['PORT'] ? Number(process.env['PORT']) : 3000;
@@ -18,12 +18,12 @@ const app = express();
 // You can tell an AI-Solution (e.g. GitHub copilot)
 // to do this for you by telling which entity interface
 // should be used for this.
-const entitiesList: MyProductInterface[] = [
+const entitiesListBackup: Readonly<EntityInterface[]> = Object.freeze([
   {
     id: '1000',
     code: 'f230fh0g3',
     name: 'Bamboo Watch',
-    description: 'Product Description',
+    description: 'MyProduct Description',
     price: 65,
     category: 'Accessories',
     quantity: 24,
@@ -34,7 +34,7 @@ const entitiesList: MyProductInterface[] = [
     id: '1001',
     code: 'nvklal433',
     name: 'Black Watch',
-    description: 'Product Description',
+    description: 'MyProduct Description',
     price: 72,
     category: 'Accessories',
     quantity: 61,
@@ -45,7 +45,7 @@ const entitiesList: MyProductInterface[] = [
     id: '1002',
     code: 'zz21cz3c1',
     name: 'Blue Band',
-    description: 'Product Description',
+    description: 'MyProduct Description',
     price: 79,
     category: 'Fitness',
     quantity: 2,
@@ -56,7 +56,7 @@ const entitiesList: MyProductInterface[] = [
     id: '1003',
     code: '244wgerg2',
     name: 'Blue T-Shirt',
-    description: 'Product Description',
+    description: 'MyProduct Description',
     price: 29,
     category: 'Clothing',
     quantity: 25,
@@ -67,7 +67,7 @@ const entitiesList: MyProductInterface[] = [
     id: '1004',
     code: 'h456wer53',
     name: 'Bracelet',
-    description: 'Product Description',
+    description: 'MyProduct Description',
     price: 15,
     category: 'Accessories',
     quantity: 73,
@@ -78,41 +78,119 @@ const entitiesList: MyProductInterface[] = [
     id: '1005',
     code: 'av2231fwg',
     name: 'Brown Purse',
-    description: 'Product Description',
+    description: 'MyProduct Description',
     price: 120,
     category: 'Accessories',
     quantity: 0,
     inventoryStatus: 'OUTOFSTOCK',
     rating: 4,
   },
-];
+]);
+
+const entitiesList: EntityInterface[] = [...entitiesListBackup];
+
+function restoreData() {
+  // Restore the entities list to the backup
+  entitiesList.splice(0, entitiesList.length, ...entitiesListBackup);
+}
+
+function generateNextId(): string {
+  // Find the maximum id in the entitiesList
+  const maxId = entitiesListBackup.reduce((max, entity) => {
+    const entityId = Number(entity.id);
+    return entityId > max ? entityId : max;
+  }, 0);
+
+  // Generate the next id by incrementing the maximum id by 1
+  const nextId = (maxId + 1).toString();
+
+  return nextId;
+}
+
+// -- STEP 3 you can remove this line if your entity doesn't have a code
+function generateRandomCode(): string {
+  // Generate a random code using alphanumeric characters
+  const characters =
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let code = '';
+  for (let i = 0; i < 8; i++) {
+    const randomIndex = Math.floor(Math.random() * characters.length);
+    code += characters[randomIndex];
+  }
+
+  return code;
+}
 
 app.use(express.json());
+
+app.post('/api/seed', (req, res) => {
+  restoreData();
+  res.send({ message: 'Data restored successfully' });
+});
 
 app.get('/api/examples/my-products', (req, res) => {
   res.send(entitiesList);
 });
 
-app.post('/api/examples/my-products/:id', (req, res) => {
-  const newEntity: MyProductInterface = req.body;
+app.post('/api/examples/my-products', (req, res) => {
+  // For debugging purposes
+  /*res.sendStatus(404);
+  return;*/
 
-  // Add the new product to the products list
-  entitiesList.push(newEntity);
+  const newEntity: EntityInterface = req.body;
+  // Generate the next id and random code for the new entity
+  const nextId = generateNextId();
+  newEntity.id = nextId;
 
-  res.sendStatus(200);
+  // -- STEP 4 you can remove this line if your entity doesn't have a code
+  // Add the new id and code to the new entity
+  const randomCode = generateRandomCode();
+  newEntity.code = randomCode;
+
+  setTimeout(() => {
+    // Add the new entity to the entities list
+    entitiesList.push(newEntity);
+    res.send(newEntity);
+  }, 0);
 });
 
 app.put('/api/examples/my-products/:id', (req, res) => {
-  const id = req.params.id;
-  const updatedEntity: MyProductInterface = req.body;
+  // For debugging purposes
+  /*res.sendStatus(404);
+  return;*/
 
-  // Find the product and update it
+  const id = req.params.id;
+  const updatedEntity: EntityInterface = req.body;
+
+  // Find the entity and update it
   const entityIndex = entitiesList.findIndex((entity) => entity.id === id);
   if (entityIndex !== -1) {
-    entitiesList[entityIndex] = updatedEntity;
+    // Add a delay of 1 second before updating the entity
+    setTimeout(() => {
+      entitiesList[entityIndex] = updatedEntity;
+      res.send(updatedEntity);
+    }, 0);
+  } else {
+    res.sendStatus(404);
   }
+});
 
-  res.sendStatus(200);
+// handle delete request
+app.delete('/api/examples/my-products/:id', (req, res) => {
+  // For debugging purposes
+  /*res.sendStatus(404);
+  return;*/
+
+  const id = req.params.id;
+
+  setTimeout(() => {
+    // Find the entity and delete it
+    const entityIndex = entitiesList.findIndex((entity) => entity.id === id);
+    if (entityIndex !== -1) {
+      entitiesList.splice(entityIndex, 1);
+      res.send({ message: 'Deleted successfully' });
+    }
+  }, 0);
 });
 
 app.listen(port, host, () => {

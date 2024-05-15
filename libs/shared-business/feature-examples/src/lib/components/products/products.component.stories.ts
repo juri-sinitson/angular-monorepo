@@ -7,7 +7,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ProductsComponent as EntitiesComponent } from './products.component';
 // TODO: Adjust the project tags.
 // eslint-disable-next-line @nx/enforce-module-boundaries
-import { ProductInterface } from '@angular-monorepo/shared-business/examples';
+import { ProductInterface as EntityInterface } from '@angular-monorepo/shared-business/examples';
 // eslint-disable-next-line @nx/enforce-module-boundaries
 import { MessageInterface, commonAppConfig } from '@angular-monorepo/shared/util-common';
 // eslint-disable-next-line @nx/enforce-module-boundaries
@@ -23,7 +23,7 @@ import {
   expectNoElem,
 } from '@angular-monorepo/shared/util-common-non-prod';
 
-const entitiesList: ProductInterface[] = [
+const entitiesList: EntityInterface[] = [
   {
     id: '1001',
     code: 'abc123',
@@ -103,6 +103,8 @@ const header = 'Products';
       [noData]="noData"
       [crud]="true"
       (onDelete)="crudOperationHandler('Data deletion')"
+      (onEdit)="crudOperationHandler('Data editing')"
+      (onNewBeforeSubmit)="crudOperationHandler('Data submitting')"
       (onNew)="crudOperationHandler('Data submitting')"
       (onUpdate)="crudOperationHandler('Data submission')"
     >
@@ -112,7 +114,7 @@ const header = 'Products';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EntityWrapperComponent extends ConfirmNotImplementedWrapperComponent {
-  @Input() data: ProductInterface[] = [];
+  @Input() data: EntityInterface[] = [];
   @Input() messages: MessageInterface[] = [];
   @Input() isLoading = false;
   @Input() noData = false;

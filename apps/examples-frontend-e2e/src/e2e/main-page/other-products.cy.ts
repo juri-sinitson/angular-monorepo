@@ -26,7 +26,7 @@ describe('Main Page: Other products', () => {
     // Use the POST method to send a request to the seed endpoint
     cy.request({
       method: 'POST',
-      url: '/api/seed', // Adjust the URL according to your application's routing
+      url: '/api/shared-business/seed',
       // Optionally, include any required headers or body data if needed
     }).then((response) => {
       // Check the response status and message to ensure the seed operation was successful

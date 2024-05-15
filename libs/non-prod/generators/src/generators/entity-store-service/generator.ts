@@ -19,14 +19,18 @@ export async function entityStoreServiceGenerator(
   const filesRoot = `${projectRoot}/src/lib/stores`;
   const className = `${strings.classify(options.entityName)}`;
   const classNamePlural = `${className}s`;
-  const fileName = `${strings.dasherize(options.entityName)}`;
+  const fileName = `${strings.dasherize(options.entityName)}`;  
+  const entityName = fileName;
+  const constantName = `${strings.camelize(entityName)}`;
+  const constantNamePlural = `${constantName}s`;
 
   generateFiles(tree, path.join(__dirname, 'files'), filesRoot, {
     className,
-    fileName,    
-    entityName: fileName,
-    classNamePlural,
-    getUrlName: `getAll${classNamePlural}Url`,
+    fileName,
+    constantName,
+    constantNamePlural,
+    entityName,    
+    classNamePlural,    
     interfaceName: `${strings.classify(options.entityName)}Interface`,    
   });
   await formatFiles(tree);

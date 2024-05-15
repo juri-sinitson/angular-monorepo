@@ -26,10 +26,10 @@ import { MessageInterface, commonAppConfig } from '@angular-monorepo/shared/util
 
 // TODO! Adjust the project tags.
 // eslint-disable-next-line @nx/enforce-module-boundaries
-import { ProductInterface } from '@angular-monorepo/shared-business/examples';
+import { ProductInterface as EntityInterface } from '@angular-monorepo/shared-business/examples';
+import { ProductFormComponent as EntityFormComponent } from './product-form.component';
 
-import { ProductFormComponent } from './product-form.component';
-
+const header = 'Product';
 
 @Component({
   selector: 'angular-monorepo-product-form-wrapper',
@@ -39,7 +39,7 @@ import { ProductFormComponent } from './product-form.component';
     ConfirmDialogModule,
     
     // Own
-    ProductFormComponent,
+    EntityFormComponent,
   ],
   providers: [ConfirmationService],
   template: `
@@ -54,24 +54,24 @@ import { ProductFormComponent } from './product-form.component';
     <p-confirmDialog [style]="{ maxWidth: '450px' }"></p-confirmDialog>
   `,
 })
-class ProductFormWrapperComponent extends ConfirmNotImplementedWrapperComponent {
-  @Input() data: ProductInterface | null = null;
+class EntityFormWrapperComponent extends ConfirmNotImplementedWrapperComponent {
+  @Input() data: EntityInterface | null = null;
   @Input() messages: MessageInterface[] = [];
   @Input() isLoading = false;  
   @Input() header: string | undefined = undefined;
 }
 
-const meta: Meta<ProductFormWrapperComponent> = {
-  component: ProductFormWrapperComponent,  
+const meta: Meta<EntityFormWrapperComponent> = {
+  component: EntityFormWrapperComponent,  
   decorators: [
     applicationConfig({ ...commonAppConfig }),    
   ],
   title: 'shared-business/feature-examples/Product Form',
 };
 export default meta;
-type Story = StoryObj<ProductFormWrapperComponent>;
+type Story = StoryObj<EntityFormWrapperComponent>;
 
-const data: ProductInterface = {
+const data: EntityInterface = {
   id: '1006',
   code: 'xyz789',
   name: 'Example Product',
@@ -85,7 +85,7 @@ const data: ProductInterface = {
 
 export const primary: Story = {
   args: {
-    header: 'Product',
+    header,
     data,
   },
   play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
@@ -98,9 +98,9 @@ export const primary: Story = {
     await expectNumberInputValue('price-input', '€10.00', canvas);
     await expectTextInputValue('category-input', 'Example Category', canvas);
     await expectNumberInputValue('quantity-input', '10', canvas);
-    await expectDropdownValue('inventoryStatus-input', 'Out of Stock', canvas);
+    await expectDropdownValue('inventory-status-input', 'Out of Stock', canvas);
     await expectNumberInputValue('rating-input', '3', canvas);
-    await expectFormValid(canvas);
+    await expectFormValid(canvas, false);
 
     // testing the invalidity of the form
     await expectFormInvalidByTextInput('name-input', canvas);
@@ -114,7 +114,7 @@ export const primary: Story = {
 
 export const newEntry: Story = {
   args: {
-    header: 'Product',
+    header,
     data: null,
   },
   play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
@@ -127,7 +127,7 @@ export const newEntry: Story = {
     await expectNumberInputValue('price-input', '', canvas);
     await expectTextInputValue('category-input', '', canvas);
     await expectNumberInputValue('quantity-input', '', canvas);
-    await expectDropdownValue('inventoryStatus-input', 'Select Inventory Status', canvas);
+    await expectDropdownValue('inventory-status-input', 'Select Inventory Status', canvas);
     await expectNumberInputValue('rating-input', '', canvas);
     await expectFormInvalid(canvas);
   },
@@ -137,12 +137,12 @@ export const Loading: Story = {
   args: {
     ...loadingStory.args,
     data,
-    header: 'Product',
+    header,
   },
   play: loadingStory.play,
 };
 
 export const Error: Story = {
-  args: { ...errorStory.args, data, header: 'Product' },
+  args: { ...errorStory.args, data, header },
   play: errorStory.play,
 };

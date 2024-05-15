@@ -32,7 +32,7 @@ describe('Main Page: Products', () => {
     // Use the POST method to send a request to the seed endpoint
     cy.request({
       method: 'POST',
-      url: '/api/seed', // Adjust the URL according to your application's routing
+      url: '/api/shared-business/seed',
       // Optionally, include any required headers or body data if needed
     }).then((response) => {
       // Check the response status and message to ensure the seed operation was successful
@@ -71,7 +71,7 @@ describe('Main Page: Products', () => {
             .first()
             .within(() => {
               expectTableDataValue('category', 'Accessories');
-              expectTableDataValue('description', 'Product Description');
+              expectTableDataValue('description', 'Entity Description');
               expectTableDataValue('inventoryStatus', 'INSTOCK');
               expectTableDataValue('name', 'Bamboo Watch');
               expectTableDataValue('price', '65');
@@ -83,7 +83,7 @@ describe('Main Page: Products', () => {
             .eq(1)
             .within(() => {
               expectTableDataValue('category', 'Accessories');
-              expectTableDataValue('description', 'Product Description');
+              expectTableDataValue('description', 'Entity Description');
               expectTableDataValue('inventoryStatus', 'OUTOFSTOCK');
               expectTableDataValue('name', 'Black Watch');
               expectTableDataValue('price', '72');
@@ -157,13 +157,13 @@ describe('Main Page: Products', () => {
         cy.visit('/');
       });
 
-      it('should update product ON success BY any', () => {
+      it('should update entity ON success BY any', () => {
                             
         const submitNewValue = getByTestId(entitiesFeature)
           .within(() => 
             getByTestId('row').first()
               .within(() => getByTestId('edit').click())
-                .then(() => getByTestId('product-form'))
+                .then(() => getByTestId('entity-form'))
                 .within(() => 
                   getByTestId('name-input').clear().type(newValue)
                   .then(() => getByTestId('submit-button').click()                
@@ -174,7 +174,7 @@ describe('Main Page: Products', () => {
         submitNewValue.then(() => 
           getByTestId(entitiesFeature)
             .within(() => 
-              getByTestId('product-form').should('not.exist')
+              getByTestId('entity-form').should('not.exist')
                 .then(() => getByTestId('row').first()
                   .within(() => expectTableDataValue('name', newValue)))
           ));
@@ -192,7 +192,7 @@ describe('Main Page: Products', () => {
           getByTestId('row')
             .first()
             .within(() => getByTestId('edit').click())
-            .then(() => getByTestId('product-form'))
+            .then(() => getByTestId('entity-form'))
             .within(() =>
               getByTestId('name-input').clear().type(`${newValue}-2`)
                 .then(() => getByTestId('submit-button').click())
@@ -200,7 +200,7 @@ describe('Main Page: Products', () => {
                 .then(() => expectErrorIsShown())
                 .then(() => getByTestId('cancel-button').click())                  
              )
-            .then(() => getByTestId('product-form').should('not.exist'))
+            .then(() => getByTestId('entity-form').should('not.exist'))
             .then(() => expectCrudIsDisabled());
         });
       });
@@ -221,7 +221,7 @@ describe('Main Page: Products', () => {
           .within(() => {
             return getByTestId('row').first()
             .within(() => getByTestId('edit').click())
-              .then(() => getByTestId('product-form'))
+              .then(() => getByTestId('entity-form'))
               .within(() => 
                 getByTestId('name-input').clear().type(newName)
                 .then(() => getByTestId('submit-button').click()                
@@ -245,7 +245,7 @@ describe('Main Page: Products', () => {
         cy.visit('/');
       });
 
-      it('should delete product ON success BY any', () => {
+      it('should delete entity ON success BY any', () => {
                   
         let rowsBefore = 0;
 
@@ -303,25 +303,25 @@ describe('Main Page: Products', () => {
   describe('CREATE', () => {
 
     const fillInFormAndSubmit = () => {
-      const newProduct = {
+      const newEntity = {
         category: 'Accessories',
         description: 'New Description',
         inventoryStatus: 'In Stock',
-        name: 'New Product',
+        name: 'New Entity',
         price: '100',
         quantity: '100',
         rating: '5',
       };
 
-      return getByTestId('product-form')
+      return getByTestId('entity-form')
         .within(() => {
-          getByTestId('name-input').type(newProduct.name);
-          getByTestId('description-input').type(newProduct.description);
-          getByTestId('price-input').type(newProduct.price);
-          getByTestId('category-input').type(newProduct.category);
-          getByTestId('quantity-input').type(newProduct.quantity);
-          selectDropdownValue('inventory-status-input', newProduct.inventoryStatus);
-          getByTestId('rating-input').type(newProduct.rating);
+          getByTestId('name-input').type(newEntity.name);
+          getByTestId('description-input').type(newEntity.description);
+          getByTestId('price-input').type(newEntity.price);
+          getByTestId('category-input').type(newEntity.category);
+          getByTestId('quantity-input').type(newEntity.quantity);
+          selectDropdownValue('inventory-status-input', newEntity.inventoryStatus);
+          getByTestId('rating-input').type(newEntity.rating);
           return getByTestId('submit-button').click();
         });
     }
@@ -331,7 +331,7 @@ describe('Main Page: Products', () => {
         cy.visit('/');
       });
 
-      it('should create product ON success BY any', () => {
+      it('should create entity ON success BY any', () => {
 
         let rowsBefore = 0;
         
@@ -341,7 +341,7 @@ describe('Main Page: Products', () => {
               rowsBefore = length;
             })
             .then(() => getByTestId('new-button').click())
-            .then(() => getByTestId('product-form'))
+            .then(() => getByTestId('entity-form'))
             .then(() => fillInFormAndSubmit())
             .then(() => expectLoadingIsNotShown())
             .then(() => getByTestId('row').should('have.length', rowsBefore + 1));
@@ -366,7 +366,7 @@ describe('Main Page: Products', () => {
             .then(() => delayRequest())
             .then(() => getByTestId('new-button').click())            
             .then(() => fillInFormAndSubmit())
-            .then(() => getByTestId('product-form'))
+            .then(() => getByTestId('entity-form'))
               .within(() => expectLoadingIsShown())
         );
       });
@@ -387,7 +387,7 @@ describe('Main Page: Products', () => {
             .then(() => getByTestId('new-button').click())
             .then(() => provokeError())
             .then(() => fillInFormAndSubmit())
-            .then(() => getByTestId('product-form'))
+            .then(() => getByTestId('entity-form'))
               .within(() => expectErrorIsShown()
                 .then(() => getByTestId('cancel-button').click())
              )

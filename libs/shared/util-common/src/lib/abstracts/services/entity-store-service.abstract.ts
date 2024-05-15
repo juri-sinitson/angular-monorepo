@@ -15,29 +15,11 @@ import { withDevToolsFunc } from "../../util/store.util";
 
 type Entity = { id: EntityId; };
 
-type BasicState = { 
-  isLoading: boolean | null; 
-  error: Error | null;
-  selectedEntityId: EntityId | null | undefined;
-};
-
-type State<T> = BasicState & EntityState<T>;
-
-interface BasicEntityStore<T> extends StateSignal<State<T>>{
-  entities: Signal<T[]>;
-  isLoading: Signal<boolean|null>;  
-  error: Signal<Error | null>;
-  selectedEntityId: Signal<EntityId | null | undefined>;
-  selectedEntity: Signal<T|null>;
-  loadWithSideEffects: () => void;
-  addWithSideEffects: (entity: Entity) => void;
-  updateWithSideEffects: (entity: Entity) => void;
-  deleteWithSideEffects: (id: EntityId) => void;
-}
-
-type Provider<T> = ProviderToken<BasicEntityStore<T>>;
-
 type SelectedEntityState = { selectedEntityId: EntityId | null | undefined };
+
+export type AdditionalStoreHooks = {
+  sideEffectsOnInit: (store: StateSignal<object>) => void;
+};
 
 const withSelectedEntity = <Entity>() => {
   return signalStoreFeature(
@@ -52,14 +34,23 @@ const withSelectedEntity = <Entity>() => {
   );
 };
 
-const createStore = <T  extends Entity>(url: string, devToolsScope: string): unknown => {
+type State = {
+  isLoading: boolean | null; 
+  error: Error | null;  
+  moreData?: Record<string, unknown>;
+};
 
-  const initialState: State<T> = {
+const createStore = <T  extends Entity>(
+  url: string, 
+  devToolsScope: 
+  string, 
+  additionalHooks: AdditionalStoreHooks
+): unknown => {
+
+  const initialState: State = {
     isLoading: null,
     error: null,
-    entityMap: {},
-    ids: [],
-    selectedEntityId: undefined,
+    moreData: undefined
   };
   
   return signalStore(
@@ -141,13 +132,19 @@ const createStore = <T  extends Entity>(url: string, devToolsScope: string): unk
       }
     }
     ),
-    withHooks({ onInit: (store) => store.loadWithSideEffects([]) })
+    withHooks({ onInit: (store): void => {
+      store.loadWithSideEffects([]);
+      additionalHooks.sideEffectsOnInit(store);
+    }})
   );
 }
 
 export abstract class AbstractEntityStoreService<T  extends Entity> {
   
-  private store!: BasicEntityStore<T>;
+  // Avoiding mess with internal types, thus
+  // decided to use any here.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  protected store!: any;
 
   // We assume the item of correct type is coming here.
   // If not the probability is very to detect it in 
@@ -222,11 +219,28 @@ export abstract class AbstractEntityStoreService<T  extends Entity> {
     return computed(() => !!this.store.error());
   }
 
-  constructor() {
-    const store = createStore<T>(this.getGetUrl(), this.getDevToolsScope());
-    this.store = inject(store as Provider<T>);
+  /* istanbul ignore next */
+  /** 
+   * Override this method to add more hooks.
+   */ 
+  protected getAdditionalHooks(): AdditionalStoreHooks {
+    return {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      sideEffectsOnInit: (store): void => { 
+        // Override this method to add more hooks.
+       },
+    };
+  }  
+
+  constructor() {    
+    const store = createStore<T>(
+      this.getEntitiesUrl(), 
+      this.getDevToolsScope(), 
+      this.getAdditionalHooks()
+    );
+    this.store = inject(store as ProviderToken<unknown>);
   }
     
   protected abstract getDevToolsScope(): string;
-  protected abstract getGetUrl(): string;
+  protected abstract getEntitiesUrl(): string;
 }

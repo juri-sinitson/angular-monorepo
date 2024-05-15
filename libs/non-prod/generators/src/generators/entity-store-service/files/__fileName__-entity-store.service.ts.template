@@ -5,20 +5,20 @@ import { Injectable } from '@angular/core';
 import { AbstractEntityStoreService } from '@angular-monorepo/shared/util-common';
 
 // -- STEP 1: ADJUST THE URL! --
-import { <%= getUrlName %> }  from './urls';
+import { <%= classNamePlural %>Url as entitiesUrl }  from './urls';
 // -- STEP 2: ADJUST THE INTERFACE PATH! --
-import { <%= interfaceName %> } from '../interfaces/<%= entityName %>.interface';
+import { <%= interfaceName %> as EntityInterface } from '../interfaces/<%= entityName %>.interface';
 
 @Injectable({
   providedIn: 'root'
 })
-export class <%= className %>EntityStoreService extends AbstractEntityStoreService<<%= interfaceName %>> {
+export class <%= className %>EntityStoreService extends AbstractEntityStoreService<EntityInterface> {
   
   protected override getDevToolsScope(): string {
     return '<%= classNamePlural %>';
   }
 
   protected override getGetUrl(): string {
-    return getAll<%= classNamePlural %>Url;
+    return entitiesUrl;
   }
 }

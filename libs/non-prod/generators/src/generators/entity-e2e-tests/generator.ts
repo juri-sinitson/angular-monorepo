@@ -15,13 +15,15 @@ export async function entityE2eTestsGenerator(
 ) {
   const projectConfig = readProjectConfiguration(tree, options.project);
   const projectRoot = projectConfig.root;
+  const entitySelectorName = `${strings.dasherize(options.entityName)}`;
+  const entitySelectorNamePlural = `${entitySelectorName}s`;
 
-  const className = `${strings.classify(options.entityName)}`;
-  const classNamePlural = `${className}s`;
+  const className = `${strings.classify(options.entityName)}`;  
 
   generateFiles(tree, path.join(__dirname, 'files'), projectRoot, {
-    getUrlName: `getAll${classNamePlural}Url`,
-    entitySelectorNamePlural: `${strings.dasherize(options.entityName)}s`,      
+    urlName: `${strings.camelize(options.entityName)}sUrl`,
+    entitySelectorNamePlural,
+    classNamePlural: `${className}s`,
   });
   await formatFiles(tree);
 }

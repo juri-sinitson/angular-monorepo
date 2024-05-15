@@ -1,23 +1,30 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import {
-  FormGroup,
+import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import {  
   Validators,
   FormControl,
   FormsModule,
   ReactiveFormsModule,
+  ValidationErrors,
+  ValidatorFn,
+  AbstractControl,  
 } from '@angular/forms';
+
+// PrimeNG
 import { DropdownModule } from 'primeng/dropdown';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
+import { MessagesModule } from 'primeng/messages';
 
+// -- STEP 1: Adjust the path to the entity interface
 // TODO! Adjust the project tags.
 // eslint-disable-next-line @nx/enforce-module-boundaries
-import { ProductInterface as EntityInterface } from '@angular-monorepo/shared-business/examples';
+import { <%= entityInterfaceName %> as EntityInterface } from '@angular-monorepo/shared-business/examples';
 // TODO! Adjust the project tags.
 // eslint-disable-next-line @nx/enforce-module-boundaries
 import { CommonWrapperComponent, AbstractEntityFormComponent } from '@angular-monorepo/shared/ui-common';
 
+// -- STEP 2: Define the form types and options when necessary
 type Status = 'INSTOCK' | 'OUTOFSTOCK' | 'LOWSTOCK';
 interface StatusOption {
   name: string;
@@ -25,7 +32,7 @@ interface StatusOption {
 }
 
 @Component({
-  selector: 'angular-monorepo-product-form',
+  selector: 'angular-monorepo-<%= originalName %>-form',
   standalone: true,
   imports: [
     // Angular
@@ -41,12 +48,19 @@ interface StatusOption {
     // Own
     CommonWrapperComponent,
   ],
-  template: ` <div class="flex justify-content-center" data-testid="entity-form">
-    <common-common-wrapper
+  template: `
+  <div data-testid="<%= originalName %>-form" 
+      class="flex justify-content-center w-full" >
+    <common-common-wrapper class="w-full"
       [messages]="formMessages()" 
       [isLoading]="isLoading()"
       [header]="header()"      
     >
+      <!-- // -- STEP 2: Adjust the form template. -->
+      <!-- You can use an AI-Solution like Copilot or Phind
+        to generate the form template for you by providing the
+        entity interface to the AI-Solution.
+      -->
       <form [formGroup]="entityForm" data-testid="form">
         <div class="flex flex-column gap-2">
           <label for="id">ID</label>
@@ -152,6 +166,30 @@ interface StatusOption {
             [max]="5"
           ></p-inputNumber>
         </div>
+        @if(!changesMade()) {
+          <!-- TODO! Add the general static message component to the catalogue -->
+          <p-messages severity="info">
+            <ng-template pTemplate>
+              <div data-testid="no-changes">
+                <b>No changes made yet!</b>
+              </div>
+            </ng-template>  
+          </p-messages>
+        }
+        @if(!isExistingEntitySameAsEdited()) {
+          <!-- TODO! Add the general static message component to the catalogue -->
+          <p-messages severity="error">
+            <ng-template pTemplate>
+              <div data-testid="entity-already-exists">
+                <b>THIS PERSON IS ALREADY IN THE DATABASE!</b>
+                <p>
+                  It looks like you already have the person with 
+                  the same name, surname and birth date in the database. 
+                </p>
+              </div>
+            </ng-template>  
+          </p-messages>  
+        }
         <div class="flex justify-content-end button-margin-top">
           <p-button
             label="Cancel"  
@@ -172,51 +210,52 @@ interface StatusOption {
   </div>`,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ProductFormComponent extends AbstractEntityFormComponent<EntityInterface> {
+export class <%= entityName %>FormComponent extends AbstractEntityFormComponent<EntityInterface> {
 
-  override entityForm = new FormGroup({
-    id: new FormControl<string>('0', { nonNullable: true }),
-    code: new FormControl<string>('-', { nonNullable: true }),
-    name: new FormControl<string>('', [Validators.required]),
-    description: new FormControl<string>('', [Validators.required]),
-    price: new FormControl<number | null>(null, [Validators.required]),
-    category: new FormControl<string>('', [Validators.required]),
-    quantity: new FormControl<number | null>(null, [Validators.required]),
-    inventoryStatus: new FormControl<StatusOption | null>(null, [
-      Validators.required,
-    ]),
-    rating: new FormControl<number | null>(null, [Validators.required]),
-  });
+  allData = input.required<EntityInterface[]>();
 
+  // -- STEP 4: adjust the options for the dropdown if necessary
   inventoryStatusOptions: StatusOption[] = [
     { name: 'In Stock', value: 'INSTOCK' },
     { name: 'Out of Stock', value: 'OUTOFSTOCK' },
     { name: 'Low Stock', value: 'LOWSTOCK' },
   ];  
 
+  // -- STEP 5: adjust the implementation of the form
+  // validity
   override isEntityFormValid(): boolean {
     return this.entityForm.valid;
   }
 
-  protected override initForm(dataArg: EntityInterface | null): void {
-    this.entityForm.get('id')?.disable();
-    this.entityForm.get('code')?.disable();
-
-    const data = {...dataArg} as EntityInterface;
-    if (!data) {
-      this.entityForm.reset();
-    } else {
-      const statusOption = this.inventoryStatusOptions.find(
-        (option) => option.value === data.inventoryStatus
-      );
-
-      this.entityForm.patchValue({
-        ...data,
-        inventoryStatus: statusOption,
-      });
-    }
+  // -- STEP 6: adjust the comparison between the entity being edited and the entities of in entities list
+  protected override getExistingEntity(): EntityInterface | undefined {
+    return undefined;
   }
 
+  // -- STEP 7: adjust the form initialization  
+  protected override initForm(dataArg: EntityInterface | null): void {
+    
+    // -- STEP 8: adjust the form, you can use an AI-Solution 
+    // (e.g. Gibhub Copilot or Phind) for this by providing 
+    // the entity interface to it
+    this.entityForm.addControl('id', new FormControl<string | number>('0', { nonNullable: true }));
+    this.entityForm.addControl('name', new FormControl<string>('', [Validators.required]));
+    this.entityForm.addControl('surname', new FormControl<string | undefined>(undefined, ));
+    
+    const multiFieldValidators: ValidatorFn[] = [
+      this.existingEntityMultiFieldValidator(),
+    ];
+
+    this.entityForm.get('id')?.disable();
+    this.entityForm.get('code')?.disable();
+    this.entityForm.addValidators(multiFieldValidators);
+  }
+
+  protected override getFormValue(): EntityInterface {
+    return this.entityForm.getRawValue() as EntityInterface
+  }
+
+  // -- STEP 9: adjust the getting of the form value
   protected override getFormValue(): EntityInterface {
     const inventoryStatusValue: Status = this.entityForm.get('inventoryStatus')
       ?.value?.value as Status;

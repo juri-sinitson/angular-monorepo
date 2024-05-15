@@ -15,10 +15,12 @@ export async function entityBackendMockGenerator(
 ) {
   const projectConfig = readProjectConfiguration(tree, options.project);
   const projectRoot = projectConfig.root;
+  const entityClassName = strings.classify(options.entityName);
 
   generateFiles(tree, path.join(__dirname, 'files'), projectRoot, {
-    entityInterfaceName: `${strings.classify(options.entityName)}Interface`,
-    entityInUrlNamePlural: `${strings.dasherize(options.entityName)}s`,      
+    entityInterfaceName: `${entityClassName}Interface`,
+    entityClassName,
+    entityInUrlNamePlural: `${strings.dasherize(options.entityName)}s`,
   });
   await formatFiles(tree);
 }

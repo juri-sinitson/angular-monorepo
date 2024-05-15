@@ -5,8 +5,8 @@ import { Component, computed, input, output } from "@angular/core";
 import { MessageInterface, Entity, EntityId } from "@angular-monorepo/shared/util-common";
 
 @Component({template: ``,})
-export abstract class AbstractEntitiesListComponent<T extends Entity> {
-  data = input.required<T[]>();
+export abstract class AbstractEntitiesListComponent<T extends Entity, TOriginal = T> {
+  data = input.required<TOriginal[]>();
   messages = input<MessageInterface[]>([]);
   isLoading = input<boolean>(false);
   noData = input<boolean>(false);
@@ -46,7 +46,7 @@ export abstract class AbstractEntitiesListComponent<T extends Entity> {
     this.onCancel.emit();
   }
   
-  submitHandler($event: T) {
+  submitHandler($event: Entity) {
     if (this.isNewEntity()) {
       // We assume the item of correct type is coming here.
       // If not the probability is very to detect it in 

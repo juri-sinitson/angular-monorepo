@@ -16,6 +16,12 @@ const getFirstElem = async (testId: string, canvas: any): Promise<HTMLElement> =
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const countElemsByText = async (text: string, canvas: any): Promise<number> => {
+  const elems = await canvas.getAllByText(text);
+  return Promise.resolve(elems.length);
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const getFirstElemByText = async (text: string, canvas: any): Promise<HTMLElement> => {
   const elems = await canvas.getAllByText(text);
   return elems[0];
@@ -49,6 +55,12 @@ export const expectNoElem = async (testId: string, canvas: any): Promise<void> =
 export const getCanvas = (canvasElement: HTMLElement): any => {
   return within(canvasElement);
 }
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const getSubCanvasByTestId = async (testId: string, canvas: HTMLElement): Promise<any> => {
+  const elem: HTMLElement = await getElem(testId, canvas);
+  return within(elem);
+};
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const expectText = async (text: string, canvas: any): Promise<void> => {
@@ -119,7 +131,7 @@ const getInputElem = async (testId: string, canvas: HTMLCanvasElement): Promise<
   return Promise.resolve(result);
 }
 
-const typeToTextInput = async (testId: string, value: string, 
+const typeToTextInputHelper = async (testId: string, value: string, 
   canvas: HTMLCanvasElement, defocus = true): Promise<void> => {  
   const inputElem: HTMLInputElement = await getInputElem(testId, canvas); 
   await userEvent.type(inputElem, value);
@@ -129,9 +141,18 @@ const typeToTextInput = async (testId: string, value: string,
   }
 }
 
-const clearTextInput = async (testId: string, canvas: HTMLCanvasElement): Promise<void> => {  
+export const clearTextInput = async (testId: string, 
+    canvas: HTMLCanvasElement, defocus = false): Promise<void> => {  
   const elem: HTMLElement = await getInputElem(testId, canvas);
   await userEvent.clear(elem);
+  if (defocus) {
+    await userEvent.tab();
+  }
+}
+
+export const clearNumberInput = async (testId: string, 
+    canvas: HTMLCanvasElement, defocus = false): Promise<void> => {  
+  return clearTextInput(testId, canvas, defocus);
 }
 
 const getTextInputValue = async (testId: string, canvas: HTMLCanvasElement): Promise<string> => {
@@ -140,19 +161,25 @@ const getTextInputValue = async (testId: string, canvas: HTMLCanvasElement): Pro
   return Promise.resolve(elem.value);
 }
 
-const expectSubmitButtonDisabled = async (canvas: HTMLCanvasElement): Promise<void> => {
+export const expectSubmitButtonDisabled = async (canvas: HTMLCanvasElement): Promise<void> => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const submitButton: any = await getElem('submit-button', canvas);
   const submitButtonChild: HTMLElement = submitButton.querySelector('button');
   expect(submitButtonChild).toBeDisabled();
 }
 
-const expectSubmitButtonEnabled = async (canvas: HTMLCanvasElement): Promise<void> => {
+export const expectSubmitButtonEnabled = async (canvas: HTMLCanvasElement): Promise<void> => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const submitButton: any = await getElem('submit-button', canvas);
   const submitButtonChild: HTMLElement = submitButton.querySelector('button');
   expect(submitButtonChild).not.toBeDisabled();
 }
+
+export const typeToTextInput = async (testId: string, value: string, 
+  canvas: HTMLCanvasElement): Promise<void> => {
+    await clearTextInput(testId, canvas);
+    await typeToTextInputHelper(testId, value, canvas);
+  };
 
 export const expectFormInvalid = async (canvas: HTMLCanvasElement): Promise<void> => {  
   const form: HTMLElement = await getElem('form', canvas);
@@ -162,11 +189,15 @@ export const expectFormInvalid = async (canvas: HTMLCanvasElement): Promise<void
   await expectSubmitButtonDisabled(canvas);
 }
 
-export const expectFormValid = async (canvas: HTMLCanvasElement): Promise<void> => {
+export const expectFormValid = async (canvas: HTMLCanvasElement, 
+  checkSubmitButton = true
+): Promise<void> => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const form: any = await getElem('form', canvas);
   expect(form).toHaveClass('ng-valid');  
-  await expectSubmitButtonEnabled(canvas);  
+  if(checkSubmitButton) {
+    await expectSubmitButtonEnabled(canvas);  
+  }  
 }
 
 export const expectFormInvalidByTextInput = async (testId: string, 
@@ -174,5 +205,5 @@ export const expectFormInvalidByTextInput = async (testId: string,
   const valueBackup: string = await getTextInputValue(testId, canvas);
   await clearTextInput(testId, canvas);
   await expectFormInvalid(canvas);
-  await typeToTextInput(testId, valueBackup, canvas);
+  await typeToTextInputHelper(testId, valueBackup, canvas);
 }
