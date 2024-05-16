@@ -9,7 +9,7 @@
     "storybook": "NODE_ENV=development pnpm nx run non-prod-storybook:storybook",
     "storybook-alt": "pnpm nx run non-prod-storybook:storybook",
     "ci:lint-test-build": "NX_BRANCH=$(git branch --show-current) pnpm nx affected -t lint test build --parallel",
-    "ci:helper:start-backend": "nx run examples-backend:build && node dist/apps/examples-backend/main",
+    "ci:helper:start-backend": "nx run central-backend:build && node dist/apps/central-backend/main",
     "ci:helper:e2e": "NX_BRANCH=$(git branch --show-current) pnpm nx affected --verbose -t e2e --parallel",
     "ci:e2e": "pnpm start-server-and-test ci:helper:start-backend http://localhost:3000 ci:helper:e2e",
     "ci:helper:storybook": "pnpm storybook -- --ci",

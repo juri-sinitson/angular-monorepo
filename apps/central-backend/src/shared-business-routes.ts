@@ -3,23 +3,19 @@ import express from 'express';
 // TODO: adjust project tags and as the case may be
 // rearrange the libs.
 // eslint-disable-next-line @nx/enforce-module-boundaries
-import { ProductInterface } from '@angular-monorepo/shared-business/examples';
+import { ProductInterface as EntityInterface } from '@angular-monorepo/shared-business/examples';
+import { generateRandomCode, nextId } from './lib';
 
-const host = process.env['HOST'] ?? 'localhost';
-const port = process.env['PORT'] ? Number(process.env['PORT']) : 3000;
+const router = express.Router();
 
-const app = express();
+const startingId = 1000;
 
-// -- STEP 2: ADJUST THE MOCK DATA! --
-// You can tell an AI-Solution (e.g. GitHub copilot)
-// to do this for you by telling which entity interface
-// should be used for this.
-const entitiesListBackup: Readonly<ProductInterface[]> = Object.freeze([
+const entitiesListBackup: Readonly<EntityInterface[]> = Object.freeze([
   {
     id: '1000',
     code: 'f230fh0g3',
     name: 'Bamboo Watch',
-    description: 'Product Description',
+    description: 'Entity Description',
     price: 65,
     category: 'Accessories',
     quantity: 24,
@@ -30,7 +26,7 @@ const entitiesListBackup: Readonly<ProductInterface[]> = Object.freeze([
     id: '1001',
     code: 'nvklal433',
     name: 'Black Watch',
-    description: 'Product Description',
+    description: 'Entity Description',
     price: 72,
     category: 'Accessories',
     quantity: 61,
@@ -82,9 +78,9 @@ const entitiesListBackup: Readonly<ProductInterface[]> = Object.freeze([
     rating: 4,
   },
 ]);
-const otherProductsListBackup: Readonly<ProductInterface[]> = Object.freeze([
+const otherProductsListBackup: Readonly<EntityInterface[]> = Object.freeze([
   {
-    id: '1006',
+    id: '1000',
     code: 'bib36pfvm',
     name: 'Chakra Bracelet',
     description: 'Product Description',
@@ -95,7 +91,7 @@ const otherProductsListBackup: Readonly<ProductInterface[]> = Object.freeze([
     rating: 3,
   },
   {
-    id: '1007',
+    id: '1001',
     code: 'mbvjkgip5',
     name: 'Galaxy Earrings',
     description: 'Product Description',
@@ -106,7 +102,7 @@ const otherProductsListBackup: Readonly<ProductInterface[]> = Object.freeze([
     rating: 5,
   },
   {
-    id: '1008',
+    id: '1002',
     code: 'vbb124btr',
     name: 'Game Controller',
     description: 'Product Description',
@@ -117,7 +113,7 @@ const otherProductsListBackup: Readonly<ProductInterface[]> = Object.freeze([
     rating: 4,
   },
   {
-    id: '1009',
+    id: '1003',
     code: 'cm230f032',
     name: 'Gaming Set',
     description: 'Product Description',
@@ -128,7 +124,7 @@ const otherProductsListBackup: Readonly<ProductInterface[]> = Object.freeze([
     rating: 3,
   },
   {
-    id: '1010',
+    id: '1004',
     code: 'plb34234v',
     name: 'Gold Phone Case',
     description: 'Product Description',
@@ -139,7 +135,7 @@ const otherProductsListBackup: Readonly<ProductInterface[]> = Object.freeze([
     rating: 4,
   },
   {
-    id: '1011',
+    id: '1005',
     code: '4920nnc2d',
     name: 'Green Earbuds',
     description: 'Product Description',
@@ -151,8 +147,8 @@ const otherProductsListBackup: Readonly<ProductInterface[]> = Object.freeze([
   },
 ]);
 
-const entitiesList: ProductInterface[] = [...entitiesListBackup];
-const otherProductsList: ProductInterface[] = [...otherProductsListBackup];
+const entitiesList: EntityInterface[] = [...entitiesListBackup];
+const otherProductsList: EntityInterface[] = [...otherProductsListBackup];
 
 function restoreData() {
   // Restore the entities list to the backup
@@ -161,49 +157,26 @@ function restoreData() {
 }
 
 function generateNextId(): string {
-  // Find the maximum id in the entitiesList
-  const maxId = entitiesListBackup.reduce((max, entity) => {
-    const entityId = Number(entity.id);
-    return entityId > max ? entityId : max;
-  }, 0);
-
-  // Generate the next id by incrementing the maximum id by 1
-  const nextId = (maxId + 1).toString();
-
-  return nextId;
+  return nextId(startingId, entitiesList);  
 }
 
-function generateRandomCode(): string {
-  // Generate a random code using alphanumeric characters
-  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  let code = '';
-  for (let i = 0; i < 8; i++) {
-    const randomIndex = Math.floor(Math.random() * characters.length);
-    code += characters[randomIndex];
-  }
-
-  return code;
-}
-
-app.use(express.json());
-
-app.post('/api/seed', (req, res) => {
+router.post('/api/shared-business/seed', (req, res) => {
   restoreData();
   res.send({message: 'Data restored successfully'});
 });
 
-app.get('/api/examples/products', (req, res) => {
+router.get('/api/examples/products', (req, res) => {
   res.send(entitiesList);
 });
 
 
-app.post('/api/examples/products', (req, res) => {
+router.post('/api/examples/products', (req, res) => {
 
   // For debugging purposes
   /*res.sendStatus(404);
   return;*/
 
-  const newEntity: ProductInterface = req.body;
+  const newEntity: EntityInterface = req.body;
   // Generate the next id and random code for the new entity
   const nextId = generateNextId();
   const randomCode = generateRandomCode();
@@ -220,13 +193,13 @@ app.post('/api/examples/products', (req, res) => {
 
 });
 
-app.put('/api/examples/products/:id', (req, res) => {
+router.put('/api/examples/products/:id', (req, res) => {
   // For debugging purposes
   /*res.sendStatus(404);
   return;*/
   
   const id = req.params.id;
-  const updatedEntity: ProductInterface = req.body;
+  const updatedEntity: EntityInterface = req.body;
 
   // Find the product and update it
   const entityIndex = entitiesList.findIndex((entity) => entity.id === id);
@@ -242,7 +215,7 @@ app.put('/api/examples/products/:id', (req, res) => {
 });
 
 // handle delete request
-app.delete('/api/examples/products/:id', (req, res) => {
+router.delete('/api/examples/products/:id', (req, res) => {
   // For debugging purposes
   /*res.sendStatus(404);
   return;*/
@@ -260,15 +233,8 @@ app.delete('/api/examples/products/:id', (req, res) => {
   
 });
 
-/**
- * Created on the fast track for E2E testing demo purposes.
- * One of the goals is to demonstrate E2E testing 
- * of a page with multiple API calls.
- */
-app.get('/api/examples/other-products', (req, res) => {
+router.get('/api/examples/other-products', (req, res) => {
   res.send(otherProductsListBackup);
 });
 
-app.listen(port, host, () => {
-  console.log(`[ ready ] http://${host}:${port}`);
-});
+export default router;

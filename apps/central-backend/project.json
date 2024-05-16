@@ -1,8 +1,9 @@
 {
-  "name": "examples-backend",
+  "name": "central-backend",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/examples-backend/src",
+  "sourceRoot": "apps/central-backend/src",
   "projectType": "application",
+  "tags": [],
   "targets": {
     "build": {
       "executor": "@nx/esbuild:esbuild",
@@ -10,12 +11,12 @@
       "defaultConfiguration": "production",
       "options": {
         "platform": "node",
-        "outputPath": "dist/apps/examples-backend",
+        "outputPath": "dist/apps/central-backend",
         "format": ["cjs"],
         "bundle": false,
-        "main": "apps/examples-backend/src/main.ts",
-        "tsConfig": "apps/examples-backend/tsconfig.app.json",
-        "assets": ["apps/examples-backend/src/assets"],
+        "main": "apps/central-backend/src/main.ts",
+        "tsConfig": "apps/central-backend/tsconfig.app.json",
+        "assets": ["apps/central-backend/src/assets"],
         "generatePackageJson": true,
         "esbuildOptions": {
           "sourcemap": true,
@@ -40,27 +41,23 @@
       "executor": "@nx/js:node",
       "defaultConfiguration": "development",
       "options": {
-        "buildTarget": "examples-backend:build"
+        "buildTarget": "central-backend:build"
       },
       "configurations": {
         "development": {
-          "buildTarget": "examples-backend:build:development"
+          "buildTarget": "central-backend:build:development"
         },
         "production": {
-          "buildTarget": "examples-backend:build:production"
+          "buildTarget": "central-backend:build:production"
         }
       }
-    },
-    "lint": {
-      "executor": "@nx/eslint:lint"
     },
     "test": {
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "apps/examples-backend/jest.config.ts"
+        "jestConfig": "apps/central-backend/jest.config.ts"
       }
     }
-  },
-  "tags": []
+  }
 }

@@ -28,8 +28,7 @@ const entitiesFeature = 'products-feature';
 // from this suite.
 describe('Main Page: Products', () => {
 
-  before(() => {
-    // Use the POST method to send a request to the seed endpoint
+  const seed = () => {
     cy.request({
       method: 'POST',
       url: '/api/shared-business/seed',
@@ -38,7 +37,11 @@ describe('Main Page: Products', () => {
       // Check the response status and message to ensure the seed operation was successful
       expect(response.status).to.eq(200);
       expect(response.body.message).to.eq('Data restored successfully');
-    });
+    });    
+  };
+
+  before(() => {
+    seed();
   });
 
   describe('READ', () => {
@@ -152,8 +155,12 @@ describe('Main Page: Products', () => {
 
     const newValue = 'New Value';
 
+    before(() => {
+      seed();
+    });
+
     describe('Happy case', () => {
-      before(() => {
+      before(() => {        
         cy.visit('/');
       });
 
@@ -239,6 +246,11 @@ describe('Main Page: Products', () => {
   });
 
   describe('DELETE', () => {
+
+    before(() => {
+      seed();
+    });
+
     describe('Happy case', () => {
 
       before(() => {
@@ -301,6 +313,10 @@ describe('Main Page: Products', () => {
   });
 
   describe('CREATE', () => {
+
+    before(() => {
+      seed();
+    });    
 
     const fillInFormAndSubmit = () => {
       const newEntity = {

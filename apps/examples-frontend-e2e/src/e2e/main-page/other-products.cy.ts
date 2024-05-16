@@ -22,8 +22,7 @@ const entities = 'other-products';
 
 describe('Main Page: Other products', () => {
 
-  before(() => {
-    // Use the POST method to send a request to the seed endpoint
+  const seed = () => {
     cy.request({
       method: 'POST',
       url: '/api/shared-business/seed',
@@ -32,7 +31,11 @@ describe('Main Page: Other products', () => {
       // Check the response status and message to ensure the seed operation was successful
       expect(response.status).to.eq(200);
       expect(response.body.message).to.eq('Data restored successfully');
-    });
+    });    
+  }
+
+  before(() => {
+    seed();
   });
 
   describe('READ', () => {
