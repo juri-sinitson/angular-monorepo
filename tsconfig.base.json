@@ -21,7 +21,9 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "paths": {
-      "@angular-monorepo/generators": ["libs/non-prod/generators/src/index.ts"],
+      "@angular-monorepo/generators": [
+        "libs/non-prod/generators/src/index.ts"
+      ],
       "@angular-monorepo/persons-management-api-persons": [
         "libs/persons-management/api-persons/src/index.ts"
       ],
@@ -40,7 +42,9 @@
       "@angular-monorepo/shared/ui-common": [
         "libs/shared/ui-common/src/index.ts"
       ],
-      "@angular-monorepo/shared/ui-menu": ["libs/shared/ui-menu/src/index.ts"],
+      "@angular-monorepo/shared/ui-menu": [
+        "libs/shared/ui-menu/src/index.ts"
+      ],
       "@angular-monorepo/shared/util-common": [
         "libs/shared/util-common/src/index.ts"
       ],

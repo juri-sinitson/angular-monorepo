@@ -54,6 +54,13 @@
               {
                 "sourceTag": "domain:shared",
                 "onlyDependOnLibsWithTags": ["domain:shared"]
+              },
+              {
+                "sourceTag": "domain:persons-management",
+                "onlyDependOnLibsWithTags": [
+                  "domain:persons-management",
+                  "domain:shared"
+                ]
               }
             ]
           }

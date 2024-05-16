@@ -1,0 +1,5 @@
+{
+  "name": "@angular-monorepo/persons-management/domain",
+  "version": "0.0.1",
+  "sideEffects": false
+}
