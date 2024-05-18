@@ -1,1 +1,1 @@
-export * from './lib/birthdays.component';
+export * from './lib/components/persons/persons-smart.component';

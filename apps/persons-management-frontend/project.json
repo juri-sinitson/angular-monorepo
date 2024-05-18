@@ -20,7 +20,7 @@
           "apps/persons-management-frontend/src/favicon.ico",
           "apps/persons-management-frontend/src/assets"
         ],
-        "styles": ["apps/persons-management/src/styles.scss"],
+        "styles": ["styles.scss"],
         "scripts": []
       },
       "configurations": {
