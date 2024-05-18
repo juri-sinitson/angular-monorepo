@@ -1,1 +1,1 @@
-export * from './lib/application/birthdays.facade';
+export * from './lib/interfaces/entities/person.interface';

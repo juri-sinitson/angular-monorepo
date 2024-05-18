@@ -1,6 +1,8 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Signal, computed, input } from '@angular/core';
 
+// PrimeNG
 import { DialogModule } from 'primeng/dialog';
+import { MessagesModule } from 'primeng/messages';
 
 // TODO! Adjust the project tags.
 // eslint-disable-next-line @nx/enforce-module-boundaries
@@ -12,18 +14,30 @@ import {
 // eslint-disable-next-line @nx/enforce-module-boundaries
 import { AbstractEntitiesListComponent } from '@angular-monorepo/shared/ui-common';
 
-// -- STEP 1: ADJUST THE ENTITY INTERFACE PATH! --
 // TODO! Adjust the project tags.
 // eslint-disable-next-line @nx/enforce-module-boundaries
-import { PersonInterface as EntityInterface } from '@angular-monorepo/shared-business/examples';
+import {   
+  Age,
+   PersonInterfaceComputed as EntityInterfaceComputed,
+   PersonInterface as EntityInterface,
+   BirthDate,
+} from '@angular-monorepo/persons-management/domain';
+
 import { PersonFormComponent as EntityFormComponent } from './person-form.component';
+import {  
+  DateAsString, 
+  daysToNexDue, 
+  getAgeInYears, 
+  getNextYearlyDue 
+} from '@angular-monorepo/shared/util-common';
 
 @Component({
-  selector: 'angular-monorepo-persons',
+  selector: 'persons-management-persons',
   standalone: true,
   imports: [
     // PrimeNG
     DialogModule,
+    MessagesModule,
 
     // Own
     BasicTableComponent,
@@ -31,41 +45,69 @@ import { PersonFormComponent as EntityFormComponent } from './person-form.compon
     EntityFormComponent,
   ],
   template: `
-    <common-common-wrapper
+    <h1>Birthdays of your friends</h1>
+    <common-common-wrapper data-testid="all-birthdays"
       [messages]="messages()"
       [isLoading]="isListLoading()"
-      [header]="header()"
-      [noData]="noData()"
+      [header]="'All birthdays'"
+      [noData]="noData()"      
     >
+       <!-- TODO! Add the general static message component to the catalogue -->
+       @if(areBirthdaysToday()) {
+        <p-messages severity="info" data-testid="todays-birthdays-message">
+          <ng-template pTemplate>
+            <div data-testid="info-29-february">
+              <b>NOTE!</b>
+              <p>
+                You have birthdays of your friends today!
+                See the list of todays birthdays below.
+              </p>
+            </div>
+          </ng-template>
+        </p-messages>  
+      }
       <common-basic-table
         [columns]="columns"
-        [data]="data()"
+        [data]="computedData()"
         [crud]="crud()"
         [isError]="isError()"
         (onDelete)="deleteHandler($event)"
         (onEdit)="editHandler($event)"
-        (onNew)="newHandler()"
+        (onNew)="newHandler()"        
       ></common-basic-table>
     </common-common-wrapper>
+    @if(areBirthdaysToday()) {
+      <common-common-wrapper data-testid="todays-birthdays" 
+        [header]="'Todays birthdays'" 
+      >
+        <common-basic-table          
+          [columns]="todaysBirthdaysColumns"
+          [data]="todaysBirthdays()"
+          [crud]="false"
+        ></common-basic-table>      
+      </common-common-wrapper>  
+    }      
     <!-- Generator template if CRUD is enabled -->
     @if (crud()) {
     <p-dialog
       [visible]="showEntityDialog()"
-      [style]="{ width: '450px' }"
+      [styleClass]="'w-23rem'"
       [modal]="true"
       [closable]="false"
       styleClass="p-fluid"
     >
       <ng-template pTemplate="content">
-        <angular-monorepo-person-form
+        <persons-management-person-form
           [data]="selectedEntity()"
+          [allData]="data()"
           [header]="'Person'"
-          [messages]="messages()"
+          [messages]="messages()"          
           [isLoading]="isFormLoading()"
+          [todaysDateAsString]="todaysDateAsString()"
           (onSubmit)="submitHandler($event)"
-          (onCancel)="cancelHandler()"
+          (onCancel)="cancelHandler()"          
         >
-        </angular-monorepo-person-form>
+        </persons-management-person-form>
       </ng-template>
     </p-dialog>
     }
@@ -73,19 +115,65 @@ import { PersonFormComponent as EntityFormComponent } from './person-form.compon
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PersonsComponent extends AbstractEntitiesListComponent<PersonInterface> {
-  protected override getColumns(): Array<[keyof EntityInterface, string]> {
-    // -- STEP 2: ADJUST THE COLUMNS NAMES AND THE SEQUENCE!
+export class PersonsComponent extends AbstractEntitiesListComponent
+  <EntityInterfaceComputed, EntityInterface> {
+    
+  todaysDateAsString = input.required<DateAsString>();
+
+  computedData: Signal<EntityInterfaceComputed[]> = computed(() => 
+    this.data()
+      .map((item) => {      
+        const today: Date = new Date(this.todaysDateAsString());
+        const age: Age = item.birthYear ? `${getAgeInYears(today, item.birthYear)}` : '-';
+                        
+        const nextBirthday: Date = getNextYearlyDue(today, item.birthMonth, item.birthDay);
+        const daysToBirthday: number = daysToNexDue(today, nextBirthday);
+        
+        const birthDay = item.birthDay < 10 ? `0${item.birthDay}` : `${item.birthDay}`;
+        const birthMonth = item.birthMonth < 10 ? `0${item.birthMonth}` : `${item.birthMonth}`;
+        
+        const birthDate: BirthDate = item.birthYear ? `${birthDay}.${birthMonth}.${item.birthYear}` 
+          : `${birthDay}.${birthMonth}`;
+
+        return {
+          ...item,
+          birthDate,
+          age,
+          daysToBirthday 
+        };
+      })
+      .sort((a, b) => a.daysToBirthday - b.daysToBirthday)
+      .map((item) => ({...item,
+        daysToBirthday: item.daysToBirthday === 0 ? 'today!' : item.daysToBirthday
+      }))      
+  );
+  
+  todaysBirthdays: Signal<EntityInterfaceComputed[]> = computed(() => {
+    const today: Date = new Date(this.todaysDateAsString());
+    return this.computedData().filter((item) => {
+      const nextBirthday: Date = getNextYearlyDue(today, item.birthMonth, item.birthDay);
+      return daysToNexDue(today, nextBirthday) === 0;
+    });
+  });
+
+  areBirthdaysToday: Signal<boolean> = computed(() => this.todaysBirthdays().length > 0);
+
+  protected override getColumns(): Array<[keyof EntityInterfaceComputed, string]> {    
     // Adjusting the columns names and the sequence
-    return [
+    return [    
+      // Original columns
       ['name', 'Name'],
-      ['category', 'Category'],
-      ['description', 'Description'],
-      ['inventoryStatus', 'Status'],
-      ['code', 'Code'],
-      ['price', 'Price'],
-      ['quantity', 'Quantity'],
-      ['rating', 'Rating'],
+      ['surname', 'Surname'],
+      // Computed columns
+      ['birthDate', 'Birthday'],      
+      ['age', 'Age'],
+      ['daysToBirthday', 'Days until'],
     ];
   }
+
+  readonly todaysBirthdaysColumns: Array<[keyof EntityInterfaceComputed, string]> 
+    = this.getColumns()
+      .filter((column) => 
+        column[0] === 'name' || column[0] === 'surname' || column[0] === 'age'
+      );
 }

@@ -2,26 +2,26 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 
 // TODO! Adjust the project tags.
 // eslint-disable-next-line @nx/enforce-module-boundaries
-// -- STEP 1: adjust the entity service path
-import { PersonEntityStoreService as EntityStoreService } from '@angular-monorepo/shared-business/examples';
+import { PersonEntityStoreService as EntityStoreService } from '@angular-monorepo/persons-management-api-persons';
 import { PersonsComponent as EntityComponent } from './persons.component';
 
 const entityHeader = 'Persons';
 
 @Component({
-  selector: 'angular-monorepo-persons-smart',
+  selector: 'persons-management-persons-smart',
   standalone: true,
   imports: [EntityComponent],
   providers: [EntityStoreService],
   template: `
     <div data-testid="persons-feature">
-      <angular-monorepo-persons
+      <persons-management-persons
         [data]="entityService.entities()"
         [isLoading]="!!entityService.isLoading()"
         [messages]="entityService.messages()"
         [noData]="entityService.noData()"
         [header]="header"
         [crud]="true"
+        [todaysDateAsString]="entityService.currentDate()"
         [selectedEntity]="entityService.selectedEntity()"
         [isNewBeforeSubmitBeingEdited]="entityService.isNewEntityBeingEdited()"
         [isError]="entityService.isError()"
@@ -32,7 +32,7 @@ const entityHeader = 'Persons';
         (onEdit)="entityService.selectEntityId($event)"
         (onCancel)="entityService.resetSelectedEntity()"
       >
-      </angular-monorepo-persons>
+      </persons-management-persons>
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

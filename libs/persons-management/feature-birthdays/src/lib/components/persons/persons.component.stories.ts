@@ -1,4 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { expect } from '@storybook/test';
+
 import {
   applicationConfig,
   type Meta,
@@ -11,11 +13,12 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { PersonsComponent as EntitiesComponent } from './persons.component';
 // TODO: Adjust the project tags.
 // eslint-disable-next-line @nx/enforce-module-boundaries
-import { PersonInterface as EntityInterface } from '@angular-monorepo/shared-business/examples';
+import { PersonInterface as EntityInterface } from '@angular-monorepo/persons-management/domain';
 // eslint-disable-next-line @nx/enforce-module-boundaries
 import {
+  DateAsString,
   MessageInterface,
-  commonAppConfig,
+  rootComponentConfigBase as commonAppConfig,
 } from '@angular-monorepo/shared/util-common';
 // eslint-disable-next-line @nx/enforce-module-boundaries
 import {
@@ -27,76 +30,71 @@ import {
   ConfirmNotImplementedWrapperComponent,
   primaryTableStory,
   getCanvas,
-  expectNoElem,
+  expectNoElem,  
+  getSubCanvasByTestId,
+  expectElem,
+  countElemsByText,
 } from '@angular-monorepo/shared/util-common-non-prod';
 
+const header = 'Birthdays of your friends';
+const todaysDate: DateAsString = '2024-03-15';
+
 const entitiesList: EntityInterface[] =
-  // -- STEP 1: Adjust the example data
-  // TIP: you can use copilot or similar AI-solution for this
-  // by providing the entity interface to the AI and telling
-  // to adjust this file to that entity interface for you.
   [
     {
-      id: '1001',
-      code: 'abc123',
-      name: 'T-Shirt',
-      description: 'Person Description',
-      price: 20,
-      category: 'Clothing',
-      quantity: 50,
-      inventoryStatus: 'INSTOCK',
-      rating: 4,
+      id: '1006',
+      name: 'John',
+      surname: 'Doe',
+      birthDay: 15,
+      birthMonth: 6,
+      birthYear: 1990,
     },
     {
-      id: '1002',
-      code: 'def456',
-      name: 'Jeans',
-      description: 'Person Description',
-      price: 50,
-      category: 'Clothing',
-      quantity: 30,
-      inventoryStatus: 'INSTOCK',
-      rating: 5,
+      id: '1007',
+      name: 'Jane',
+      surname: 'Smith',
+      birthDay: 10,
+      birthMonth: 9,
+      birthYear: 1985,
     },
     {
-      id: '1003',
-      code: 'ghi789',
-      name: 'Shoes',
-      description: 'Person Description',
-      price: 80,
-      category: 'Footwear',
-      quantity: 20,
-      inventoryStatus: 'INSTOCK',
-      rating: 4.5,
+      id: '1010',
+      name: 'David',
+      surname: 'Jackson',
+      birthDay: 17,
+      birthMonth: 3,
+    },    
+    {
+      id: '1008',
+      name: 'Michael',
+      surname: 'Johnson',
+      birthDay: 16,
+      birthMonth: 3,
+      birthYear: 1995,
     },
     {
-      id: '1004',
-      code: 'h456wer53',
-      name: 'Bracelet',
-      description: 'Person Description',
-      price: 15,
-      category: 'Accessories',
-      quantity: 73,
-      inventoryStatus: 'INSTOCK',
-      rating: 4,
+      id: '1009',
+      name: 'Sarah',
+      surname: 'Williams',
+      birthDay: 12,
+      birthMonth: 7,
     },
-    {
-      id: '1005',
-      code: 'jkl012',
-      name: 'Hat',
-      description: 'Person Description',
-      price: 10,
-      category: 'Clothing',
-      quantity: 100,
-      inventoryStatus: 'INSTOCK',
-      rating: 3.5,
-    },
-  ];
+  ];  
 
-const header = 'Person';
+const withTodaysBirthdays = (): EntityInterface[] => {
+  const temp = entitiesList.map(entity => ({...entity}));
+  return temp.map((entity, index) => {
+    if(index > 2) {
+      entity.birthDay = 15;
+      entity.birthMonth = 3;
+    }
+    return entity;
+  });
+}
+
 
 @Component({
-  selector: 'angular-monorepo-persons-test-wrapper',
+  selector: 'persons-management-persons-test-wrapper',
   standalone: true,
   providers: [ConfirmationService],
   imports: [
@@ -107,7 +105,8 @@ const header = 'Person';
     EntitiesComponent,
   ],
   template: `
-    <angular-monorepo-persons
+    <persons-management-persons
+      [todaysDateAsString]="todaysDateAsString"
       [data]="data"
       [messages]="messages"
       [isLoading]="isLoading"
@@ -120,12 +119,13 @@ const header = 'Person';
       (onNew)="crudOperationHandler('Data submitting')"
       (onUpdate)="crudOperationHandler('Data submission')"
     >
-    </angular-monorepo-persons>
-    <p-confirmDialog [style]="{ maxWidth: '450px' }"></p-confirmDialog>
+    </persons-management-persons>
+    <p-confirmDialog [styleClass]="'w-23rem'"></p-confirmDialog>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EntityWrapperComponent extends ConfirmNotImplementedWrapperComponent {
+  todaysDateAsString = todaysDate;
   @Input() data: EntityInterface[] = [];
   @Input() messages: MessageInterface[] = [];
   @Input() isLoading = false;
@@ -136,58 +136,94 @@ export class EntityWrapperComponent extends ConfirmNotImplementedWrapperComponen
 const meta: Meta<EntityWrapperComponent> = {
   component: EntityWrapperComponent,
   decorators: [applicationConfig({ ...commonAppConfig })],
-  // -- STEP 2: Adjust the title for the storybook to place in the
-  // correct place of the components tree
-  title: 'shared-business/feature-examples/Person',
+  title: 'persons-management/feature-birthdays/Persons',
 };
 export default meta;
 type Story = StoryObj<EntityWrapperComponent>;
 
-const expectCols = async (canvas: HTMLElement) => {
-  // -- STEP 3: Adjust the columns --
+const expectCols = async (canvas: HTMLElement) => {  
   await expectText('Name', canvas);
-  await expectText('Category', canvas);
-  await expectText('Description', canvas);
-  await expectText('Status', canvas);
-  await expectText('Code', canvas);
-  await expectText('Price', canvas);
-  await expectText('Quantity', canvas);
-  await expectText('Rating', canvas);
+  await expectText('Surname', canvas);
+  await expectText('Birthday', canvas);
+  await expectText('Age', canvas);
+  await expectText('Days until', canvas);
 };
 
 const expectValues = async (canvas: HTMLElement) => {
-  // -- STEP 4: Adjust the values for the first row --
-  await expectText('T-Shirt', canvas);
-  await getFirstElemByText('Clothing', canvas);
-  await getFirstElemByText('Person Description', canvas);
-  await getFirstElemByText('INSTOCK', canvas);
-  await expectText('abc123', canvas);
-  await getFirstElemByText('20', canvas);
-  await getFirstElemByText('50', canvas);
-  await getFirstElemByText('4', canvas);
+  
+  await expectText('John', canvas);
+  await getFirstElemByText('Doe', canvas);
+  await getFirstElemByText('15.06.1990', canvas);
+  await getFirstElemByText('34', canvas);
+  await getFirstElemByText('92', canvas);
 
-  // -- STEP 5: Adjust the values for the second row --
-  await expectText('Jeans', canvas);
-  await getFirstElemByText('Clothing', canvas);
-  await getFirstElemByText('Person Description', canvas);
-  await getFirstElemByText('INSTOCK', canvas);
-  await expectText('def456', canvas);
-  await getFirstElemByText('50', canvas);
-  await getFirstElemByText('30', canvas);
-  await getFirstElemByText('5', canvas);
+  await expectText('David', canvas);
+  await getFirstElemByText('Jackson', canvas);
+  await getFirstElemByText('17.03', canvas);
+  await getFirstElemByText('-', canvas);
+  await getFirstElemByText('2', canvas);
+
+  await expectText('Jane', canvas);
+  await getFirstElemByText('Smith', canvas);
+  await getFirstElemByText('10.09.1985', canvas);
+  await getFirstElemByText('39', canvas);
+  await getFirstElemByText('179', canvas);
 };
 
 export const Primary: Story = {
   args: { ...primaryTableStory.args, data: entitiesList, header },
   play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
-    const canvas = getCanvas(canvasElement);
+    const parentCanvas = getCanvas(canvasElement);
+    const canvas = await getSubCanvasByTestId('all-birthdays', parentCanvas, );
 
     await expectCols(canvas);
     await expectValues(canvas);
 
+    // WE don't expect todays birthdays
+    await expectNoElem('todays-birthdays', parentCanvas);
+    await expectNoElem('todays-birthdays-message', canvas);
+
+    // No loading, error, etc.
     await expectNoElem('loading', canvas);
     await expectNoElem('messages', canvas);
     await expectNoElem('no-data', canvas);
+  },
+};
+
+export const todaysBirthdays: Story = {
+  args: { ...primaryTableStory.args, 
+    data: withTodaysBirthdays(), 
+    header,
+  },
+  play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
+    const parentCanvas = getCanvas(canvasElement);
+    const allBirthDaysCanvas = await getSubCanvasByTestId('all-birthdays', parentCanvas, );
+    const todaysBirthdaysCanvas = await getSubCanvasByTestId('todays-birthdays', parentCanvas, );
+
+    await expectCols(allBirthDaysCanvas);
+    await expectValues(allBirthDaysCanvas);
+
+    // WE expect todays birthdays
+    await expectElem('todays-birthdays-message', allBirthDaysCanvas);
+    await expect(await countElemsByText('today!', allBirthDaysCanvas)).toBe(2);
+    await expectElem('todays-birthdays', parentCanvas);
+    
+    await expectText('Name', todaysBirthdaysCanvas);
+    await expectText('Surname', todaysBirthdaysCanvas)    
+    await expectText('Age', todaysBirthdaysCanvas);
+
+    await getFirstElemByText('Sarah', todaysBirthdaysCanvas);
+    await getFirstElemByText('Williams', todaysBirthdaysCanvas);
+    await getFirstElemByText('-', todaysBirthdaysCanvas);
+
+    await getFirstElemByText('Michael', todaysBirthdaysCanvas);
+    await getFirstElemByText('Johnson', todaysBirthdaysCanvas);
+    await getFirstElemByText('29', todaysBirthdaysCanvas);
+
+    // No loading, error, etc.
+    await expectNoElem('loading', parentCanvas);
+    await expectNoElem('messages', parentCanvas);
+    await expectNoElem('no-data', parentCanvas);
   },
 };
 
