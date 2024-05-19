@@ -10,7 +10,7 @@ export default defineConfig({
         default: 'nx run persons-management-frontend:serve:development',
         production: 'nx run persons-management-frontend:serve:production',
       },
-      ciWebServerCommand: 'nx run persons-management-frontend:serve-static',
+      ciWebServerCommand: 'nx run persons-management-frontend:serve:production',
     }),
     baseUrl: 'http://localhost:4200',
   },
