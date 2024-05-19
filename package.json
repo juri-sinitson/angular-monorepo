@@ -14,6 +14,7 @@
     "ci:e2e": "pnpm start-server-and-test ci:helper:start-backend http://localhost:3000 ci:helper:e2e",
     "ci:helper:storybook": "pnpm storybook -- --ci",
     "ci:helper:test-storybook": "pnpm exec jest --clearCache -u && NX_BRANCH=$(git branch --show-current) pnpm nx affected -t test-storybook --parallel --url http://localhost:4400",
+    "test-storybook-jest-clean": "pnpm nx affected -t test-storybook -- -u",
     "ci:test-storybook": "pnpm start-server-and-test ci:helper:storybook http://localhost:4400 ci:helper:test-storybook",
     "spot-check": "bash ./spot-check.sh",
     "container:stop": "docker-compose rm -fsv container",
