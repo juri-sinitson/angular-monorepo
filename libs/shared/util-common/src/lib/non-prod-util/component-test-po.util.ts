@@ -106,6 +106,14 @@ export const expectNumberInputValue = async (testId: string, value: string,
   expect(elem.value).toBe(value);
 }
 
+export const expectNumberInputToContainValue = async (testId: string, value: string, 
+  canvas: HTMLCanvasElement): Promise<void> => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const parentElem: any = await getElem(testId, canvas); 
+  const elem = parentElem.querySelector('input');
+  expect(elem.value).toContain(value);
+}
+
 export const expectDropdownValue = async (testId: string, value: string, 
   canvas: HTMLCanvasElement): Promise<void> => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

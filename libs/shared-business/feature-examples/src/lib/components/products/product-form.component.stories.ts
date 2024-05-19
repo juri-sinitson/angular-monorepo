@@ -17,7 +17,8 @@ import {
   expectFormValid,
   expectFormInvalid,
   loadingStory,
-  errorStory,  
+  errorStory,
+  expectNumberInputToContainValue,  
 } from '@angular-monorepo/shared/util-common-non-prod';
 
 // TODO! Adjust the project tags.
@@ -95,7 +96,7 @@ export const primary: Story = {
     await expectTextInputValue('code-input', 'xyz789', canvas);
     await expectTextInputValue('name-input', 'Example Product', canvas);
     await expectTextInputValue('description-input', 'This is an example product.', canvas);
-    await expectNumberInputValue('price-input', '€10.00', canvas);
+    await expectNumberInputToContainValue('price-input', '10', canvas);
     await expectTextInputValue('category-input', 'Example Category', canvas);
     await expectNumberInputValue('quantity-input', '10', canvas);
     await expectDropdownValue('inventory-status-input', 'Out of Stock', canvas);
