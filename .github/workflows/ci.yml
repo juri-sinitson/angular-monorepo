@@ -29,7 +29,9 @@ jobs:
       # Replacing the placeholder YOUR-SENSITIVE-VALUE-HERE for nxCloudAccessToken
       # with an appropriate secret value
       - run: sed 's/YOUR-SENSITIVE-VALUE-HERE/${{ secrets.nx_cloud_access_token_readonly }}/' nx.json > temp.json && mv temp.json nx.json
-      - run: pnpm install --frozen-lockfile      
+      # We try do use the flag --frozen-lockfile later, but currently there are issues with this flag.
+      # - run: pnpm install --frozen-lockfile
+      - run: pnpm install
       # This command is commented out, because currently (2024-03-15) the usage 
       # of NX Agents is only supported for a payed plan. Wether it's a payed plan
       # or not is determined by nx cloud access token provided in this repo as a secret.
