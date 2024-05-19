@@ -3,35 +3,41 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "start-frontend": "nx serve examples-frontend",
+    "start-frontend": "nx serve persons-management-frontend",
     "start-frontend:container": "nx serve examples-frontend --host=0.0.0.0",
-    "start-combined": "start-server-and-test helper:start-backend http://localhost:3000 start-frontend",
-    "start-backend": "pnpm build-backend && pnpm helper:start-backend",
-    "start-backend:container": "HOST='0.0.0.0' PORT=3000 node dist/apps/central-backend/main",
-    "build-backend": "nx run central-backend:build",
     "build-frontend": "nx run examples-frontend:build:production",
-    "helper:start-backend": "node dist/apps/central-backend/main",
-    "storybook-alt": "NODE_ENV=development pnpm nx run non-prod-storybook:storybook",
+    
+    "start-backend": "pnpm build-backend && pnpm start-backend-directly",
+    "start-backend:container": "HOST='0.0.0.0' PORT=3000 pnpm build-backend && pnpm start-backend-directly",    
+    "build-backend": "nx run central-backend:build",
+    "start-backend-directly": "node dist/apps/central-backend/main",    
+    
     "storybook": "nx run non-prod-storybook:storybook",
+    "storybook-alt": "NODE_ENV=development pnpm storybook",
     "storybook:container": "nx run non-prod-storybook:storybook --host=0.0.0.0 --ci",
     "test-storybook": "jest --clearCache -u && nx affected -t test-storybook --parallel --url http://localhost:4400",
-    "test-storybook+clean": "jest --clearCache -u && nx affected -t test-storybook -u",
+    "test-storybook+clean": "jest --clearCache -u && nx affected -t test-storybook -u",            
+    
     "unit-test": "jest --clearCache -u && nx affected -t test --parallel",
     "e2e": "nx affected -t e2e --parallel",
     "lint": "nx affected -t lint",
     "build": "nx affected -t build",
+    
     "depgraph": "pnpm exec nx affected:graph",
     "depgraph:container": "pnpm exec nx affected:graph --host=0.0.0.0",
+
     "spot-check": "bash ./spot-check.sh",
+    
     "ci:helper:wait-for-storybook": "until curl --output /dev/null --silent --head --fail http://localhost:4400; do echo \"Waiting for storybook...\"; sleep 1; done;",
     "ci:storybook": "pnpm storybook -- --ci > /dev/null 2>&1 &",
     "ci:test-storybook": "pnpm ci:helper:wait-for-storybook && jest --clearCache -u && NX_BRANCH=$(git branch --show-current) pnpm nx affected -t test-storybook --parallel --url http://localhost:4400",
     "ci:kill-storybook": "lsof -ti :4400 | xargs kill -9 > /dev/null",
     "ci:helper:wait-for-backend": "until curl --output /dev/null --silent --head --fail http://localhost:3000; do echo \"Waiting for backend...\"; sleep 1; done;",
-    "ci:start-backend": "pnpm run helper:start-backend > /dev/null &",
+    "ci:start-backend": "pnpm run start-backend > /dev/null &",
     "ci:e2e": "pnpm ci:helper:wait-for-backend && NX_BRANCH=$(git branch --show-current) pnpm nx affected -t e2e --parallel",
     "ci:kill-backend": "lsof -ti :3000 | xargs kill -9 > /dev/null",
     "ci:lint-test-build": "NX_BRANCH=$(git branch --show-current) pnpm nx affected -t lint test build --parallel",
+    
     "container:start": "docker-compose up -d container",
     "container:stop": "docker-compose down",
     "container:remove": "docker-compose rm -fsv container",
@@ -39,6 +45,7 @@
     "container:rebuild": "pnpm container:stop && docker build -t frontend-juri-sinitson/image:dev --no-cache . && docker image prune -f",
     "container:enter": "pnpm container:start && docker-compose exec container bash",
     "container:exec": "pnpm container:start && docker-compose exec container bash -c",
+    
     "experimental:lint-test-build": "pnpm container:exec -- \"NX_CLOUD_ACCESS_TOKEN=$(cat nx-cloud-access-token) pnpm ci:lint-test-build\"",
     "experimental:e2e": "pnpm container:exec -- \"NX_CLOUD_ACCESS_TOKEN=$(cat nx-cloud-access-token) pnpm ci:e2e\"",
     "experimental:test-storybook": "pnpm container:exec -- \"NX_CLOUD_ACCESS_TOKEN=$(cat nx-cloud-access-token) pnpm ci:test-storybook\""

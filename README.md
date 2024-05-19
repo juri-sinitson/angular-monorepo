@@ -1,5 +1,25 @@
 <!-- TOC start (generated with https://github.com/derlin/bitdowntoc) -->
 
+- [READ THIS FIRST](#read-this-first)
+  - [Setup: Single steps](#setup-single-steps)
+  - [Execution: Single steps](#execution-single-steps)
+    - [On the host (recommended for the current Ubuntu LTS)](#on-the-host-recommended-for-the-current-ubuntu-lts)
+      - [Start the app](#start-the-app)
+      - [Start Storybook](#start-storybook)
+      - [Storybook Interaction Tests](#storybook-interaction-tests)
+        - [NOTE!](#note)
+      - [Unit tests](#unit-tests)
+      - [E2E](#e2e)
+      - [Lint](#lint)
+      - [Build](#build)
+      - [Dependency Graph](#dependency-graph)
+    - [Execution in a Docker container](#execution-in-a-docker-container)
+      - [NOTE!](#note-1)
+  - [Limitations](#limitations)
+    - [General](#general)
+    - [Docker](#docker)
+  - [Important notes](#important-notes)
+  - [Other notes](#other-notes)
 - [What is this repo for?](#what-is-this-repo-for)
 - [Is a monorepo an evil?](#is-a-monorepo-an-evil)
 - [You're talking about angular here, what about other frameworks?](#youre-talking-about-angular-here-what-about-other-frameworks)
@@ -12,7 +32,7 @@
   - [Own additions](#own-additions)
 - [Architecture](#architecture)
   - [Main Goals](#main-goals)
-  - [General](#general)
+  - [General](#general-1)
   - [Own additions/modifications](#own-additionsmodifications)
     - [UI](#ui)
     - [UI: Stylesheets](#ui-stylesheets)
@@ -29,7 +49,7 @@
       - [How to handle side effects in the unit tests?](#how-to-handle-side-effects-in-the-unit-tests)
       - [How to handle side effects in E2E?](#how-to-handle-side-effects-in-e2e)
     - [State Management](#state-management)
-    - [Unit tests](#unit-tests)
+    - [Unit tests](#unit-tests-1)
     - [E2E tests and Storybook interaction tests](#e2e-tests-and-storybook-interaction-tests)
     - [How deal with manual tests?](#how-deal-with-manual-tests)
       - [Short answer](#short-answer)
@@ -55,7 +75,7 @@
 - [Update](#update)
   - [Additions](#additions)
 - [Generated documentation](#generated-documentation)
-  - [Start the app](#start-the-app)
+  - [Start the app](#start-the-app-1)
   - [Generate code](#generate-code)
   - [Running tasks](#running-tasks)
   - [Want better Editor Integration?](#want-better-editor-integration)
@@ -64,6 +84,100 @@
   - [Connect with us!](#connect-with-us)
 
 <!-- TOC end -->
+
+# READ THIS FIRST
+## Setup: Single steps
+1. Install the current stable NodeJS and git. In case of Windows 10 (probably also 11)  
+   GitBash is also needed (it's usually included in the git installation for Windows).
+2. Install Docker (for the current Ubuntu LTS it's optional)
+3. Install pnpm with `npm install -g pnpm`, with `pnpm --version` make sure it's there.
+4. `git clone https://github.com/freitagh2/persons-management-feature-birthdays.git`
+5. `code persons-management-feature-birthdays` or `cd persons-management-feature-birthdays`
+6. You should be now on the branch `main`, so go the branch of the feature  with `git switch persons-management-feature-birthdays`
+7. `pnpm install`
+8. `cp nx.json.dist nx.json`. Put an [access token](https://nx.dev/ci/recipes/security/access-tokens) there if you have got one. If you like, you can obtain one [here](nx.app). Otherwise
+   replace the string `YOUR-SENSITIVE-VALUE-HERE` with an empty one.
+9.  `cp nx-cloud-access-token.dist nx-cloud-access-token`. If you have an 
+   [access token](https://nx.dev/ci/recipes/security/access-tokens), put it to 
+   the file you just created, otherwise leave the file empty.
+10. If you decided to use Docker:
+    >1. `pnpm container:rebuild`
+    >2. `pnpm container:enter`
+    >3. `pnpm install`, if you want to execute the commands in the container
+    > you can stay in this container terminal or execute `exit` if you to leave that 
+    terminal for now.   
+
+## Execution: Single steps
+### On the host (recommended for the current Ubuntu LTS)
+
+#### Start the app
+1. Start the backend with `pnpm start-backend`
+2. Start the frontend with `pnpm start-frontend`.
+
+#### Start Storybook
+1. `pnpm storybook`
+
+#### Storybook Interaction Tests
+Start storybook, then execute `pnpm test-storybook`.
+Most probably it will fail because of missing installation fist time.
+In this case follow the instructions in the terminal.
+
+##### NOTE!
+Due to issues with the Jest artifacts storybook tests may return an error
+although they all pass. This is caused by warnings about Jest artifacts.
+In this case execute `pnpm test-storybook+clean` (even if it has errors
+it still cleans). Then reexecute `pnpm test-storybook`, now all the 
+tests will have no Jest warnings any more.
+
+#### Unit tests
+`pnpm unit-test`
+
+#### E2E
+`pnpm start-backend` and then `pnpm e2e`
+
+#### Lint
+`pnpm lint`
+
+#### Build
+`pnpm build-frontend` or `pnpm build` if you want to build all the apps and
+libraries affected.
+
+#### Dependency Graph
+`pnpm depgraph`
+
+### Execution in a Docker container
+In this case you need to enter the terminal of the container with the command `pnpm container:enter` first. The commands to start the backend, frontend, storybook and depgraph should be infixed with `:container`, e.g. `pnpm start-backend:container` instead of
+`pnpm start-backend`. The ports of the infixed commands above are
+forwarded to the host, so you can access e.g. `localhost:4200` for
+the app served from the browser of your host.
+
+#### NOTE!
+The command `pnpm depgraph:container` seems to execute with no issues in a docker container,
+however the the server it starts is not accessible on the host most probably
+due to some issues.
+
+## Limitations
+### General
+1. Some interactions in storybook fail from time to time
+   when you browse the stories. If this happens, just reload the page.
+   Such spontaneous failures don't seem to occur on CI or when 
+   executed in a terminal.
+
+### Docker
+1. There is currently no cache for `node_modules`. You might need to 
+   reinstall them even if you didn't down shut down the container.
+
+## Important notes
+The info above should be usually enough to execute the most important commands.
+You can read the section "Other notes" directly below if you want and omit the rest of this 
+documentation.
+
+## Other notes
+1. The commands shown above are the basic ones (you need both the feature branch 
+   and the main branch to execute them).
+   If you want to know all the variants and the structure of the commands in an 
+   nx monorepo, either read this documentation further or visit [this](nx.dev) and 
+   optionally [this](nx.app).
 
 <!-- TOC --><a name="what-is-this-repo-for"></a>
 # What is this repo for?
