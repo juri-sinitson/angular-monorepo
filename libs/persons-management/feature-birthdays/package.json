@@ -1,5 +1,5 @@
 {
-  "name": "@angular-monorepo/persons-management/feature-birthdays",
+  "name": "@angular-monorepo/persons-management-feature-birthdays",
   "version": "0.0.1",
   "sideEffects": false
 }

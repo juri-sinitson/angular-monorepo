@@ -2,9 +2,9 @@
   "name": "persons-management-feature-birthdays",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/persons-management/feature-birthdays/src",
-  "prefix": "persons-management",
+  "prefix": "lib",
   "projectType": "library",
-  "tags": ["domain:persons-management", "type:feature"],
+  "tags": [],
   "targets": {
     "build": {
       "executor": "@nx/angular:ng-packagr-lite",
@@ -31,41 +31,6 @@
     },
     "lint": {
       "executor": "@nx/eslint:lint"
-    },
-    "storybook": {
-      "executor": "@storybook/angular:start-storybook",
-      "options": {
-        "port": 4400,
-        "configDir": "libs/persons-management/feature-birthdays/.storybook",
-        "browserTarget": "persons-management-feature-birthdays:build-storybook",
-        "compodoc": false
-      },
-      "configurations": {
-        "ci": {
-          "quiet": true
-        }
-      }
-    },
-    "build-storybook": {
-      "executor": "@storybook/angular:build-storybook",
-      "outputs": ["{options.outputDir}"],
-      "options": {
-        "outputDir": "dist/storybook/persons-management-feature-birthdays",
-        "configDir": "libs/persons-management/feature-birthdays/.storybook",
-        "browserTarget": "persons-management-feature-birthdays:build-storybook",
-        "compodoc": false
-      },
-      "configurations": {
-        "ci": {
-          "quiet": true
-        }
-      }
-    },
-    "test-storybook": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "test-storybook -c libs/persons-management/feature-birthdays/.storybook --url=http://localhost:4400"
-      }
     }
   }
 }

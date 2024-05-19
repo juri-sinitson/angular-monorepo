@@ -10,6 +10,8 @@ import { personsUrl as entitiesUrl } from './urls';
 // TODO: adjust the project tags
 // eslint-disable-next-line @nx/enforce-module-boundaries
 import { MessageInterface } from '@angular-monorepo/shared/util-common';
+// TODO: adjust the project tags
+// eslint-disable-next-line @nx/enforce-module-boundaries
 import { PersonInterface as EntityInterface } from '@angular-monorepo/persons-management/domain';
 
 // Consciously duplicating this utility function 

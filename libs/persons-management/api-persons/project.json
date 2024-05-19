@@ -2,13 +2,9 @@
   "name": "persons-management-api-persons",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/persons-management/api-persons/src",
-  "prefix": "person",
+  "prefix": "lib",
   "projectType": "library",
-  "tags": [
-    "domain:persons-management",
-    "domain:persons-management/api-person",
-    "type:api"
-  ],
+  "tags": [],
   "targets": {
     "build": {
       "executor": "@nx/angular:ng-packagr-lite",

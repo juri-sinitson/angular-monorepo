@@ -1,6 +1,6 @@
 {
   "extends": ["../../../.eslintrc.json"],
-  "ignorePatterns": ["!**/*", "storybook-static"],
+  "ignorePatterns": ["!**/*"],
   "overrides": [
     {
       "files": ["*.ts"],
@@ -13,7 +13,7 @@
           "error",
           {
             "type": "attribute",
-            "prefix": "personsManagement",
+            "prefix": "lib",
             "style": "camelCase"
           }
         ],
@@ -36,8 +36,8 @@
       "files": ["*.json"],
       "parser": "jsonc-eslint-parser",
       "rules": {
-        "@nx/dependency-checks": "off"        
-      } 
+        "@nx/dependency-checks": "off"
+      }
     }
   ]
 }

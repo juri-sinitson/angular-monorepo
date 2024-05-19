@@ -30,7 +30,7 @@ import {
   ConfirmNotImplementedWrapperComponent,
   primaryTableStory,
   getCanvas,
-  expectNoElem,  
+  expectNoElem,
   getSubCanvasByTestId,
   expectElem,
   countElemsByText,
@@ -39,59 +39,57 @@ import {
 const header = 'Birthdays of your friends';
 const todaysDate: DateAsString = '2024-03-15';
 
-const entitiesList: EntityInterface[] =
-  [
-    {
-      id: '1006',
-      name: 'John',
-      surname: 'Doe',
-      birthDay: 15,
-      birthMonth: 6,
-      birthYear: 1990,
-    },
-    {
-      id: '1007',
-      name: 'Jane',
-      surname: 'Smith',
-      birthDay: 10,
-      birthMonth: 9,
-      birthYear: 1985,
-    },
-    {
-      id: '1010',
-      name: 'David',
-      surname: 'Jackson',
-      birthDay: 17,
-      birthMonth: 3,
-    },    
-    {
-      id: '1008',
-      name: 'Michael',
-      surname: 'Johnson',
-      birthDay: 16,
-      birthMonth: 3,
-      birthYear: 1995,
-    },
-    {
-      id: '1009',
-      name: 'Sarah',
-      surname: 'Williams',
-      birthDay: 12,
-      birthMonth: 7,
-    },
-  ];  
+const entitiesList: EntityInterface[] = [
+  {
+    id: '1006',
+    name: 'John',
+    surname: 'Doe',
+    birthDay: 15,
+    birthMonth: 6,
+    birthYear: 1990,
+  },
+  {
+    id: '1007',
+    name: 'Jane',
+    surname: 'Smith',
+    birthDay: 10,
+    birthMonth: 9,
+    birthYear: 1985,
+  },
+  {
+    id: '1010',
+    name: 'David',
+    surname: 'Jackson',
+    birthDay: 17,
+    birthMonth: 3,
+  },
+  {
+    id: '1008',
+    name: 'Michael',
+    surname: 'Johnson',
+    birthDay: 16,
+    birthMonth: 3,
+    birthYear: 1995,
+  },
+  {
+    id: '1009',
+    name: 'Sarah',
+    surname: 'Williams',
+    birthDay: 12,
+    birthMonth: 7,
+  },
+];
 
 const withTodaysBirthdays = (): EntityInterface[] => {
-  const temp = entitiesList.map(entity => ({...entity}));
+  const temp = entitiesList.map((entity) => ({ ...entity }));
   return temp.map((entity, index) => {
-    if(index > 2) {
+    if (index > 2) {
       entity.birthDay = 15;
       entity.birthMonth = 3;
     }
     return entity;
   });
-}
-
+};
 
 @Component({
   selector: 'persons-management-persons-test-wrapper',
@@ -141,7 +139,7 @@ const meta: Meta<EntityWrapperComponent> = {
 export default meta;
 type Story = StoryObj<EntityWrapperComponent>;
 
-const expectCols = async (canvas: HTMLElement) => {  
+const expectCols = async (canvas: HTMLElement) => {
   await expectText('Name', canvas);
   await expectText('Surname', canvas);
   await expectText('Birthday', canvas);
@@ -150,7 +148,6 @@ const expectCols = async (canvas: HTMLElement) => {
 };
 
 const expectValues = async (canvas: HTMLElement) => {
-  
   await expectText('John', canvas);
   await getFirstElemByText('Doe', canvas);
   await getFirstElemByText('15.06.1990', canvas);
@@ -174,7 +171,7 @@ export const Primary: Story = {
   args: { ...primaryTableStory.args, data: entitiesList, header },
   play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
     const parentCanvas = getCanvas(canvasElement);
-    const canvas = await getSubCanvasByTestId('all-birthdays', parentCanvas, );
+    const canvas = await getSubCanvasByTestId('all-birthdays', parentCanvas);
 
     await expectCols(canvas);
     await expectValues(canvas);
@@ -191,14 +188,17 @@ export const Primary: Story = {
 };
 
 export const todaysBirthdays: Story = {
-  args: { ...primaryTableStory.args, 
-    data: withTodaysBirthdays(), 
-    header,
-  },
+  args: { ...primaryTableStory.args, data: withTodaysBirthdays(), header },
   play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
     const parentCanvas = getCanvas(canvasElement);
-    const allBirthDaysCanvas = await getSubCanvasByTestId('all-birthdays', parentCanvas, );
-    const todaysBirthdaysCanvas = await getSubCanvasByTestId('todays-birthdays', parentCanvas, );
+    const allBirthDaysCanvas = await getSubCanvasByTestId(
+      'all-birthdays',
+      parentCanvas
+    );
+    const todaysBirthdaysCanvas = await getSubCanvasByTestId(
+      'todays-birthdays',
+      parentCanvas
+    );
 
     await expectCols(allBirthDaysCanvas);
     await expectValues(allBirthDaysCanvas);
@@ -207,9 +207,9 @@ export const todaysBirthdays: Story = {
     await expectElem('todays-birthdays-message', allBirthDaysCanvas);
     await expect(await countElemsByText('today!', allBirthDaysCanvas)).toBe(2);
     await expectElem('todays-birthdays', parentCanvas);
-    
+
     await expectText('Name', todaysBirthdaysCanvas);
-    await expectText('Surname', todaysBirthdaysCanvas)    
+    await expectText('Surname', todaysBirthdaysCanvas);
     await expectText('Age', todaysBirthdaysCanvas);
 
     await getFirstElemByText('Sarah', todaysBirthdaysCanvas);
