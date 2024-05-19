@@ -40,7 +40,7 @@
     "@ngrx/operators": "^17.1.1",
     "@ngrx/signals": "^17.1.1",
     "@nx/angular": "19.0.0",
-    "axios": "1.6.0",
+    "axios": "1.6.8",
     "chart.js": "^4.4.1",
     "express": "~4.19.2",
     "primeflex": "^3.3.1",
@@ -117,11 +117,5 @@
     "ts-jest": "^29.1.0",
     "ts-node": "10.9.1",
     "typescript": "5.4.5"
-  },
-  "pnpm": {
-    "overrides": {
-      "webpack-dev-middleware": ">=6.1.2",
-      "axios": ">=1.6.1"
-    }
   }
 }
