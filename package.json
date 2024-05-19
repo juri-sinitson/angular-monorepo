@@ -80,7 +80,6 @@
     "@storybook/addon-interactions": "^8.0.0",
     "@storybook/angular": "8.1.1",
     "@storybook/core-server": "8.1.1",
-    "@storybook/jest": "^0.2.3",
     "@storybook/test": "8.1.1",
     "@storybook/test-runner": "^0.17.0",
     "@swc-node/register": "1.8.0",
