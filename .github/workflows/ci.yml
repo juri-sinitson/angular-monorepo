@@ -5,6 +5,8 @@
 name: CI
 on:
   pull_request:
+  # workflow_dispatch:
+  # push:
 
 jobs:
   process-affected-on-main:
@@ -16,28 +18,33 @@ jobs:
       - uses: pnpm/action-setup@v2
         with:
           version: 8
+      - name: Install pnpm
+        # Use the latest version here!
+        # pnpm will usually inform you when the new version comes.
+        # Make sure the version of pnpm here are the same as you local
+        # machine!
+        run: pnpm install -g pnpm@9.1.1
+      - run: pnpm --version
       - name: Restore cached npm dependencies
         id: cache-dependencies-restore
         uses: actions/cache/restore@v3
         with:
           path: |
-            node_modules
-            ~/.cache/Cypress # needed for the Cypress binary
+            node_modules            
+            ~/.cache/Cypress 
             ~/.cache/ms-playwright
           key: npm-dependencies-${{ hashFiles('pnpm-lock.yaml') }}
-      - run: cp nx.json.dist nx.json      
+      - run: cp nx.json.dist nx.json
       # Replacing the placeholder YOUR-SENSITIVE-VALUE-HERE for nxCloudAccessToken
       # with an appropriate secret value
-      - run: sed 's/YOUR-SENSITIVE-VALUE-HERE/${{ secrets.nx_cloud_access_token_readonly }}/' nx.json > temp.json && mv temp.json nx.json
-      # We try do use the flag --frozen-lockfile later, but currently there are issues with this flag.
-      # - run: pnpm install --frozen-lockfile
-      - run: pnpm install
+      - run: sed 's/YOUR-SENSITIVE-VALUE-HERE/${{ secrets.nx_cloud_access_token_readonly }}/' nx.json > temp.json && mv temp.json nx.json      
+      - run: pnpm install --frozen-lockfile
       # This command is commented out, because currently (2024-03-15) the usage 
       # of NX Agents is only supported for a payed plan. Wether it's a payed plan
       # or not is determined by nx cloud access token provided in this repo as a secret.
-      # If you want to privide a different nx cloud access token for the CI of this repo you most probably
+      # If you want to provide a different nx cloud access token for the CI of this repo you most probably
       # need to fork this repo. Also if you want to uncomment this line you may need to fork it.
-      # - run: pnpm exec nx-cloud start-ci-run --distribute-on="3 linux-medium-js" --stop-agents-after="affected:test-storybook"
+      # - run: pnpm exec nx-cloud start-ci-run --distribute-on="3 linux-medium-js" --stop-agents-after="affected:e2e"
       # We currently (2024-03-15) need playwright for the task test-storybook
       - run: pnpm exec playwright install
       - run: pnpm exec cypress install
@@ -47,7 +54,7 @@ jobs:
         with:
           path: |
             node_modules
-            ~/.cache/Cypress # needed for the Cypress binary
+            ~/.cache/Cypress
             ~/.cache/ms-playwright
           key: ${{ steps.cache-dependencies-restore.outputs.cache-primary-key }}
       - name: Set shas for affected command
@@ -57,7 +64,16 @@ jobs:
           echo "---------- BASE: ${{ env.NX_BASE }}"
           echo "---------- HEAD: ${{ env.NX_HEAD }}"            
       # This line is needed for nx affected to work when CI is running on a PR
-      - run: git branch --track main origin/main            
+      - run: git branch --track main origin/main                        
+      # Storybook should come currently as first to avoid tests failing
+      # because of jest artifacts warnings
+      - run: pnpm ci:storybook
       - run: pnpm ci:test-storybook
-      - run: pnpm ci:lint-test-build
+      - run: pnpm ci:lint-test-build      
+      # e2e
+      - run: pnpm build-backend
+      - run: pnpm ci:start-backend
       - run: pnpm ci:e2e
+      # Kill the background processes
+      - run: pnpm ci:kill-backend
+      - run: pnpm ci:kill-storybook
