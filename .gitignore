@@ -46,3 +46,6 @@ storybook-static
 # Security: to avoid versioning access tokens, passwords, etc
 nx.json
 nx-cloud-access-token
+
+# Package management
+.pnpm-store

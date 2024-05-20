@@ -5,6 +5,10 @@ services:
     image: frontend-juri-sinitson/image:dev
     container_name: frontend-juri-sinitson-container-tests
     build: .
+    ports:
+      - "3000:3000"
+      - "4200:4200"
+      - "4400:4400"
     volumes:
       - .:/app
       # Making an anonymous volume for node_modules
@@ -12,6 +16,7 @@ services:
       # and the changes will never be reflected 
       # on the host
       - /app/node_modules
+      - /.pnpm-store
     working_dir: /app
     # We want to keep this container running
     # to be able to execute commands in it during development

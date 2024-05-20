@@ -4,19 +4,25 @@
   "license": "MIT",
   "scripts": {
     "start-frontend": "nx serve persons-management-frontend",
+    "start-frontend:container": "nx serve persons-management-frontend --host=0.0.0.0",
     "start-combined": "start-server-and-test helper:start-backend http://localhost:3000 start-frontend",
     "start-backend": "pnpm build-backend && pnpm helper:start-backend",
+    "start-backend:container": "HOST='0.0.0.0' PORT=3000 node dist/apps/central-backend/main",
     "build-backend": "nx run central-backend:build",
+    "build-frontend": "nx run persons-management-frontend:build:production",
     "helper:start-backend": "node dist/apps/central-backend/main",
     "storybook-alt": "NODE_ENV=development pnpm nx run non-prod-storybook:storybook",
         
-    "storybook": "nx run non-prod-storybook:storybook",
+    "storybook": "nx run non-prod-storybook:storybook",    
+    "storybook:container": "nx run non-prod-storybook:storybook --host=0.0.0.0 --ci",
     "test-storybook": "jest --clearCache -u && nx affected -t test-storybook --parallel --url http://localhost:4400",
+    "test-storybook+clean": "jest --clearCache -u && nx affected -t test-storybook -u",
     "unit-test": "jest --clearCache -u && nx affected -t test --parallel",
     "e2e": "nx affected -t e2e --parallel",
     "lint": "nx affected -t lint",
     "build": "nx affected -t build",
     "depgraph": "pnpm exec nx affected:graph",
+    "depgraph:container": "pnpm exec nx affected:graph --host=0.0.0.0",
     
     "spot-check": "bash ./spot-check.sh",
     
@@ -32,11 +38,12 @@
     "ci:kill-backend": "lsof -ti :3000 | xargs kill -9 > /dev/null",
                     
     "ci:lint-test-build": "NX_BRANCH=$(git branch --show-current) pnpm nx affected -t lint test build --parallel",
-        
-    "container:stop": "docker-compose rm -fsv container",
+    
+    "container:start": "docker-compose up -d container",
+    "container:stop":  "docker-compose down",
+    "container:remove": "docker-compose rm -fsv container",
     "container:prune": "docker system prune",
     "container:rebuild": "pnpm container:stop && docker build -t frontend-juri-sinitson/image:dev --no-cache . && docker image prune -f",
-    "container:start": "docker-compose up -d container",
     "container:enter": "pnpm container:start && docker-compose exec container bash",
     "container:exec": "pnpm container:start && docker-compose exec container bash -c",
     "experimental:lint-test-build": "pnpm container:exec -- \"NX_CLOUD_ACCESS_TOKEN=$(cat nx-cloud-access-token) pnpm ci:lint-test-build\"",
