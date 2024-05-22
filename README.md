@@ -3,6 +3,7 @@
 - [READ THIS FIRST](#read-this-first)
   - [Setup: Single steps](#setup-single-steps)
   - [Execution: Single steps](#execution-single-steps)
+    - [Execution in a Docker container](#execution-in-a-docker-container)
     - [On the host (recommended for the current Ubuntu LTS)](#on-the-host-recommended-for-the-current-ubuntu-lts)
       - [Start the app](#start-the-app)
       - [Start Storybook](#start-storybook)
@@ -13,7 +14,6 @@
       - [Lint](#lint)
       - [Build](#build)
       - [Dependency Graph](#dependency-graph)
-    - [Execution in a Docker container](#execution-in-a-docker-container)
       - [NOTE!](#note-1)
   - [Limitations](#limitations)
     - [General](#general)
@@ -100,7 +100,14 @@
 9.  `cp nx-cloud-access-token.dist nx-cloud-access-token`. If you have an 
    [access token](https://nx.dev/ci/recipes/security/access-tokens), put it to 
    the file you just created, otherwise leave the file empty.
-10. If you decided to use Docker:
+10. If you decided to use Docker, do these steps additionally to the steps above. Otherwise skip this step.
+    
+    **NOTE!**
+    
+    The steps previous to this one are obligatory no matter, if you use docker or not.
+
+    The steps for docker:
+    >1. Make sure Docker us up and running
     >1. `pnpm container:rebuild`
     >2. `pnpm container:enter`
     >3. `pnpm install`, if you want to execute the commands in the container
@@ -108,6 +115,11 @@
     terminal for now.   
 
 ## Execution: Single steps
+
+### Execution in a Docker container
+In this case you need to enter the terminal of the container with the command `pnpm container:enter` first. The commands to start the backend, frontend, storybook and depgraph should be postfixed with `:container`, e.g. `pnpm start-backend:container` instead of `pnpm start-backend`. The ports of the postfixed commands above are
+forwarded to the host, so you can access e.g. `localhost:4200` for the app served from the browser of your host.
+
 ### On the host (recommended for the current Ubuntu LTS)
 
 #### Start the app
@@ -144,12 +156,6 @@ libraries affected.
 
 #### Dependency Graph
 `pnpm depgraph`
-
-### Execution in a Docker container
-In this case you need to enter the terminal of the container with the command `pnpm container:enter` first. The commands to start the backend, frontend, storybook and depgraph should be infixed with `:container`, e.g. `pnpm start-backend:container` instead of
-`pnpm start-backend`. The ports of the infixed commands above are
-forwarded to the host, so you can access e.g. `localhost:4200` for
-the app served from the browser of your host.
 
 #### NOTE!
 The command `pnpm depgraph:container` seems to execute with no issues in a docker container,
