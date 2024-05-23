@@ -475,12 +475,12 @@ Habit to
    > to test if it's really there. But don't test e.g. the button of 
    > the UI library you use directly. They have already made if for you.
    > Same applies for the internal dependencies in your project.
-5. Generate the tests by the AI (assistant)
+5. Generate the tests by an AI (assistant)
    > An AI assistant (e.g. Copilot or Phind) will very often save a lot of 
    > your typing. Of course you should have read, understood and 
-   > very often improved and/corrected those generated tests. Sometimes
+   > very often improved and/or corrected those generated tests. Sometimes
    > you will even need to write your tests yourself completely before an 
-   > AI assistant has the correct idea, how you want to get your tests 
+   > AI (assistant) has the correct idea, how you want to get your tests 
    > generated.
 
 While this work flow might still have a steep curve at the beginning, you later 
