@@ -272,7 +272,7 @@ a work which can be (partially) useless.
 
 **Goals**
 >1. Increased agility because UI part can be approved during/before the service/backend part is being developed.
->2. Every component can be found quickly. No knowledge and credentials of the real app is needed. This is very 
+>2. Every UI component can be found quickly. No knowledge and credentials of the real app is needed. This is very 
 handy for designers, POs, C-Level and other decision/developing parties.
 >3. The UI components are production ready. No rewriting for use in the production is needed.
 >4. The UI components are free of any side effects.
@@ -318,7 +318,7 @@ Examples for possible candidates:
 #### What is a side effect?
 A typical side effect is a network request or querying the date.
 
-A side effect is generally everything which theoretically 
+A side effect is generally everything which is theoretically 
 (in most cases practically) not deterministic.
 
 In other words, it's a functionality, which when executed multiple times 
@@ -359,7 +359,7 @@ For tests in the catalogue (e.g. [interaction tests in Storybook](https://storyb
 you organize your UI components that they have a sync input and send their data by the output. 
 
 Those components are then fed with the data by the smart components in your app. In case of a catalogue, 
-a catalogue mocks the smart components by providing the hardcoded sync data. 
+the story mocks the smart component by providing the hardcoded sync data.
 
 A catalogue shouldn't have to deal with the component output. At least not, 
 if this output is aimed to produce side effects directly or indirectly. 
@@ -368,14 +368,13 @@ which tells the catalogue user that this functionality is not supported in the c
 context.
 
 #### How to handle side effects in the unit tests?
-By not having them. You mock all the side effects with the hardcoded data. Typical cases
-are the network requests and date requests.
+By not having them. You mock all the side effects with the hardcoded data. Typical cases are network requests and date requests.
 
 #### How to handle side effects in E2E?
 By partially mocking them. In case of a date request or provoking an error you
 have to mock with the hardcoded data anyway. For a happy case and most often other cases you need 
 to deal with the side effects, because you want to simulate and test the end user
-using your app. Thus a certain part of indeterminism, so-called flakyness
+using your app in a real environment. Thus a certain part of indeterminism, so-called flakyness
 is at least theoretically unavoidable.
 
 <!-- TOC --><a name="state-management"></a>
@@ -440,35 +439,68 @@ While being straight forward for a very small app or lib which is not aimed for 
 they are extremely time consuming and disturb the flow if you app gets even a little bit complexer.
 
 If you have a small form with multiple validation scenarios, clicking through them every time 
-you think you could break it is bad idea in terms of time. It's even a worse idea if
-you adjust something in your general libs and wanna make sure you haven't broken anything
-in your not that small any more app, which is already in production.
+you think you could break it is a bad idea in terms of time. It's even a worse idea if
+you adjust something in your common libs and wanna make sure you haven't broken anything
+in your not-that-small-any-more-app(s), which is/are already in production.
 
 If you develop something where you need an evidence, that you have tested it...
-If you tell someone "Hey, I'll show you it works.", you may get such answer like
-"I see it works, but it's a coincidence. Where is your evidence?".
-It may get even worse when a part of the manually only tested app you developed has made 
+If you say "Hey, I'll show you it works.", you may get such answer like
+"It's a coincidence. Where is the evidence?".
+It may get even worse for you when a manually only tested part you developed has made 
 a damage in production and you get into the dialog like the one above...
 
-**What to then instead?**
+**What to do instead then?**
 
 Habit to 
-1. Write automatic tests immediately when you wanna test manually 
-2. Run your automatic tests in background in watch mode   
+1. Start writing automatic tests in the moment when you usually would test
+   manually
+2. Run your automatic tests in background in watch mode 
+   >>You may need to and often should run only a small part of tests or even only one    
+   >>or two tests to save unnecessary noise produced by the output of the tests not affected.
+   >>Use `xit`, `xdescribe`, `it.only`, `describe.only` in you test 
+   >>suite to narrow down the tests run currently in background even more.
+3. Test external behavior instead of such implementation details like:
+  >>1. private and protected values and methods/functions
+  >>2. when, which method or function how much is called with which value
+  >>
+  >>> **NOTE!**
+  >>>
+  >>>Testing how the logging methods were called can be seen as an exception
+  >>>of the recommendations above. But the controlling of logging is rather
+  >>>an external behavior than implementations details. Especially when you
+  >>>e.g. provoke an error and want to assert it's logged as expected.
+4. Not to test the functionality already tested
+   >> It's totally fine to test if e.g. a button wrapper renders the 
+   >> button correctly. Or when your wrapper activates the pagination 
+   >> to test if it's really there. But don't test e.g. the button of 
+   >> the UI library you use directly. They have already made if for you.
+   >> Same applies for the internal dependencies in your project.
+5. Generate the tests by the AI (assistant)
+   >>An AI assistant (e.g. Copilot or Phind) will very often save a lot of 
+   >>your typing. Of course you should have read, understood and 
+   >>very often improved and/corrected those generated tests. Sometimes
+   >>you will even need to write your tests yourself completely before an 
+   >>AI assistant has the correct idea, how you want to get your tests 
+   >>generated.
 
-While this work flow might have as steep curve at the beginning, you later (approximately in a month) will spend the same time for writing a test as making a manual test once. Obviously when you do manual tests multiple times you loose more and more time compared to an automatic test running in background in watch mode. Sometimes when the implementation is very obvious or you even get it generated by an AI,
-it might be reasonable to write tests even before the implementation.
+While this work flow might still have a steep curve at the beginning, you later 
+(approximately in a month) will spend the same time for writing a test 
+as making a manual test. So manual tests will not be worth for you 
+any more. And why test manually, when you have your tests running 
+in background in watch mode?
+
+Sometimes when the implementation is very obvious it might be reasonable to 
+write/generate the tests even before the implementation.
 
 This is true for all these steps: 
 1. After/while developing UI components: 
 [Interaction](https://storybook.js.org/docs/writing-tests/interaction-testing) and other tests in the catalogue (e.g. [Storybook](https://storybook.js.org/))
-2. After/while developing the service(s): unit tests
-3. Putting all together in a smart component and putting this component to an app: E2E tests
+1. After/while developing the service(s): unit tests
+2. Putting all together in a smart component and putting this component to an app: E2E tests
 
 **What/when to test manually?**
 
-When you can't find any bugs with automated testing any more in you app. And you are about to ship the
-stuff you made.
+When you can't find any bugs with automated testing any more in you code and you are about to ship it.
 
 In this case you wanna be sure, that the happy case works as expected in the end user role.
 Clicking through the catalogue a little bit might also be reasonable.
@@ -478,30 +510,31 @@ So it's kind of spot testing, to get a good feeling, that there is no bad surpri
 ### Which art of testing how much?
 From more to less:
 
-1. **Unit tests**: try to reach 100% coverage (if you e.g. have some lib functionality, which is used
-   and not used any more and then used again, you have to consider to take something less then 100).
+1. **Unit tests**: try to reach 100% coverage (if you e.g. have some functionality in 
+   a library, which is used and not used any more and then used again, you have to 
+   consider to take something less then 100).
    You definitely need to cover all the cases in the new implementations. An edge case which is 
    not covered by a test, but is reachable by the code as a very, very, very bad practice...
 
 2. **[Interaction](https://storybook.js.org/docs/writing-tests/interaction-testing) and other tests in the catalogue (e.g. [Storybook](https://storybook.js.org/))**: here you try to cover the most
 user and validation scenarios, but you can omit one where the probability of an error or mistake is very low.
 
-3. **E2E tests**: Covering all the possibilities the user can click and interact with is ideal, but 
+1. **E2E tests**: Covering all the possibilities the user can click and interact with is ideal, but 
    is not realistic due time and hardware reasons. So here you have to consider what is most 
    important to test, what is less and what can be omitted. It's usually not necessary to test 
    validation here, when you have done it in the catalogue. I you have a large amount 
    of combinations a user can click or select, testing them all will most probably overheat you, 
    your local machine, the CI and very often even the management of your company.
 
-4. **Manual tests**: click through the typical scenarios and the new entries you made in the catalogue of the components. It will give you a good warm feeling, seeing them work as expected before you ship 
+2. **Manual tests**: click through the typical scenarios and the new entries you made in the catalogue of the components. It will give you a good feeling, seeing them work as expected before you ship 
 it.
 
 #### Typical scenarios for intensive manual testing
 Usually those scenarios are applied to non-developers.
 
 To such scenarios are especially:
-1. Because of security reasons the app should be additionally clicked though after of all the automatic stuff passed.
-2. Approvement of a feature in the end user role. This is usually also done after all the automatic stuff passed.
+1. Because of security reasons the app should be additionally clicked though after all of the automatic tests passed.
+2. Approvement of a feature in the end user role. This is usually also done after all of the automatic tests passed.
 
 <!-- TOC --><a name="dry"></a>
 ### DRY by single common component
@@ -512,23 +545,25 @@ To avoid repeating e.g. for such standard states like, loading, error and no dat
    routines again and again.
 
 ### Generators
-You will see them as `@angular-monorepo/generators - X` in the [NX Console UI](https://www.youtube.com/watch?v=IIetmfgozgI), where X is currently the generator for the parts needed for a an editable list of an entity (e.g. list of products, list of persons etc..).
+You will see them in this repository as `@angular-monorepo/generators - X` in the [NX Console UI](https://www.youtube.com/watch?v=IIetmfgozgI), where X is currently the generator for the parts needed for an editable list of an entity (e.g. list of products, list of persons etc..).
 
 The big goal is that you don't need to copy-paste different parts from different files, 
 which is extremely time consuming when using an architecture which is based on separation
 of components, catalogue stories like in e.g. [Storybook](storybook.js.org/) and 
-different kinds of automatic tests. They are just generated for you.
+different kinds of automatic tests. This copy-pasting is made for you in less than
+a second.
 
-The rest of work for you here is:
+The rest of work for you to do is:
 1. Fill in the fields in the [NX Console UI](https://www.youtube.com/watch?v=IIetmfgozgI)
 2. Adjust the code places marked with something like `// -- STEP`.
 3. Adjust the logic if it differs from the logic generated
-4. Add some unique functionality if required (generators can't and shouldn't cover anything possible)
+4. Add some unique functionality if required (generators can't and shouldn't cover everything possible in this world)
 5. Improve the generators (the effort is usually very small if any)
 
 #### Is it still copy-paste?
-Yes, it is. BUT: The code is generalized as much as possible, so only the stuff is copied which is 
-not reasonable to generalize and thus would be copy-pasted anyway.
+Yes. BUT: The code is generalized as much as possible, so only the 
+stuff is copied which is not reasonable/too complicated to generalize 
+and thus would be copy-pasted anyway.
 
 #### Be careful
 Avoid generating multiple parts first and then adjusting them.
