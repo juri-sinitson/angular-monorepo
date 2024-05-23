@@ -484,14 +484,16 @@ Habit to
    >>generated.
 
 While this work flow might still have a steep curve at the beginning, you later 
-(approximately in a month) will spend the same time for writing a test 
-as making a manual test. So manual tests will not be worth for you 
-any more. And why test manually, when you have your tests running 
-in background in watch mode?
+(approximately in a month) will spend the same time for writing tests
+as making a single shot of manual tests. In this case manual tests will 
+not be worth it any more. Why make manual test shots, when you have 
+your automated tests running in background in watch mode?
+Sometimes there are situations where you have to trigger your automated
+tests manually. But it's still much faster then making manual tests.
 
 This is true for all these steps: 
 1. After/while developing UI components:
-[Interaction](https://storybook.js.org/docs/writing-tests/interaction-testing) and other tests in the catalogue (e.g. [Storybook](https://storybook.js.org/))
+[Interaction tests](https://storybook.js.org/docs/writing-tests/interaction-testing) tests in the catalogue (e.g. [Storybook](https://storybook.js.org/))
 1. After/while developing the service(s): unit tests
 2. Putting all together in a smart component and putting this component to an app: E2E tests
 
@@ -502,7 +504,8 @@ When you can't find any bugs with automated testing any more in you code and you
 In this case you wanna be sure, that the happy case works as expected in the end user role.
 Clicking through the catalogue a little bit might also be reasonable.
 
-So it's kind of spot testing, to get a good feeling, that there is no bad surprizes any more...
+So it's kind of spot testing, to get a good feeling, that there is no bad surprizes 
+for typical cases (or at least for a part of them) any more...
 
 ### Which art of testing how much?
 From more to less:
@@ -523,8 +526,8 @@ user and validation scenarios, but you can omit one where the probability of an 
    of combinations a user can click or select, testing them all will most probably overheat you, 
    your local machine, the CI and very often even the management of your company.
 
-2. **Manual tests**: click through the typical scenarios and the new entries you made in the catalogue of the components. It will give you a good feeling, seeing them work as expected before you ship 
-it.
+2. **Manual tests**: click through the typical scenarios and the new entries you made in the catalogue of the components. It will give you a good feeling, seeing the happy cases 
+(or part of them) work as expected before you ship it.
 
 #### Typical scenarios for intensive manual testing
 Usually those scenarios are applied to non-developers.
