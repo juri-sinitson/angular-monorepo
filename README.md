@@ -455,33 +455,33 @@ Habit to
 1. Start writing automatic tests in the moment when you usually would test
    manually
 2. Run your automatic tests in background in watch mode 
-   >>You may need to and often should run only a small part of tests or even only one    
-   >>or two tests to save unnecessary noise produced by the output of the tests not affected.
-   >>Use `xit`, `xdescribe`, `it.only`, `describe.only` in you test 
-   >>suite to narrow down the tests run currently in background even more.
+   >You may need to and often should run only a small part of tests or even only one    
+   >or two tests to save unnecessary noise produced by the output of the tests not affected.
+   >Use `xit`, `xdescribe`, `it.only`, `describe.only` in you test 
+   >suite to narrow down the tests run currently in background even more.
 3. Test external behavior instead of such implementation details like:
-  >>1. private and protected values and methods/functions
-  >>2. when, which method or function how much is called with which value
+  >1. private and protected values and methods/functions
+  >2. when, which method or function how much is called with which value
   >>
-  >>> **NOTE!**
-  >>>
-  >>>Testing how the logging methods were called can be seen as an exception
-  >>>of the recommendations above. But the controlling of logging is rather
-  >>>an external behavior than implementations details. Especially when you
-  >>>e.g. provoke an error and want to assert it's logged as expected.
+  >> **NOTE!**
+  >>
+  >>Testing how the logging methods were called can be seen as an exception
+  >>of the recommendations above. But the controlling of logging is rather
+  >>an external behavior than implementations details. Especially when you
+  >>e.g. provoke an error and want to assert it's logged as expected.
 4. Not to test the functionality already tested
-   >> It's totally fine to test if e.g. a button wrapper renders the 
-   >> button correctly. Or when your wrapper activates the pagination 
-   >> to test if it's really there. But don't test e.g. the button of 
-   >> the UI library you use directly. They have already made if for you.
-   >> Same applies for the internal dependencies in your project.
+   > It's totally fine to test if e.g. a button wrapper renders the 
+   > button correctly. Or when your wrapper activates the pagination 
+   > to test if it's really there. But don't test e.g. the button of 
+   > the UI library you use directly. They have already made if for you.
+   > Same applies for the internal dependencies in your project.
 5. Generate the tests by the AI (assistant)
-   >>An AI assistant (e.g. Copilot or Phind) will very often save a lot of 
-   >>your typing. Of course you should have read, understood and 
-   >>very often improved and/corrected those generated tests. Sometimes
-   >>you will even need to write your tests yourself completely before an 
-   >>AI assistant has the correct idea, how you want to get your tests 
-   >>generated.
+   > An AI assistant (e.g. Copilot or Phind) will very often save a lot of 
+   > your typing. Of course you should have read, understood and 
+   > very often improved and/corrected those generated tests. Sometimes
+   > you will even need to write your tests yourself completely before an 
+   > AI assistant has the correct idea, how you want to get your tests 
+   > generated.
 
 While this work flow might still have a steep curve at the beginning, you later 
 (approximately in a month) will spend the same time for writing tests
@@ -510,24 +510,32 @@ for typical cases (or at least for a part of them) any more...
 ### Which art of testing how much?
 From more to less:
 
-1. **Unit tests**: try to reach 100% coverage (if you e.g. have some functionality in 
+1. **Unit tests**:
+   
+   Try to reach 100% coverage (if you e.g. have some functionality in 
    a library, which is used and not used any more and then used again, you have to 
    consider to take something less then 100).
    You definitely need to cover all the cases in the new implementations. An edge case which is 
    not covered by a test, but is reachable by the code as a very, very, very bad practice...
 
-2. **[Interaction](https://storybook.js.org/docs/writing-tests/interaction-testing) and other tests in the catalogue (e.g. [Storybook](https://storybook.js.org/))**: here you try to cover the most
-user and validation scenarios, but you can omit one where the probability of an error or mistake is very low.
+2. **[Interaction tests](https://storybook.js.org/docs/writing-tests/interaction-testing) in the catalogue (e.g. [Storybook](https://storybook.js.org/))**:
+   
+   Here you try to cover the most
+   user and validation scenarios, but you can omit one where the probability of an error or mistake is very low.
 
-1. **E2E tests**: Covering all the possibilities the user can click and interact with is ideal, but 
+3. **E2E tests**:
+   
+   Covering all the possibilities the user can click and interact with is ideal, but 
    is not realistic due time and hardware reasons. So here you have to consider what is most 
    important to test, what is less and what can be omitted. It's usually not necessary to test 
    validation here, when you have done it in the catalogue. I you have a large amount 
    of combinations a user can click or select, testing them all will most probably overheat you, 
    your local machine, the CI and very often even the management of your company.
 
-2. **Manual tests**: click through the typical scenarios and the new entries you made in the catalogue of the components. It will give you a good feeling, seeing the happy cases 
-(or part of them) work as expected before you ship it.
+4. **Manual tests**:
+   
+   Click through the typical scenarios and the new entries you made in the catalogue of the components. It will give you a good feeling, seeing the happy cases 
+   (or part of them) work as expected before you ship it.
 
 #### Typical scenarios for intensive manual testing
 Usually those scenarios are applied to non-developers.
