@@ -489,11 +489,8 @@ as making a manual test. So manual tests will not be worth for you
 any more. And why test manually, when you have your tests running 
 in background in watch mode?
 
-Sometimes when the implementation is very obvious it might be reasonable to 
-write/generate the tests even before the implementation.
-
 This is true for all these steps: 
-1. After/while developing UI components: 
+1. After/while developing UI components:
 [Interaction](https://storybook.js.org/docs/writing-tests/interaction-testing) and other tests in the catalogue (e.g. [Storybook](https://storybook.js.org/))
 1. After/while developing the service(s): unit tests
 2. Putting all together in a smart component and putting this component to an app: E2E tests
