@@ -1,5 +1,6 @@
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function nextId(startingId: number, dataBase: unknown[]): string {
-  return `${startingId + dataBase.length + 1}`;
+  return generateRandomCode();
 }
 
 export function generateRandomCode(): string {

@@ -91,6 +91,7 @@ router.post('/api/persons-management/persons', (req, res) => {
   setTimeout(() => {
     // Add the new entity to the entities list
     entitiesList.push(newEntity);
+    console.log('New entity:', newEntity);
     res.send(newEntity);
   }, 0);
 });
