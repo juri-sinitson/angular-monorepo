@@ -7,11 +7,28 @@ import {
 } from "./date.util";
 
 describe('getAgeInYears', () => {
-  it('should return the correct age in years ON any BY any', () => {
-    const today = new Date(2022, 0, 1); // January 1, 2022
-    const startYear = 2000;
-    const expectedAge = 22;
-    expect(getAgeInYears(today, startYear)).toEqual(expectedAge);
+  it('should return the diff of years ON any BY lower month than today', () => {
+    const today = new Date(2022, 1, 3);
+    const birthDate = new Date(2000, 0, 20); 
+    expect(getAgeInYears(today, birthDate)).toEqual(22);
+  });
+
+  it('should return the diff of years ON any BY same month and day as today', () => {
+    const today = new Date(2022, 1, 3);
+    const birthDate = new Date(2000, 1, 3); 
+    expect(getAgeInYears(today, birthDate)).toEqual(22);
+  });
+
+  it('should return the diff of years minus one ON any BY higher month than today', () => {
+    const today = new Date(2022, 0, 20);    
+    const birthDate = new Date(2000, 6, 3); 
+    expect(getAgeInYears(today, birthDate)).toEqual(22-1);
+  });
+
+  it('should return the diff of years minus one ON any BY same month and higher day than today', () => {
+    const today = new Date(2022, 5, 1); 
+    const birthDate = new Date(2000, 5, 23); 
+    expect(getAgeInYears(today, birthDate)).toEqual(22-1);
   });
 });
 

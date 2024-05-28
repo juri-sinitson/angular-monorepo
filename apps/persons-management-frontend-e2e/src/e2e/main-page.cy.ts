@@ -79,7 +79,7 @@ describe('Main Page: Persons', () => {
               expectTableDataValue('name', 'Michael');
               expectTableDataValue('surname', 'Johnson');
               expectTableDataValue('birthDate', '28.06.1985');
-              expectTableDataValue('age', '39');
+              expectTableDataValue('age', '38');
               expectTableDataValue('daysToBirthday', '42');
             });
 

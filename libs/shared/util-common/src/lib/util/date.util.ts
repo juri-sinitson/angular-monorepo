@@ -39,8 +39,28 @@ export function dateExists(day: number, month: number, year?: number | null): bo
   return isDateValid(day, month, year);
 }
 
-export function getAgeInYears(today: Date, startYear: number): number {
-  return today.getFullYear() - startYear;
+/**
+ * Calculates the age in years.
+ * 
+ * @param today 
+ * @param birthDate 
+ * @returns the age in years
+ */
+export function getAgeInYears(today: Date, birthDate: Date): number {
+  const age = today.getFullYear() - birthDate.getFullYear();
+  const month = today.getMonth() - birthDate.getMonth();
+
+  let ageMustBeCorrected = false;
+
+  if (month < 0 ) {
+    ageMustBeCorrected = true;
+  } 
+  
+  if ( month === 0 && today.getDate() < birthDate.getDate()) {
+    ageMustBeCorrected = true;
+  }
+  
+  return ageMustBeCorrected ? age - 1 : age;
 }
 
 export function daysToNexDue(today: Date, due: Date): number {

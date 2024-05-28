@@ -136,7 +136,7 @@ export class PersonsComponent extends AbstractEntitiesListComponent<
       .map((item) => {
         const today: Date = new Date(this.todaysDateAsString());
         const age: Age = item.birthYear
-          ? `${getAgeInYears(today, item.birthYear)}`
+          ? `${ getAgeInYears(today, new Date(`${item.birthYear}-${item.birthMonth}-${item.birthDay}`) ) }`
           : '-';
 
         const nextBirthday: Date = getNextYearlyDue(

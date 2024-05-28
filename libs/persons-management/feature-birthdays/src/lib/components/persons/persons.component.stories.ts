@@ -150,8 +150,8 @@ const expectCols = async (canvas: HTMLElement) => {
 const expectValues = async (canvas: HTMLElement) => {
   await expectText('John', canvas);
   await getFirstElemByText('Doe', canvas);
-  await getFirstElemByText('15.06.1990', canvas);
-  await getFirstElemByText('34', canvas);
+  await getFirstElemByText('15.06.1990', canvas);  
+  await getFirstElemByText('33', canvas);
   await getFirstElemByText('92', canvas);
 
   await expectText('David', canvas);
@@ -163,7 +163,7 @@ const expectValues = async (canvas: HTMLElement) => {
   await expectText('Jane', canvas);
   await getFirstElemByText('Smith', canvas);
   await getFirstElemByText('10.09.1985', canvas);
-  await getFirstElemByText('39', canvas);
+  await getFirstElemByText('38', canvas);
   await getFirstElemByText('179', canvas);
 };
 
