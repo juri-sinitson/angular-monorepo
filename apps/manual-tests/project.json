@@ -13,7 +13,7 @@
         "outputPath": "dist/apps/manual-tests",
         "index": "apps/manual-tests/src/index.html",
         "browser": "apps/manual-tests/src/main.ts",
-        "polyfills": ["zone.js"],
+        "polyfills": [],
         "tsConfig": "apps/manual-tests/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
         "assets": [

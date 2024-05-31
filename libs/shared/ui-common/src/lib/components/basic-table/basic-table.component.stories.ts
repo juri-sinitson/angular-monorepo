@@ -3,7 +3,7 @@ import { applicationConfig, type Meta, type StoryObj } from '@storybook/angular'
 
 // TODO: Adjust the project tags.
 // eslint-disable-next-line @nx/enforce-module-boundaries
-import { commonAppConfig } from '@angular-monorepo/shared/util-common';
+import { rootComponentConfigBase as commonAppConfig } from '@angular-monorepo/shared/util-common-non-prod';
 
 import { BasicTableComponent } from './basic-table.component';
 

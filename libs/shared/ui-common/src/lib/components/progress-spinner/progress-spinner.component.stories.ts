@@ -6,11 +6,11 @@ import {
   expectText,
   getCanvas,
 } from '@angular-monorepo/shared/util-common-non-prod';
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 // TODO: Adjust the project tags.
 // eslint-disable-next-line @nx/enforce-module-boundaries
-import { commonAppConfig } from '@angular-monorepo/shared/util-common';
+import { rootComponentConfigBase as commonAppConfig } from '@angular-monorepo/shared/util-common-non-prod';
 // eslint-disable-next-line @nx/enforce-module-boundaries
 import { ProgressSpinnerComponent } from './progress-spinner.component';
 
@@ -23,6 +23,7 @@ import { ProgressSpinnerComponent } from './progress-spinner.component';
       [loadingMessage]="loadingMessage"
     ></common-progress-spinner>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProgressSpinnerTestWrapperComponent {
   // TODO! Figure how to use signal

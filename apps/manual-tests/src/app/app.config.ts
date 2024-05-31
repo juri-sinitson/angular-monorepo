@@ -4,7 +4,7 @@ import { appRoutes } from './app.routes';
 
 // TODO: Add tags to libs
 // eslint-disable-next-line @nx/enforce-module-boundaries
-import { commonAppConfig } from '@angular-monorepo/shared/util-common';
+import { rootComponentConfigProd as commonAppConfig } from '@angular-monorepo/shared/util-common';
 
 export const appConfig: ApplicationConfig = {
   providers: [

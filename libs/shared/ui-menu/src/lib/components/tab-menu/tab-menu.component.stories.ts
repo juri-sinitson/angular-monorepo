@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import {
   RouterLink,
@@ -24,10 +24,15 @@ import {
   getCanvas,
 } from '@angular-monorepo/shared/util-common-non-prod';
 
+// TODO: Adjust the project tags.
+// eslint-disable-next-line @nx/enforce-module-boundaries
+import { rootComponentConfigBase as commonAppConfig } from '@angular-monorepo/shared/util-common-non-prod';
+
 @Component({
   selector: 'menu-test',
   standalone: true,
   template: ` <p [attr.data-testid]="'page/' + url">{{ pageName }} page</p> `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MenuTestComponent {
   constructor(private router: Router) {}
@@ -72,6 +77,7 @@ const routes: Routes = [
     >
     </menu-tab-menu>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TabMenuTestWrapperComponent {
   // TODO! Figure how to use signal
@@ -98,7 +104,10 @@ const meta: Meta<TabMenuTestWrapperComponent> = {
     `,
     ),
     applicationConfig({
-      providers: [provideRouter(routes)],
+      providers: [
+        provideRouter(routes),
+        commonAppConfig.providers,
+      ],
     }),
   ],
 };

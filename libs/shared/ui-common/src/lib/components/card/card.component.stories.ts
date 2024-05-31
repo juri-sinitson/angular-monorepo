@@ -1,6 +1,6 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
-import type { Meta, StoryObj } from '@storybook/angular';
+import { applicationConfig, type Meta, type StoryObj } from '@storybook/angular';
 
 import { CardComponent } from './card.component';
 
@@ -9,6 +9,10 @@ import {
   expectText,
   getCanvas,
 } from '@angular-monorepo/shared/util-common-non-prod';
+
+// TODO: Adjust the project tags.
+// eslint-disable-next-line @nx/enforce-module-boundaries
+import { rootComponentConfigBase as commonAppConfig } from '@angular-monorepo/shared/util-common-non-prod';
 
 /**
  * Testing component.
@@ -26,6 +30,7 @@ import {
       <p>Main content</p>
     </common-card>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CardTestComponent {
   // TODO! Figure how to use signal
@@ -37,6 +42,7 @@ export class CardTestComponent {
 const meta: Meta<CardTestComponent> = {
   component: CardTestComponent,
   title: 'shared/ui-common/Card',
+  decorators: [applicationConfig({ ...commonAppConfig })],
 };
 export default meta;
 type Story = StoryObj<CardTestComponent>;

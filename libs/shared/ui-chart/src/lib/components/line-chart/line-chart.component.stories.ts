@@ -5,7 +5,7 @@ import { LineChartComponent } from './line-chart.component';
 
 // TODO: Adjust the project tags.
 // eslint-disable-next-line @nx/enforce-module-boundaries
-import { commonAppConfig } from '@angular-monorepo/shared/util-common';
+import { rootComponentConfigBase as commonAppConfig } from '@angular-monorepo/shared/util-common-non-prod';
 
 const documentStyle = getComputedStyle(document.documentElement);
 

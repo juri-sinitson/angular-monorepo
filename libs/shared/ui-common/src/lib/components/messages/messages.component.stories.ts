@@ -1,4 +1,5 @@
-import { commonAppConfig } from '@angular-monorepo/shared/util-common';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+
 import {
   applicationConfig,
   type Meta,
@@ -13,13 +14,15 @@ import {
   expectText,
   getCanvas,
 } from '@angular-monorepo/shared/util-common-non-prod';
-import { Component, Input } from '@angular/core';
+
+import { rootComponentConfigBase as commonAppConfig } from '@angular-monorepo/shared/util-common-non-prod';
 
 @Component({
   selector: 'common-messages-test-wrapper',
   standalone: true,
   imports: [MessagesComponent],
   template: ` <common-messages [messages]="messages"></common-messages> `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MessagesTestWrapperComponent {
   // TODO! Figure how to use signal

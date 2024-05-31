@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 import { ConfirmationService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
@@ -23,7 +23,11 @@ import {
 
 // TODO! Adjust the project tags.
 // eslint-disable-next-line @nx/enforce-module-boundaries
-import { MessageInterface, commonAppConfig } from '@angular-monorepo/shared/util-common';
+import { MessageInterface } from '@angular-monorepo/shared/util-common';
+
+// TODO: Adjust the project tags.
+// eslint-disable-next-line @nx/enforce-module-boundaries
+import { rootComponentConfigBase as commonAppConfig } from '@angular-monorepo/shared/util-common-non-prod';
 
 // TODO! Adjust the project tags.
 // eslint-disable-next-line @nx/enforce-module-boundaries
@@ -54,6 +58,7 @@ const header = 'Product';
     ></angular-monorepo-product-form>
     <p-confirmDialog [style]="{ maxWidth: '450px' }"></p-confirmDialog>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 class EntityFormWrapperComponent extends ConfirmNotImplementedWrapperComponent {
   @Input() data: EntityInterface | null = null;

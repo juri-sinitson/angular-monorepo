@@ -1,9 +1,12 @@
 import { TestBed } from '@angular/core/testing';
-import {
-  HttpClientTestingModule,
+import {  
   HttpTestingController,
   TestRequest,
 } from '@angular/common/http/testing';
+
+// TODO: adjust the project tags
+// eslint-disable-next-line @nx/enforce-module-boundaries
+import { specConfig } from '@angular-monorepo/shared/util-common-non-prod';
 
 import { <%= className %>EntityStoreService as EntityStoreService } from './<%= fileName %>-entity-store.service';
 import { <%= constantNamePlural %>Url as entitiesUrl } from './urls';
@@ -54,14 +57,16 @@ describe('<%= className %>EntityStoreService', () => {
     },
   ];
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [EntityStoreService],
+ beforeEach(() => {
+    TestBed.configureTestingModule({      
+      providers: [
+         specConfig.providers,
+         OtherProductEntityStoreService
+      ]
     });
-    service = TestBed.inject(EntityStoreService);
+    service = TestBed.inject(OtherProductEntityStoreService);
     httpMock = TestBed.inject(HttpTestingController);
-  });
+ });
 
   afterEach(() => {
     httpMock.verify(); // Ensure that there are no outstanding requests.

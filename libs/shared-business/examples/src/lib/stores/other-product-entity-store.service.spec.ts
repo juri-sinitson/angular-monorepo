@@ -1,5 +1,9 @@
 import { TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpTestingController } from '@angular/common/http/testing';
+
+// TODO: adjust the project tags
+// eslint-disable-next-line @nx/enforce-module-boundaries
+import { specConfig } from '@angular-monorepo/shared/util-common-non-prod';
 
 import { OtherProductEntityStoreService } from './other-product-entity-store.service';
 import { otherProductsUrl } from './urls'
@@ -8,15 +12,16 @@ import { ProductInterface } from '../interfaces/product.interface';
 // eslint-disable-next-line @nx/enforce-module-boundaries
 import { MessageInterface } from '@angular-monorepo/shared/util-common';
 
-// TODO! Crete the test generator
 describe('ProductService', () => {
  let service: OtherProductEntityStoreService;
  let httpMock: HttpTestingController;
 
  beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [OtherProductEntityStoreService]
+    TestBed.configureTestingModule({      
+      providers: [
+         specConfig.providers,
+         OtherProductEntityStoreService
+      ]
     });
     service = TestBed.inject(OtherProductEntityStoreService);
     httpMock = TestBed.inject(HttpTestingController);

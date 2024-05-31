@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 // TODO: give the correct tags to the projects
 // eslint-disable-next-line @nx/enforce-module-boundaries
@@ -15,6 +15,7 @@ import { MenuItemInterface, TabMenuComponent } from '@angular-monorepo/shared/ui
     <menu-tab-menu [items]="menuItems"></menu-tab-menu>
     <router-outlet></router-outlet>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent {
   title = 'app1';

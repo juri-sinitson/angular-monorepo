@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ConfirmationService } from 'primeng/api';
 
 const catalogueMessagePart = `in a catalogue of presentational components`;
@@ -17,6 +17,7 @@ const confirmationData = {
   template: ``,
   standalone: true,
   providers: [ConfirmationService],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ConfirmNotImplementedWrapperComponent {
   

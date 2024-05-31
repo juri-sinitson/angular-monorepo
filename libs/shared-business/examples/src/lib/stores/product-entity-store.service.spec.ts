@@ -1,9 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 import {
-  HttpClientTestingModule,
   HttpTestingController,
-  TestRequest,
+  TestRequest,  
 } from '@angular/common/http/testing';
+
+// TODO: adjust the project tags
+// eslint-disable-next-line @nx/enforce-module-boundaries
+import { specConfig } from '@angular-monorepo/shared/util-common-non-prod';
 
 import { ProductEntityStoreService as EntityStoreService } from './product-entity-store.service';
 import { productsUrl as entitiesUrl } from './urls';
@@ -56,8 +59,10 @@ describe('ProductEntityStoreService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [EntityStoreService],
+      providers: [
+        specConfig.providers,
+        EntityStoreService
+      ],
     });
     service = TestBed.inject(EntityStoreService);
     httpMock = TestBed.inject(HttpTestingController);

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 import {
   applicationConfig,
@@ -6,7 +6,7 @@ import {
   type StoryObj,
 } from '@storybook/angular';
 
-import { commonAppConfig } from '@angular-monorepo/shared/util-common';
+import { rootComponentConfigBase as commonAppConfig } from '@angular-monorepo/shared/util-common-non-prod';
 
 import { CommonWrapperComponent } from './common-wrapper.component';
 import { MessageInterface } from '@angular-monorepo/shared/util-common';
@@ -57,6 +57,7 @@ const infoMessages: MessageInterface[] = [
       <p>Wrapped content</p>
     </common-common-wrapper>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class WrapperTestComponent {
   // TODO! Figure how to use signal

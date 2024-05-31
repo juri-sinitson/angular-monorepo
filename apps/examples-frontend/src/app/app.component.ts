@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 // TODO: Adjust the project tags.
 // eslint-disable-next-line @nx/enforce-module-boundaries
@@ -16,5 +16,6 @@ import {
     <angular-monorepo-other-products-smart></angular-monorepo-other-products-smart>
   `,
   styles: ``,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent {}

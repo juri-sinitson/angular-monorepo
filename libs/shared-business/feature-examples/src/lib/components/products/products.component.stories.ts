@@ -4,12 +4,16 @@ import { applicationConfig, type Meta, type StoryObj } from '@storybook/angular'
 import { ConfirmationService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
+// TODO: Adjust the project tags.
+// eslint-disable-next-line @nx/enforce-module-boundaries
+import { rootComponentConfigBase as commonAppConfig } from '@angular-monorepo/shared/util-common-non-prod';
+
 import { ProductsComponent as EntitiesComponent } from './products.component';
 // TODO: Adjust the project tags.
 // eslint-disable-next-line @nx/enforce-module-boundaries
 import { ProductInterface as EntityInterface } from '@angular-monorepo/shared-business/examples';
 // eslint-disable-next-line @nx/enforce-module-boundaries
-import { MessageInterface, commonAppConfig } from '@angular-monorepo/shared/util-common';
+import { MessageInterface } from '@angular-monorepo/shared/util-common';
 // eslint-disable-next-line @nx/enforce-module-boundaries
 import {
   errorStory,
