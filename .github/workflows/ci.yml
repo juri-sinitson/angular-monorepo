@@ -10,7 +10,8 @@ on:
 
 jobs:
   process-affected-on-main:
-    runs-on: ubuntu-latest
+    # The LTS instead of latest is used for more stability.
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
         with:
