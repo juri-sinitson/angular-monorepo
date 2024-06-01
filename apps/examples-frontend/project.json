@@ -13,7 +13,7 @@
         "outputPath": "dist/apps/examples-frontend",
         "index": "apps/examples-frontend/src/index.html",
         "browser": "apps/examples-frontend/src/main.ts",
-        "polyfills": [],
+        "polyfills": ["zone.js"],
         "tsConfig": "apps/examples-frontend/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
         "assets": [

@@ -75,6 +75,9 @@ importers:
       tslib:
         specifier: ^2.3.0
         version: 2.6.2
+      zone.js:
+        specifier: 0.14.4
+        version: 0.14.4
     devDependencies:
       '@angular-architects/ddd':
         specifier: ^18.0.0
@@ -274,9 +277,6 @@ importers:
       typescript:
         specifier: 5.4.5
         version: 5.4.5
-      zone.js:
-        specifier: 0.14.4
-        version: 0.14.4
 
 packages:
 
