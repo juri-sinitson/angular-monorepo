@@ -4,8 +4,9 @@ const config: StorybookConfig = {
   stories: ['../../../**/*.@(mdx|stories.@(js|jsx|ts|tsx))'],
 
   addons: [
-    '@storybook/addon-essentials', 
-    '@storybook/addon-interactions',    
+    '@storybook/addon-essentials',
+    '@storybook/addon-interactions',
+    '@chromatic-com/storybook'
   ],
 
   framework: {
@@ -20,9 +21,7 @@ const config: StorybookConfig = {
     };
   },*/
 
-  docs: {
-    autodocs: true
-  }
+  docs: {}
 };
 
 export default config;
