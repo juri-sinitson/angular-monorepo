@@ -22,14 +22,17 @@
     "noFallthroughCasesInSwitch": true,
     "paths": {
       "@angular-monorepo/generators": ["libs/non-prod/generators/src/index.ts"],
-      "@angular-monorepo/shared-business/examples": [
-        "libs/shared-business/examples/src/index.ts"
+      "@angular-monorepo/persons-management-api-persons": [
+        "libs/persons-management/api-persons/src/index.ts"
       ],
-      "@angular-monorepo/shared-business/examples-e2e": [
-        "libs/shared-business/examples/src/index-e2e.ts"
+      "@angular-monorepo/persons-management-api-persons-e2e": [
+        "libs/persons-management/api-persons/src/index-e2e.ts"
       ],
-      "@angular-monorepo/shared-business/feature-examples": [
-        "libs/shared-business/feature-examples/src/index.ts"
+      "@angular-monorepo/persons-management-feature-birthdays": [
+        "libs/persons-management/feature-birthdays/src/index.ts"
+      ],
+      "@angular-monorepo/persons-management/domain": [
+        "libs/persons-management/domain/src/index.ts"
       ],
       "@angular-monorepo/shared/ui-chart": [
         "libs/shared/ui-chart/src/index.ts"
