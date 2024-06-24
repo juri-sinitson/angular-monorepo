@@ -1,5 +1,5 @@
 import express from 'express';
-import sharedBusinessRoutes from './shared-business-routes';
+import personsManagementRoutes from './persons-management-routes';
 
 const host = process.env['HOST'] ?? 'localhost';
 const port = process.env['PORT'] ? Number(process.env['PORT']) : 3000;
@@ -20,7 +20,7 @@ app.get('/', (req, res) => {
 });
 
 app.use(express.json());
-app.use(sharedBusinessRoutes);
+app.use(personsManagementRoutes);
 
 app.listen(port, host, () => {
   console.log(`[ ready ] http://${host}:${port}`);
