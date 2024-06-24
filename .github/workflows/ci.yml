@@ -70,9 +70,8 @@ jobs:
       # because of jest artifacts warnings
       - run: pnpm ci:storybook
       - run: pnpm ci:test-storybook
-      - run: pnpm ci:lint-test-build      
+      - run: pnpm ci:lint-test-build
       # e2e
-      - run: pnpm build-backend
       - run: pnpm ci:start-backend
       - run: pnpm ci:e2e
       # Kill the background processes

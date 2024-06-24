@@ -4,8 +4,9 @@
   "license": "MIT",
   "scripts": {
     "start-frontend": "nx serve persons-management-frontend",
-    "start-frontend:container": "nx serve examples-frontend --host=0.0.0.0",
-    "build-frontend": "nx run examples-frontend:build:production",
+    "start-frontend:container": "nx serve persons-management-frontend --host=0.0.0.0",
+    "build-frontend": "nx run persons-management-frontend:build:production",
+    "e2e-frontend": "nx run persons-management-frontend-e2e:e2e",
     
     "start-backend": "pnpm build-backend && pnpm start-backend-directly",
     "start-backend:container": "HOST='0.0.0.0' PORT=3000 pnpm build-backend && pnpm start-backend-directly",    
@@ -15,8 +16,8 @@
     "storybook": "nx run non-prod-storybook:storybook",
     "storybook-alt": "NODE_ENV=development pnpm storybook",
     "storybook:container": "nx run non-prod-storybook:storybook --host=0.0.0.0 --ci",
-    "test-storybook": "jest --clearCache -u && nx affected -t test-storybook --parallel --url http://localhost:4400",
-    "test-storybook+clean": "jest --clearCache -u && nx affected -t test-storybook -u",            
+    "test-storybook": "jest --clearCache -u && nx affected -t test-storybook --parallel --url http://localhost:4400 --exclude=non-prod-storybook",    
+    "test-storybook+clean": "jest --clearCache -u && nx affected -t test-storybook -u",
     
     "unit-test": "jest --clearCache -u && nx affected -t test --parallel",
     "e2e": "nx affected -t e2e --parallel",
