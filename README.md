@@ -91,9 +91,9 @@
    GitBash is also needed (it's usually included in the git installation for Windows).
 2. Install Docker (for the current Ubuntu LTS it's optional)
 3. Install pnpm with `npm install -g pnpm`, with `pnpm --version` make sure it's there.
-4. `git clone https://github.com/freitagh2/persons-management-feature-birthdays.git`
-5. `code persons-management-feature-birthdays` or `cd persons-management-feature-birthdays`
-6. You should be now on the branch `main`, so go the branch of the feature  with `git switch persons-management-feature-birthdays`
+4. `git clone https://github.com/juri-sinitson/angular-monorepo.git`
+5. `code angular-monorepo` or `cd angular-monorepo`
+6. You should be now on the branch `main`
 7. `pnpm install`
 8. `cp nx.json.dist nx.json`. Put an [access token](https://nx.dev/ci/recipes/security/access-tokens) there if you have got one. If you like, you can obtain one [here](nx.app). Otherwise
    replace the string `YOUR-SENSITIVE-VALUE-HERE` with an empty one.
