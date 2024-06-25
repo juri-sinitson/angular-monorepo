@@ -16,8 +16,8 @@ import { MenuItemInterface } from '../../interfaces/menu-item.interface';
         <a
           class="p-menuitem-link flex justify-content-between align-items-center p-3"
           [attr.data-testid]="'link' + item.url"
-          [routerLink]="item.url"
-          [routerLinkActive]="'active'"
+          routerLink="{{item.url}}"
+          routerLinkActive="'active'"
         >
           <div>
             @if (showIcons()) {

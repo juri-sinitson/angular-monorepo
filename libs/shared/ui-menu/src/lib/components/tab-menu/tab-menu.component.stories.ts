@@ -98,9 +98,8 @@ const meta: Meta<TabMenuTestWrapperComponent> = {
     // TODO: Figure out how to make router outlet work here
     componentWrapperDecorator(
       (story) => `
-      ${story}
-      <!-- Workaround: the target component is used directly instead of the router outlet. -->
-      <menu-test></menu-test>
+      ${story}      
+      <router-outlet></router-outlet>
     `,
     ),
     applicationConfig({
