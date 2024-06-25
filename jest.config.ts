@@ -6,4 +6,5 @@ export default {
     "<rootDir>/dist/**", 
     "<rootDir>/node_modules/**"
   ],
+  roots: ['<rootDir>/libs'],
 };

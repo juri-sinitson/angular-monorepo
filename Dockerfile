@@ -7,7 +7,7 @@ FROM node:lts
 # To avoid "Your system is missing the dependency: Xvfb"
 # when running E2E tests with Cypress.
 RUN apt-get update
-RUN apt-get -y install xvfb vim
+RUN apt-get -y install xvfb vim lsof
 
 WORKDIR /app
 # We copy these files now because the commands in this file are executed

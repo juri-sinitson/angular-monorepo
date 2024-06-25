@@ -15,9 +15,9 @@
     
     "storybook": "nx run non-prod-storybook:storybook",
     "storybook-alt": "NODE_ENV=development pnpm storybook",
-    "storybook:container": "nx run non-prod-storybook:storybook --host=0.0.0.0 --ci",
-    "test-storybook": "jest --clearCache -u && nx affected -t test-storybook --parallel --url http://localhost:4400 --exclude=non-prod-storybook",    
-    "test-storybook+clean": "jest --clearCache -u && nx affected -t test-storybook -u",
+    "storybook:container": "nx run non-prod-storybook:storybook --host=0.0.0.0 --ci",    
+    "test-storybook": "jest --clearCache -u && nx affected -t test-storybook --parallel --exclude=non-prod-storybook,generators",
+    "test-storybook+clean": "jest --clearCache -u && pnpm test-storybook -- -u",
     
     "unit-test": "jest --clearCache -u && nx affected -t test --parallel",
     "e2e": "nx affected -t e2e --parallel",
@@ -31,7 +31,7 @@
     
     "ci:helper:wait-for-storybook": "until curl --output /dev/null --silent --head --fail http://localhost:4400; do echo \"Waiting for storybook...\"; sleep 1; done;",
     "ci:storybook": "pnpm storybook -- --ci > /dev/null 2>&1 &",
-    "ci:test-storybook": "pnpm ci:helper:wait-for-storybook && jest --clearCache -u && NX_BRANCH=$(git branch --show-current) pnpm nx affected -t test-storybook --parallel --url http://localhost:4400",
+    "ci:test-storybook": "pnpm ci:helper:wait-for-storybook && NX_BRANCH=$(git branch --show-current) pnpm test-storybook",
     "ci:kill-storybook": "lsof -ti :4400 | xargs kill -9 > /dev/null",
     "ci:helper:wait-for-backend": "until curl --output /dev/null --silent --head --fail http://localhost:3000; do echo \"Waiting for backend...\"; sleep 1; done;",
     "ci:start-backend": "pnpm run start-backend > /dev/null &",

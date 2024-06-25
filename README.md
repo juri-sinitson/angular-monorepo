@@ -108,11 +108,10 @@
 
     The steps for docker:
     >1. Make sure Docker us up and running
-    >1. `pnpm container:rebuild`
-    >2. `pnpm container:enter`
-    >3. `pnpm install`, if you want to execute the commands in the container
+    >2. `pnpm container:rebuild`
+    >3. `pnpm container:enter`, if you want to execute the commands in the container
     > you can stay in this container terminal or execute `exit` if you to leave that 
-    terminal for now.   
+    terminal for now.
 
 ## Execution: Single steps
 
@@ -170,8 +169,9 @@ due to some issues.
    executed in a terminal.
 
 ### Docker
-1. There is currently no cache for `node_modules`. You might need to 
-   reinstall them even if you didn't down shut down the container.
+1. There is currently some issue with `node_modules` from time to time. Thus you suddenly
+   may get strange errors e.g. when executing `pnpm ci:storybook` or its respective subcommand.
+   Restarting the container should usually help.
 
 ## Important notes
 The info above should be usually enough to execute the most important commands.
