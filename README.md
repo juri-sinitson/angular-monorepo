@@ -52,6 +52,7 @@
     - [State Management](#state-management)
     - [Unit tests](#unit-tests-1)
     - [E2E tests and Storybook interaction tests](#e2e-tests-and-storybook-interaction-tests)
+      - [For E2E tests](#for-e2e-tests)
     - [How deal with manual tests?](#how-deal-with-manual-tests)
       - [Short answer](#short-answer)
       - [Detailed answer](#detailed-answer)
@@ -239,12 +240,13 @@ in a config file with the dist extension (in this example `nx.json.dist`).
 
 <!-- TOC --><a name="the-list"></a>
 ## The list
-1. `nx.json.dist` - this file contains the [access token](https://nx.dev/ci/recipes/security/access-tokens) by in key `nxCloudAccessToken` for the nx workspace in the [nx cloud](nx.app/).
+1. `nx.json.dist` - this file contains the [access token](https://nx.dev/ci/recipes/security/access-tokens) in 
+    the key `nxCloudAccessToken` for the nx workspace in the [nx cloud](nx.app/).
 
    > **NOTE!**
    >
-   > You can leave the token empty for this file and add it at some later point. Everything should
-   still work fine. If you just want to take a closer look to this repo, you most probably even
+   > You can replace the token placeholder with an empty string and optionally add it at some later point. 
+   Everything should still work fine. If you just want to take a closer look to this repo, you most probably even
    don't need a token now.
    >
    > If you want to see [remote cache](https://nx.dev/ci/features/remote-cache) in action as the case
@@ -256,7 +258,7 @@ in a config file with the dist extension (in this example `nx.json.dist`).
 
 <!-- TOC --><a name="execution"></a>
 # Execution
-We execute in general as described in the generated documentation below.
+Execution is made in general as described in the generated documentation below.
 Use the `npx` command in front of the `nx` e.g. `npx nx serve app1` to be 
 sure you use the nx executable from the current repo!
 
@@ -278,7 +280,7 @@ troubleshooting section for this case for more details.
 
 <!-- TOC --><a name="own-additions"></a>
 ## Own additions
-1. To execute the global [Storybook](https://storybook.js.org/) catalogue we use `nx run non-prod-storybook:storybook`. 
+1. To execute the global [Storybook](https://storybook.js.org/) catalogue `nx run non-prod-storybook:storybook` is used. 
 See also other relevant executable commands in the config of the lib `non-prod-storybook`.
 
 **NOTE!**
@@ -300,8 +302,9 @@ lib is to execute storybook over all the libraries to get the whole catalogue at
 
 <!-- TOC --><a name="general"></a>
 ## General
-We follow the architecture described by [M. Steyer](https://www.angulararchitects.io/en/ebooks/micro-frontends-and-moduliths-with-angular/).
-As also mentioned in this book we use the [ddd plugin](https://www.npmjs.com/package/@angular-architects/ddd).
+The architecture used here is described by [M. Steyer](https://www.angulararchitects.io/en/ebooks/micro-frontends-and-moduliths-with-angular/).
+As also mentioned in this book the [ddd plugin](https://www.npmjs.com/package/@angular-architects/ddd)
+is used.
 
 <!-- TOC --><a name="own-additionsmodifications"></a>
 ## Own additions/modifications
@@ -320,7 +323,7 @@ See also [this](https://nx.dev/features/enforce-module-boundaries) documentation
 
 <!-- TOC --><a name="ui"></a>
 ### UI
-We use component based approach with [PrimeNG](https://primeng.org/) and utility first approach with [PrimeFlex](PrimeFlex).
+Component based approach with [PrimeNG](https://primeng.org/) and utility first approach with [PrimeFlex](PrimeFlex) are used here.
 
 Goals:
 
@@ -331,7 +334,7 @@ Goals:
 5. Instead of pixel pushing you use [padding](https://primeflex.org/padding)- and 
 [margin](https://primeflex.org/margin)-classes instead.
 
-We abstract a component of the UI library wrapping it in a component with the input parameters.
+A component of the UI library is abstracted by wrapping it in a component with the input parameters.
 
 Goals:
 
@@ -390,18 +393,19 @@ This file is then used in the configurations of the apps, catalogue (e.g.
 
 <!-- TOC --><a name="ui-icons"></a>
 ### UI: Icons
-We abstract the icons for better readability and decoupling from the current UI library.
-So instead of `pi pi-fw pi-home` we use `icon-home`. The abstraction is made in 
+The icons are abstracted for better readability and decoupling from the current UI library.
+So e.g. instead of `pi pi-fw pi-home` `icon-home` is used. The abstraction is made in 
 `styles.scss` in the root directory.
 
 **NOTE!**
 
-We make the abstraction of the icons on demand instead of in advance to avoid
-a work which can be (partially) useless.
+The abstraction of the icons is made on demand instead of in advance to avoid
+a work which is no necessary at the moment.
 
 <!-- TOC --><a name="catalogue-the-ui-components-with-storybook"></a>
 ### Catalogue the UI components with Storybook
-1. To catalogue and test the components (business and basic ones) we use [Storybook](https://storybook.js.org/).
+1. To catalogue and test the components (business and basic ones) [Storybook](https://storybook.js.org/)
+   is used.
 
 **Goals**
 >1. Increased agility because UI part can be approved during/before the service/backend part is being developed.
@@ -419,14 +423,14 @@ have the best chances to ship an already completely tested form in storybook.
 
 <!-- TOC --><a name="developing-process"></a>
 ### Developing process
-We go top down. This means we first develop the UI part using storybook and review it during or before 
-the service/backend part is being developed.
+The direction is top down. This means first the UI part using storybook is developed 
+and reviewed during or before the service/backend part is being developed.
 
 <!-- TOC --><a name="the-domain-non-prod"></a>
 ### The domain `non-prod`
-1. We use this domain to store the stuff which is not thought for prod use. The examples are:
+1. This domain is used to store the stuff which is not thought to be used in the productive code. The examples are:
 >1. Storybook library which catalogues all libraries containing stories. The goal is to have a global storybook catalogue additionally to countless catalogues per library.
->2. In the future we may store common testing routines or even testing scenarios in a library of that domain.
+>1. Code generators (the generators themselves are not thought for productive code, but the code they generate is).
 
 <!-- TOC --><a name="the-domain-shared"></a>
 ### The domain `shared`
@@ -473,12 +477,12 @@ the better testable, reliable, predictable and readable it will be.
 
 #### How to handle side effects in the code?
 Side effects should be separated from the rest of the code 
-into places where they are simple to find. A (signal) store is a good candidate.
-A method/function of the store with a side effect should then have a e.g. a prefix or 
-postfix `sideEffect` for one to immediately see where the side effects in the 
+into places where they are easy to find. A (signal) store is a good candidate.
+A method/function of the store with a side effect should then have a prefix or 
+a postfix `sideEffect` for the one to immediately see where the side effects in the 
 given store are.
 
-See also [this](https://github.com/juri-sinitson/angular-monorepo/blob/main/libs/shared-business/examples/src/lib/stores/product.store.ts) example and its [unit tests](https://github.com/juri-sinitson/angular-monorepo/blob/main/libs/shared-business/examples/src/lib/stores/product.store.spec.ts).
+See also [this](https://github.com/juri-sinitson/angular-monorepo/blob/main/libs/persons-management/api-persons/src/lib/stores/person-entity-store.service.ts) example and its [unit tests](https://github.com/juri-sinitson/angular-monorepo/blob/main/libs/persons-management/api-persons/src/lib/stores/person-entity-store.service.spec.ts).
 
 Ideally the store of your choice supports such tool like Redux [DevTools](https://github.com/reduxjs/redux-devtools). In this case you have a very handy and effective tool to debug the side effects
 in your code.
@@ -492,7 +496,7 @@ For tests in the catalogue (e.g. [interaction tests in Storybook](https://storyb
 you organize your UI components that they have a sync input and send their data by the output. 
 
 Those components are then fed with the data by the smart components in your app. In case of a catalogue, 
-the story mocks the smart component by providing the hardcoded sync data.
+the story de-facto mocks the smart component by providing the hardcoded sync data.
 
 A catalogue shouldn't have to deal with the component output. At least not, 
 if this output is aimed to produce side effects directly or indirectly. 
@@ -512,26 +516,32 @@ is at least theoretically unavoidable.
 
 <!-- TOC --><a name="state-management"></a>
 ### State Management
-The state management is currently (2024-03-16) implemented using a
-[signal store](https://ngrx.io/guide/signals/signal-store) of NGRX. To provide an abstraction, the signal store is not available from the outside. Instead a service is used which provides the access to the pieces of the state and as the case may be triggers some side effects on the store.
+The state management is currently implemented using a
+[signal store](https://ngrx.io/guide/signals/signal-store) of NGRX. To provide an abstraction, 
+the signal store is not accessible directly from the outside. Instead a service is used which 
+provides the access to the pieces of the state and triggers some side effects on the store.
 
-The goal of this approach is a better predictability and better debugability with e.g. Redux DevTools
-(an addon for a popular browser). It's may also come in very handy if you know that all 
+The goal of this approach is a better predictability and better debugability with e.g. 
+[Redux DevTools](https://github.com/reduxjs/redux-devtools?tab=readme-ov-file)
+(an addon for most popular browsers). It's may also come in very handy if you know that all 
 the network requests are made as side effects on the appropriate store and that a store is the single
 source of truth.
 
-See [this](https://github.com/juri-sinitson/angular-monorepo/blob/main/libs/shared-business/examples/src/lib/stores/product.store.ts) example.
+See [this](https://github.com/juri-sinitson/angular-monorepo/blob/main/libs/persons-management/api-persons/src/lib/stores/person-entity-store.service.ts) example.
 
 <!-- TOC --><a name="unit-tests"></a>
 ### Unit tests
-Unit tests are made to ensure a service behaves as expected. If the service to be tested 
-acts as a proxy to a store with side effects, than those side effects are mocked for different scenarios. E.g. in case of a GET network request the following scenarios are emulated: happy case, loading, error and no data (in case of angular with [this](https://angular.io/guide/http-test-requests#http-testing-library) testing library). For every scenario the behavior of the service or in other words its API to the outside is tested. Implementation details are 
+Unit tests are made to ensure e.g. a service behaves as expected. If the service to be tested 
+acts as a proxy to a store with side effects, than those side effects are mocked for different scenarios. 
+E.g. in case of a GET network request the following scenarios are emulated: happy case, loading, 
+error and no data (in case of angular with like [this](https://angular.dev/guide/http/testing) testing library). 
+For every scenario the behavior of the service or in other words its API to the outside is tested. Implementation details are 
 not tested to keep the tests immune against refactoring (the changes which don't affect 
 the behavior to the outside).
 
 There is also a [video](https://www.youtube.com/watch?v=EZ05e7EMOLM) from 2017 which is still current regarding this topic.
 
-See [this](https://github.com/juri-sinitson/angular-monorepo/blob/main/libs/shared-business/examples/src/lib/stores/product.store.spec.ts) example.
+See [this](https://github.com/juri-sinitson/angular-monorepo/blob/main/libs/persons-management/api-persons/src/lib/stores/person-entity-store.service.spec.ts) example.
 
 <!-- TOC --><a name="e2e-tests-and-storybook-interaction-tests"></a>
 ### E2E tests and Storybook interaction tests
@@ -539,7 +549,9 @@ The same principle as for unit tests: the implementation details are not tested.
 The implementation details in this case are css classes, ids and other stuff which
 will or theoretically can be changed or removed to improve the template. Thus a
 separate marker should be used for E2E tests and Storybook interaction tests,
-e.g. the `testid` attribute which works on both cypress and storybook.
+e.g. the `testid` attribute which looks like an optimal choice for both cypress and storybook.
+In some cases it's also reasonable to wrap the element to be tested e.g. in a `div` container
+and assign the `testid` attribute to the container.
 
 The goal of storybook interaction tests is to make sure every entry in 
 storybook behaves as expected and is generally there (e.g. instead of an ugly black-red
@@ -549,16 +561,19 @@ The goal of E2E tests is to make sure the app behaves for the end user as expect
 If they are performant they save a lot of work for manual testing. E2E tests should be 
 made economically to provide a good performance.
 
-E.g. in case of a table it should be enough to test if the header row and first two data rows are there. 
-
-When you test if the data was loaded on the page correctly is't usually not necessary to call visit for every component. Same when you test the loading, error and no data states on the page. It usually should be enough to make one visit for each state instead of one visit for
-each component.
-
-If you have a lot of combinations to check, fill and post some data, it's reasonable to test e.g. the most important ten ones instead of 200 of them.
-
 To make a test better readable the page object approach is used.
 
-See [this](https://github.com/juri-sinitson/angular-monorepo/blob/main/apps/examples-frontend-e2e/src/e2e/main-page.cy.ts) example.
+See [this example of E2E](https://github.com/juri-sinitson/angular-monorepo/blob/main/apps/persons-management-frontend-e2e/src/e2e/main-page.cy.ts) 
+and this [example of interaction tests](https://github.com/juri-sinitson/angular-monorepo/blob/main/libs/persons-management/feature-birthdays/src/lib/components/persons/person-form.component.stories.ts).
+
+
+#### For E2E tests
+E.g. in case of a table it should be enough to test if the header row and first two data rows are there. 
+You should try to save the visit calls to make your e2e tests faster. 
+If you have a lot of combinations to check, fill and post some data, it's reasonable to test e.g. 
+the most important ten ones instead of 200 of them.
+
+To make your test reliable you should reset the data in the backend (so called [seeding](https://learn.cypress.io/advanced-cypress-concepts/database-initialization-and-seeding)). See also [this implementation](https://github.com/juri-sinitson/angular-monorepo/blob/main/apps/central-backend/src/persons-management-routes.ts) to get a better idea.
 
 
 ### How deal with manual tests?
@@ -649,7 +664,7 @@ From more to less:
    a library, which is used and not used any more and then used again, you have to 
    consider to take something less then 100).
    You definitely need to cover all the cases in the new implementations. An edge case which is 
-   not covered by a test, but is reachable by the code as a very, very, very bad practice...
+   not covered by a test, but is reachable by the code is a very, very, very bad practice...
 
 2. **[Interaction tests](https://storybook.js.org/docs/writing-tests/interaction-testing) in the catalogue (e.g. [Storybook](https://storybook.js.org/))**:
    
@@ -659,7 +674,7 @@ From more to less:
 3. **E2E tests**:
    
    Covering all the possibilities the user can click and interact with is ideal, but 
-   is not realistic due time and hardware reasons. So here you have to consider what is most 
+   is not realistic due to time and hardware reasons. So here you have to consider what is most 
    important to test, what is less and what can be omitted. It's usually not necessary to test 
    validation here, when you have done it in the catalogue. I you have a large amount 
    of combinations a user can click or select, testing them all will most probably overheat you, 
@@ -778,7 +793,7 @@ what configuration plugins you would like to install and adds the default config
 <!-- TOC --><a name="troubleshooting"></a>
 
 # Handling vulnerability fixes
-If you the dependency vulnerabilities are fixed (e.g. manually or by
+If your dependency vulnerabilities are fixed (e.g. manually or by
 [dependabot](https://docs.github.com/en/code-security/dependabot/working-with-dependabot)),
 it's reasonable to test if you code base still works. In this case the 
 [nx cache](https://nx.dev/features/cache-task-results) will not be invalidated 
