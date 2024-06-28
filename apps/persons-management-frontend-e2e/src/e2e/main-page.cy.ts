@@ -143,6 +143,7 @@ describe('Main Page: Persons', () => {
 
     describe('Happy case', () => {
       before(() => {
+        mockDate();
         cy.visit('/');
       });
 
@@ -177,11 +178,12 @@ describe('Main Page: Persons', () => {
     describe('Error', () => {
       before(() => {
         createErrorInterceptor(`${entitiesUrl}/*`).as(`${entities}Error`);
+        mockDate();
         cy.visit('/');
       });
       it('dialog should show error and stay open ON update failure BY any', () => {
         getByTestId(entitiesFeature).within(() => {
-          getByTestId('row')
+          return getByTestId('row')
             .first()
             .within(() => getByTestId('edit').click())
             .then(() => getByTestId('entity-form'))
@@ -238,6 +240,7 @@ describe('Main Page: Persons', () => {
   describe('DELETE', () => {
     describe('Happy case', () => {
       before(() => {
+        mockDate();
         cy.visit('/');
       });
 
@@ -281,6 +284,7 @@ describe('Main Page: Persons', () => {
     describe('Error', () => {
       before(() => {
         createErrorInterceptor(`${entitiesUrl}/*`).as(`${entities}Error`);
+        mockDate();
         cy.visit('/');
       });
 
@@ -375,6 +379,7 @@ describe('Main Page: Persons', () => {
     describe('Error', () => {
       before(() => {
         seed();
+        mockDate();
         cy.visit('/');
       });
 

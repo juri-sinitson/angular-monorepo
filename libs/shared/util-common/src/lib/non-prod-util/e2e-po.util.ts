@@ -75,11 +75,15 @@ export const selectDropdownValue = (dataTestId: string, value: string) =>
 // CRUD
 export const expectCrudIsDisabled = () => {
   getByTestId('new-button').should('be.disabled');
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any  
   return getByTestId('row').each((row: any) => {
     cy.wrap(row).within(() => {
-      getByTestId('delete').should('be.disabled');
-      getByTestId('edit').should('be.disabled');
+      return getByTestId('crud')
+        .within(() => {
+          getByTestId('delete').should('be.disabled');
+          getByTestId('edit').should('be.disabled');
+        });
     });
   });
 }
