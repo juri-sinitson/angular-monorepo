@@ -1,7 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 
-// TODO! Adjust the project tags.
-// eslint-disable-next-line @nx/enforce-module-boundaries
 // -- STEP 1: adjust the entity service path
 import { <%= entityServiceClassName %> as EntityStoreService } from '@angular-monorepo/shared-business/examples';
 import { <%= className %>Component as EntityComponent } from './<%= fileName %>.component';

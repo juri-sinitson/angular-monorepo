@@ -1,9 +1,7 @@
 import express from 'express';
 
-// TODO: adjust project tags and as the case may be
-// rearrange the libs.
-// eslint-disable-next-line @nx/enforce-module-boundaries
-import { PersonInterface as EntityInterface } from '@angular-monorepo/persons-management/domain';
+import { PersonInterface as EntityInterface } 
+  from '@angular-monorepo/persons-management/domain';
 import { nextId } from './lib';
 
 const router = express.Router();

@@ -24,9 +24,8 @@ import {
   getCanvas,
 } from '@angular-monorepo/shared/util-common-non-prod';
 
-// TODO: Adjust the project tags.
-// eslint-disable-next-line @nx/enforce-module-boundaries
-import { rootComponentConfigBase as commonAppConfig } from '@angular-monorepo/shared/util-common-non-prod';
+import { rootComponentConfigBase as commonAppConfig } 
+  from '@angular-monorepo/shared/util-common-non-prod';
 
 @Component({
   selector: 'menu-test',

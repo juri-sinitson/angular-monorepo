@@ -10,8 +10,6 @@ import {
   componentWrapperDecorator,
 } from '@storybook/angular';
 
-// TODO! Adjust the project tags.
-// eslint-disable-next-line @nx/enforce-module-boundaries
 import {
   getCanvas,
   ConfirmNotImplementedWrapperComponent,
@@ -30,15 +28,11 @@ import {
   clearNumberInput,
 } from '@angular-monorepo/shared/util-common-non-prod';
 
-// TODO! Adjust the project tags.
-// eslint-disable-next-line @nx/enforce-module-boundaries
 import {
   MessageInterface,
   rootComponentConfigBase as commonAppConfig,
 } from '@angular-monorepo/shared/util-common';
 
-// TODO! Adjust the project tags.
-// eslint-disable-next-line @nx/enforce-module-boundaries
 import { PersonInterface as EntityInterface } from '@angular-monorepo/persons-management/domain';
 import { PersonFormComponent as EntityFormComponent } from './person-form.component';
 

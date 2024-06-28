@@ -6,12 +6,9 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 import { <%= className %>Component as EntitiesComponent } from './<%= fileName %>.component';
 // -- STEP 1: Adjust the path to the entity interface
-// TODO: Adjust the project tags.
-// eslint-disable-next-line @nx/enforce-module-boundaries
-import { <%= entityInterfaceName %> as EntityInterface } from '@angular-monorepo/shared-business/examples';
-// eslint-disable-next-line @nx/enforce-module-boundaries
+import { <%= entityInterfaceName %> as EntityInterface } from '@angular-monorepo/shared-business/examples'
 import { MessageInterface, commonAppConfig } from '@angular-monorepo/shared/util-common';
-// eslint-disable-next-line @nx/enforce-module-boundaries
+
 import {
   errorStory,
   getFirstElemByText,

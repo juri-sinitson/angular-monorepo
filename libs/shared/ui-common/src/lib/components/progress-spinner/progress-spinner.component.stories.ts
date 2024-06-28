@@ -8,10 +8,8 @@ import {
 } from '@angular-monorepo/shared/util-common-non-prod';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
-// TODO: Adjust the project tags.
-// eslint-disable-next-line @nx/enforce-module-boundaries
-import { rootComponentConfigBase as commonAppConfig } from '@angular-monorepo/shared/util-common-non-prod';
-// eslint-disable-next-line @nx/enforce-module-boundaries
+import { rootComponentConfigBase as commonAppConfig } 
+  from '@angular-monorepo/shared/util-common-non-prod';
 import { ProgressSpinnerComponent } from './progress-spinner.component';
 
 @Component({

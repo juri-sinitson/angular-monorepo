@@ -17,11 +17,7 @@ import { ButtonModule } from 'primeng/button';
 import { MessagesModule } from 'primeng/messages';
 
 // -- STEP 1: Adjust the path to the entity interface
-// TODO! Adjust the project tags.
-// eslint-disable-next-line @nx/enforce-module-boundaries
 import { <%= entityInterfaceName %> as EntityInterface } from '@angular-monorepo/shared-business/examples';
-// TODO! Adjust the project tags.
-// eslint-disable-next-line @nx/enforce-module-boundaries
 import { CommonWrapperComponent, AbstractEntityFormComponent } from '@angular-monorepo/shared/ui-common';
 
 // -- STEP 2: Define the form types and options when necessary

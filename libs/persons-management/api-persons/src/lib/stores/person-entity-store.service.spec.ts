@@ -1,18 +1,14 @@
 import { TestBed } from '@angular/core/testing';
 import {
-  HttpClientTestingModule,
   HttpTestingController,
   TestRequest,
 } from '@angular/common/http/testing';
 
 import { PersonEntityStoreService as EntityStoreService } from './person-entity-store.service';
 import { personsUrl as entitiesUrl } from './urls';
-// TODO: adjust the project tags
-// eslint-disable-next-line @nx/enforce-module-boundaries
 import { MessageInterface } from '@angular-monorepo/shared/util-common';
-// TODO: adjust the project tags
-// eslint-disable-next-line @nx/enforce-module-boundaries
 import { PersonInterface as EntityInterface } from '@angular-monorepo/persons-management/domain';
+import { specConfig } from '@angular-monorepo/shared/util-common-non-prod';
 
 // Consciously duplicating this utility function 
 // for safer testing.
@@ -64,9 +60,11 @@ describe('PersonEntityStoreService', () => {
   beforeEach(() => {    
     jest.spyOn(global, 'Date').mockImplementation(() => mockDate);      
 
-    TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [EntityStoreService],
+    TestBed.configureTestingModule({      
+      providers: [
+        specConfig.providers,
+        EntityStoreService
+      ],
     });
     service = TestBed.inject(EntityStoreService);
     httpMock = TestBed.inject(HttpTestingController);

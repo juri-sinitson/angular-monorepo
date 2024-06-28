@@ -4,7 +4,7 @@
   "sourceRoot": "libs/persons-management/domain/src",
   "prefix": "persons-management",
   "projectType": "library",
-  "tags": ["domain:persons-management", "type:domain-logic"],
+  "tags": ["type:domain"],
   "targets": {
     "build": {
       "executor": "@nx/angular:ng-packagr-lite",

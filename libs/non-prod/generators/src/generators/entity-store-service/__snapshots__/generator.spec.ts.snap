@@ -3,8 +3,6 @@
 exports[`entity-store-service generator should match snapshot ON any BY any 1`] = `
 "import { Injectable } from '@angular/core';
 
-// TODO! Adjust the project tags.
-// eslint-disable-next-line @nx/enforce-module-boundaries
 import { AbstractEntityStoreService } from '@angular-monorepo/shared/util-common';
 
 // -- STEP 1: ADJUST THE URL! --
@@ -34,14 +32,10 @@ import {
   TestRequest,
 } from '@angular/common/http/testing';
 
-// TODO: adjust the project tags
-// eslint-disable-next-line @nx/enforce-module-boundaries
 import { specConfig } from '@angular-monorepo/shared/util-common-non-prod';
 
 import { MyProductEntityStoreService as EntityStoreService } from './my-product-entity-store.service';
 import { myProductsUrl as entitiesUrl } from './urls';
-// TODO: adjust the project tags
-// eslint-disable-next-line @nx/enforce-module-boundaries
 import { MessageInterface } from '@angular-monorepo/shared/util-common';
 import { MyProductInterface as EntityInterface } from '../interfaces/my-product.interface';
 

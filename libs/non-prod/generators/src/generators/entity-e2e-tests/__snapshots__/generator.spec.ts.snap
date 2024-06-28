@@ -1,13 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`entity-e2e-tests generator should match snapshot ON any BY any 1`] = `
-"// TODO! Adjust the project tags.
-// eslint-disable-next-line @nx/enforce-module-boundaries
-// -- STEP 1: Adjust the URL
+"// -- STEP 1: Adjust the URL
 import { myProductsUrl as entitiesUrl } from '@angular-monorepo/shared-business/examples-e2e';
 
-// TODO! Adjust the project tags.
-// eslint-disable-next-line @nx/enforce-module-boundaries
 import {
   expectE2EText as expectText,
   expectTableDataValue,

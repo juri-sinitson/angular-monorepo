@@ -1,10 +1,5 @@
-// TODO! Adjust the project tags.
-// eslint-disable-next-line @nx/enforce-module-boundaries
-// eslint-disable-next-line @nx/enforce-module-boundaries
 import { personsUrl as entitiesUrl } from '@angular-monorepo/persons-management-api-persons-e2e';
 
-// TODO! Adjust the project tags.
-// eslint-disable-next-line @nx/enforce-module-boundaries
 import {
   expectE2EText as expectText,
   expectTableDataValue,

@@ -3,7 +3,7 @@
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/shared/util-common/src",
   "prefix": "common",
-  "tags": ["domain:shared", "type:util"],
+  "tags": ["type:shared:util"],
   "projectType": "library",
   "targets": {
     "build": {

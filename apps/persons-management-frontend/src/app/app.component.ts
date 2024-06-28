@@ -1,7 +1,6 @@
-// TODO! Adjust the project tags.
-// eslint-disable-next-line @nx/enforce-module-boundaries
-import { PersonsSmartComponent } from '@angular-monorepo/persons-management-feature-birthdays';
 import { Component } from '@angular/core';
+
+import { PersonsSmartComponent } from '@angular-monorepo/persons-management-feature-birthdays';
 
 @Component({
   standalone: true,

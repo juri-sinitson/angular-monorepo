@@ -34,6 +34,7 @@
   - [Main Goals](#main-goals)
   - [General](#general-1)
   - [Own additions/modifications](#own-additionsmodifications)
+    - [Dependency constraints](#dependency-constraints)
     - [UI](#ui)
     - [UI: Stylesheets](#ui-stylesheets)
     - [UI: Icons](#ui-icons)
@@ -304,6 +305,18 @@ As also mentioned in this book we use the [ddd plugin](https://www.npmjs.com/pac
 
 <!-- TOC --><a name="own-additionsmodifications"></a>
 ## Own additions/modifications
+
+### Dependency constraints
+Dependency is here an app or a library.
+To avoid "anything can depend on anything" and bring some
+order and structure to the local dependencies, dependency constraints are used. 
+When a dependency constraint is violated, you get the linting error as of the 
+current [configuration](https://github.com/juri-sinitson/angular-monorepo/blob/main/.eslintrc.json).
+
+Feel free to adjust [the configuration](https://github.com/juri-sinitson/angular-monorepo/blob/main/.eslintrc.json) to your needs
+in case you use this repo as a base of your project.
+
+See also [this](https://nx.dev/features/enforce-module-boundaries) documentation.
 
 <!-- TOC --><a name="ui"></a>
 ### UI

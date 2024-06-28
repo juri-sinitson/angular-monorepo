@@ -4,14 +4,10 @@ import {
   TestRequest,
 } from '@angular/common/http/testing';
 
-// TODO: adjust the project tags
-// eslint-disable-next-line @nx/enforce-module-boundaries
 import { specConfig } from '@angular-monorepo/shared/util-common-non-prod';
 
 import { <%= className %>EntityStoreService as EntityStoreService } from './<%= fileName %>-entity-store.service';
 import { <%= constantNamePlural %>Url as entitiesUrl } from './urls';
-// TODO: adjust the project tags
-// eslint-disable-next-line @nx/enforce-module-boundaries
 import { MessageInterface } from '@angular-monorepo/shared/util-common';
 import { <%= className %>Interface as EntityInterface } from '../interfaces/<%= fileName %>.interface';
 

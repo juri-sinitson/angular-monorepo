@@ -5,12 +5,8 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 import { Meta, StoryObj, applicationConfig } from '@storybook/angular';
 
-// TODO: Adjust the project tags.
-// eslint-disable-next-line @nx/enforce-module-boundaries
 import { rootComponentConfigBase as commonAppConfig } from '@angular-monorepo/shared/util-common-non-prod';
 
-// TODO! Adjust the project tags.
-// eslint-disable-next-line @nx/enforce-module-boundaries
 import {
   getCanvas,
   ConfirmNotImplementedWrapperComponent,  
@@ -24,13 +20,10 @@ import {
   errorStory,  
 } from '@angular-monorepo/shared/util-common-non-prod';
 
-// TODO! Adjust the project tags.
-// eslint-disable-next-line @nx/enforce-module-boundaries
+
 import { MessageInterface, commonAppConfig } from '@angular-monorepo/shared/util-common';
 
 // -- STEP 1: Import the entity interface
-// TODO! Adjust the project tags.
-// eslint-disable-next-line @nx/enforce-module-boundaries
 import { <%= entityInterfaceName %> as EntityInterface } from '@angular-monorepo/shared-business/examples';
 // -- STEP 2: Import the entity form component
 import { <%= entityName %>FormComponent as EntityFormComponent } from './<%= originalName %>-form.component';

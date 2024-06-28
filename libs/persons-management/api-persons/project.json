@@ -4,7 +4,7 @@
   "sourceRoot": "libs/persons-management/api-persons/src",
   "prefix": "lib",
   "projectType": "library",
-  "tags": [],
+  "tags": ["type:api"],
   "targets": {
     "build": {
       "executor": "@nx/angular:ng-packagr-lite",

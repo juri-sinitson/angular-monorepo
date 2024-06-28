@@ -2,19 +2,13 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { DialogModule } from 'primeng/dialog';
 
-// TODO! Adjust the project tags.
-// eslint-disable-next-line @nx/enforce-module-boundaries
 import { 
   BasicTableComponent,
   CommonWrapperComponent,
 } from '@angular-monorepo/shared/ui-common';
-// TODO! Adjust the project tags.
-// eslint-disable-next-line @nx/enforce-module-boundaries
 import { AbstractEntitiesListComponent } from '@angular-monorepo/shared/ui-common';
 
 // -- STEP 1: ADJUST THE ENTITY INTERFACE PATH! --
-// TODO! Adjust the project tags.
-// eslint-disable-next-line @nx/enforce-module-boundaries
 import { <%= entityInterfaceName %> as EntityInterface } from '@angular-monorepo/shared-business/examples';
 import { <%= entityName  %>FormComponent as EntityFormComponent } from './<%= originalName %>-form.component';
 

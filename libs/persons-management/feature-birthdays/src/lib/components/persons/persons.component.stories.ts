@@ -11,16 +11,12 @@ import { ConfirmationService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 import { PersonsComponent as EntitiesComponent } from './persons.component';
-// TODO: Adjust the project tags.
-// eslint-disable-next-line @nx/enforce-module-boundaries
 import { PersonInterface as EntityInterface } from '@angular-monorepo/persons-management/domain';
-// eslint-disable-next-line @nx/enforce-module-boundaries
 import {
   DateAsString,
   MessageInterface,
   rootComponentConfigBase as commonAppConfig,
 } from '@angular-monorepo/shared/util-common';
-// eslint-disable-next-line @nx/enforce-module-boundaries
 import {
   errorStory,
   getFirstElemByText,

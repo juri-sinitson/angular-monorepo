@@ -4,9 +4,6 @@ exports[`entity-backend-mock generator should match snapshot ON any BY any 1`] =
 "import express from 'express';
 
 // -- STEP 1: ADJUST ENTITY INTERFACE PATH! --
-// TODO: adjust project tags and as the case may be
-// rearrange the libs.
-// eslint-disable-next-line @nx/enforce-module-boundaries
 import { MyProductInterface as EntityInterface } from '@angular-monorepo/shared-business/examples';
 
 const host = process.env['HOST'] ?? 'localhost';

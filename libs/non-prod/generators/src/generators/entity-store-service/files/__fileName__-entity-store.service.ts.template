@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
 
-// TODO! Adjust the project tags.
-// eslint-disable-next-line @nx/enforce-module-boundaries
 import { AbstractEntityStoreService } from '@angular-monorepo/shared/util-common';
 
 // -- STEP 1: ADJUST THE URL! --

@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 
-// TODO! Adjust the project tags.
-// eslint-disable-next-line @nx/enforce-module-boundaries
+
 import { PersonEntityStoreService as EntityStoreService } from '@angular-monorepo/persons-management-api-persons';
 import { PersonsComponent as EntityComponent } from './persons.component';
 

@@ -8,8 +8,6 @@ import { rxMethod } from '@ngrx/signals/rxjs-interop';
 
 import { exhaustMap, pipe, tap } from 'rxjs';
 
-// TODO! Adjust the project tags.
-// eslint-disable-next-line @nx/enforce-module-boundaries
 import { MessageInterface } from "../../interfaces/message.interface";
 import { withDevToolsFunc } from "../../util/store.util";
 

@@ -10,18 +10,12 @@ import {
 import { DialogModule } from 'primeng/dialog';
 import { MessagesModule } from 'primeng/messages';
 
-// TODO! Adjust the project tags.
-// eslint-disable-next-line @nx/enforce-module-boundaries
 import {
   BasicTableComponent,
   CommonWrapperComponent,
 } from '@angular-monorepo/shared/ui-common';
-// TODO! Adjust the project tags.
-// eslint-disable-next-line @nx/enforce-module-boundaries
 import { AbstractEntitiesListComponent } from '@angular-monorepo/shared/ui-common';
 
-// TODO! Adjust the project tags.
-// eslint-disable-next-line @nx/enforce-module-boundaries
 import {
   Age,
   PersonInterfaceComputed as EntityInterfaceComputed,
@@ -30,8 +24,6 @@ import {
 } from '@angular-monorepo/persons-management/domain';
 
 import { PersonFormComponent as EntityFormComponent } from './person-form.component';
-// TODO! Adjust the project tags.
-// eslint-disable-next-line @nx/enforce-module-boundaries
 import {
   DateAsString,
   daysToNexDue,

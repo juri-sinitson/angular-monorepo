@@ -3,9 +3,8 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 import { LineChartComponent } from './line-chart.component';
 
-// TODO: Adjust the project tags.
-// eslint-disable-next-line @nx/enforce-module-boundaries
-import { rootComponentConfigBase as commonAppConfig } from '@angular-monorepo/shared/util-common-non-prod';
+import { rootComponentConfigBase as commonAppConfig } 
+  from '@angular-monorepo/shared/util-common-non-prod';
 
 const documentStyle = getComputedStyle(document.documentElement);
 

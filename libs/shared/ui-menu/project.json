@@ -3,7 +3,7 @@
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/shared/ui-menu/src",
   "prefix": "menu",
-  "tags": ["domain:shared", "type:ui"],
+  "tags": ["type:shared:ui"],
   "projectType": "library",
   "targets": {
     "build": {

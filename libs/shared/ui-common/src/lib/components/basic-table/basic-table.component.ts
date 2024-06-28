@@ -14,8 +14,6 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToolbarModule } from 'primeng/toolbar';
 
 import { TableColumn } from '../../types/table';
-// TODO! Adjust the project tags.
-// eslint-disable-next-line @nx/enforce-module-boundaries
 import { Entity } from '@angular-monorepo/shared/util-common';
 
 /**

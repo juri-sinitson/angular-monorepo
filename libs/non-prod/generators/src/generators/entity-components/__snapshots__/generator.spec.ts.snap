@@ -5,19 +5,13 @@ exports[`entity-components generator should match snapshot ON any BY any 1`] = `
 
 import { DialogModule } from 'primeng/dialog';
 
-// TODO! Adjust the project tags.
-// eslint-disable-next-line @nx/enforce-module-boundaries
 import {
   BasicTableComponent,
   CommonWrapperComponent,
 } from '@angular-monorepo/shared/ui-common';
-// TODO! Adjust the project tags.
-// eslint-disable-next-line @nx/enforce-module-boundaries
 import { AbstractEntitiesListComponent } from '@angular-monorepo/shared/ui-common';
 
 // -- STEP 1: ADJUST THE ENTITY INTERFACE PATH! --
-// TODO! Adjust the project tags.
-// eslint-disable-next-line @nx/enforce-module-boundaries
 import { MyProductInterface as EntityInterface } from '@angular-monorepo/shared-business/examples';
 import { MyProductFormComponent as EntityFormComponent } from './MyProduct-form.component';
 
@@ -108,15 +102,12 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 import { MyProductsComponent as EntitiesComponent } from './my-products.component';
 // -- STEP 1: Adjust the path to the entity interface
-// TODO: Adjust the project tags.
-// eslint-disable-next-line @nx/enforce-module-boundaries
 import { MyProductInterface as EntityInterface } from '@angular-monorepo/shared-business/examples';
-// eslint-disable-next-line @nx/enforce-module-boundaries
 import {
   MessageInterface,
   commonAppConfig,
 } from '@angular-monorepo/shared/util-common';
-// eslint-disable-next-line @nx/enforce-module-boundaries
+
 import {
   errorStory,
   getFirstElemByText,
@@ -314,8 +305,6 @@ export const noData: Story = {
 exports[`entity-components generator should match snapshot ON any BY any 3`] = `
 "import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 
-// TODO! Adjust the project tags.
-// eslint-disable-next-line @nx/enforce-module-boundaries
 // -- STEP 1: adjust the entity service path
 import { MyProductEntityStoreService as EntityStoreService } from '@angular-monorepo/shared-business/examples';
 import { MyProductsComponent as EntityComponent } from './my-products.component';

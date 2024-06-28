@@ -1,10 +1,6 @@
-// TODO! Adjust the project tags.
-// eslint-disable-next-line @nx/enforce-module-boundaries
 // -- STEP 1: Adjust the URL
 import { <%= urlName %> as entitiesUrl } from '@angular-monorepo/shared-business/examples-e2e';
 
-// TODO! Adjust the project tags.
-// eslint-disable-next-line @nx/enforce-module-boundaries
 import {
   expectE2EText as expectText,
   expectTableDataValue,

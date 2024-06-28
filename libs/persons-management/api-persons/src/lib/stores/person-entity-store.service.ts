@@ -1,19 +1,16 @@
 import { Injectable, Signal, computed } from '@angular/core';
+import { patchState } from '@ngrx/signals';
 
-// TODO! Adjust the project tags.
-// eslint-disable-next-line @nx/enforce-module-boundaries
 import {
   AbstractEntityStoreService,
   AdditionalStoreHooks,
   DateAsString,
   dateToString,
 } from '@angular-monorepo/shared/util-common';
+import { PersonInterface as EntityInterface } 
+  from '@angular-monorepo/persons-management/domain';
 
 import { personsUrl as entitiesUrl } from './urls';
-
-// eslint-disable-next-line @nx/enforce-module-boundaries
-import { PersonInterface as EntityInterface } from '@angular-monorepo/persons-management/domain';
-import { patchState } from '@ngrx/signals';
 
 type MoreData = {
   currentDate: DateAsString;

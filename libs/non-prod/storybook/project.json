@@ -3,7 +3,7 @@
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/non-prod/storybook/src",
   "prefix": "angular-monorepo",
-  "tags": [],
+  "tags": ["type:non-prod"],
   "projectType": "library",
   "targets": {
     "test": {

@@ -1,7 +1,5 @@
 import { Component, computed, input, output } from "@angular/core";
 
-// TODO! Adjust the project tags.
-// eslint-disable-next-line @nx/enforce-module-boundaries
 import { MessageInterface, Entity, EntityId } from "@angular-monorepo/shared/util-common";
 
 @Component({template: ``,})

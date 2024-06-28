@@ -21,17 +21,13 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { MessagesModule } from 'primeng/messages';
 
-// TODO! Adjust the project tags.
-// eslint-disable-next-line @nx/enforce-module-boundaries
-import { PersonInterface as EntityInterface } from '@angular-monorepo/persons-management/domain';
-// TODO! Adjust the project tags.
-// eslint-disable-next-line @nx/enforce-module-boundaries
+
+import { PersonInterface as EntityInterface } 
+  from '@angular-monorepo/persons-management/domain';
 import {
   CommonWrapperComponent,
   AbstractEntityFormComponent,
 } from '@angular-monorepo/shared/ui-common';
-// TODO! Adjust the project tags.
-// eslint-disable-next-line @nx/enforce-module-boundaries
 import { DateAsString, dateExists } from '@angular-monorepo/shared/util-common';
 
 @Component({
